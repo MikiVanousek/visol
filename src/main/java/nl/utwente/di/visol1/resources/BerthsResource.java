@@ -6,6 +6,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBElement;
+
+import nl.utwente.di.visol1.dao.BerthDao;
 import nl.utwente.di.visol1.models.*;
 
 import java.util.List;
@@ -17,9 +19,9 @@ public class BerthsResource {
     Request request;
 
     @POST
-    //@Produces something
+    //@ TODO: Produces something
     public void createBerth(JAXBElement<Berth> berth){
-
+        BerthDao.createBerth(berth);
     }
 
     @GET

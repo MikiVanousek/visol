@@ -1,24 +1,31 @@
 package nl.utwente.di.visol1.models;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class User {
     private String name;
     private String email;
     private String passwordHash;
 
     private Role role;
-    private Terminal terminal;
-    private Port port;
+    private int terminalId;
+    private int portId;
 
-    public User(String name, String email, String passwordHash, Role role, Terminal terminal, Port port) {
+    public User(String name, String email, String passwordHash, Role role, int terminalId, int portId) {
         this.name = name;
         this.email = email;
         this.passwordHash = passwordHash;
         this.role = role;
-        this.terminal = terminal;
-        this.port = port;
+        this.terminalId = terminalId;
+        this.portId = portId;
+    }
+
+    public User() {
+        // Empty constructor
     }
 
     public String getName() {
@@ -53,19 +60,35 @@ public class User {
         this.role = role;
     }
 
+    public int getTerminalId() {
+        return terminalId;
+    }
+
+    public void setTerminalId(int terminalId) {
+        this.terminalId = terminalId;
+    }
+
     public Terminal getTerminal() {
-        return terminal;
+        return null; // TerminalDao.getById(terminalId);
     }
 
     public void setTerminal(Terminal terminal) {
-        this.terminal = terminal;
+        this.terminalId = terminal.getId();
+    }
+
+    public int getPortId() {
+        return portId;
+    }
+
+    public void setPortId(int portId) {
+        this.portId = portId;
     }
 
     public Port getPort() {
-        return port;
+        return null; // PortDao.getById(portId);
     }
 
     public void setPort(Port port) {
-        this.port = port;
+        this.portId = port.getId();
     }
 }
