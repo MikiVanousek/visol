@@ -1,32 +1,39 @@
 package nl.utwente.di.visol1.models;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Timestamp;
 
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Vessel {
     private int id;
     private String name;
     private int containerAmount;
     private double cost;
-    private Terminal destinationTerminal; //make promise
+    private int destinationTerminalId;
     private Timestamp eta;
     private Timestamp deadline;
     private int width;
     private int length;
     private int depth;
 
-    public Vessel(int id, String name, int containerAmount, double cost, Terminal destinationTerminal, Timestamp eta, Timestamp deadline, int width, int length, int depth) {
+    public Vessel(int id, String name, int containerAmount, double cost, int destinationTerminalId, Timestamp eta, Timestamp deadline, int width, int length, int depth) {
         this.id = id;
         this.name = name;
         this.containerAmount = containerAmount;
         this.cost = cost;
-        this.destinationTerminal = destinationTerminal;
+        this.destinationTerminalId = destinationTerminalId;
         this.eta = eta;
         this.deadline = deadline;
         this.width = width;
         this.length = length;
         this.depth = depth;
+    }
+
+    public Vessel() {
+        // Empty constructor
     }
 
     public int getId() {
@@ -61,12 +68,20 @@ public class Vessel {
         this.cost = cost;
     }
 
+    public int getDestinationTerminalId() {
+        return destinationTerminalId;
+    }
+
+    public void setDestinationTerminalId(int destinationTerminalId) {
+        this.destinationTerminalId = destinationTerminalId;
+    }
+
     public Terminal getDestinationTerminal() {
-        return destinationTerminal;
+        return null; // TerminalDao.getById(destinationTerminalId);
     }
 
     public void setDestinationTerminal(Terminal destinationTerminal) {
-        this.destinationTerminal = destinationTerminal;
+        this.destinationTerminalId = destinationTerminal.getId();
     }
 
     public Timestamp getEta() {

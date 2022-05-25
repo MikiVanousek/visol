@@ -1,61 +1,61 @@
 package nl.utwente.di.visol1.models;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Timestamp;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
 
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Schedule {
-    private Future<Vessel> vessel;
-    private Future<Berth> berth;
+    private int vesselId;
+    private int berthId;
     boolean manual;
     Timestamp start;
     Timestamp finish;
 
-    public Schedule(Future<Vessel> vessel, Future<Berth> berth, boolean manual, Timestamp start, Timestamp finish) {
-        this.vessel = vessel;
-        this.berth = berth;
+    public Schedule(int vesselId, int berthId, boolean manual, Timestamp start, Timestamp finish) {
+        this.vesselId = vesselId;
+        this.berthId = berthId;
         this.manual = manual;
         this.start = start;
         this.finish = finish;
     }
 
+    public Schedule() {
+        // Empty constructor
+    }
+
+    public int getVesselId() {
+        return vesselId;
+    }
+
+    public void setVesselId(int vesselId) {
+        this.vesselId = vesselId;
+    }
+
     public Vessel getVessel() {
-        try {
-            // TODO make sure it's only requested once
-            return vessel.get();
-        } catch (InterruptedException | ExecutionException exception) {
-            // TODO
-            return null;
-        }
+        return null; // VesselDao.getById(vesselId);
     }
 
     public void setVessel(Vessel vessel) {
-        // TODO set in API
-        this.vessel = new FutureTask<>(() -> {
-            String url = "<root_api_url>/vessels/" + vessel.getId();
-            return null; // TODO get from API at url
-        });
+        this.vesselId = vessel.getId();
+    }
+
+    public int getBerthId() {
+        return berthId;
+    }
+
+    public void setBerthId(int berthId) {
+        this.berthId = berthId;
     }
 
     public Berth getBerth() {
-        try {
-            // TODO make sure it's only requested once
-            return berth.get();
-        } catch (InterruptedException | ExecutionException exception) {
-            // TODO
-            return null;
-        }
+        return null; // BerthDao.getById(berthId);
     }
 
     public void setBerth(Berth berth) {
-        // TODO set in API
-        this.berth = new FutureTask<>(() -> {
-            String url = "<root_api_url>/berths/" + berth.getId();
-            return null; // TODO get from API at url
-        });
+        this.berthId = berth.getId();
     }
 
     public boolean isManual() {

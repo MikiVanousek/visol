@@ -1,28 +1,35 @@
 package nl.utwente.di.visol1.models;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Time;
 
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Berth {
     private int id;
     private double unloadSpeed;
-    private Terminal terminal; //make promise
+    private int terminalId;
     private Time open;
     private Time close;
     private int width;
     private int depth;
     private int length;
 
-    public Berth(int id, double unloadSpeed, Terminal terminal, Time open, Time close, int width, int depth, int length) {
+    public Berth(int id, double unloadSpeed, int terminalId, Time open, Time close, int width, int depth, int length) {
         this.id = id;
         this.unloadSpeed = unloadSpeed;
-        this.terminal = terminal;
+        this.terminalId = terminalId;
         this.open = open;
         this.close = close;
         this.width = width;
         this.depth = depth;
         this.length = length;
+    }
+
+    public Berth() {
+        // Empty constructor
     }
 
     public int getId() {
@@ -41,12 +48,20 @@ public class Berth {
         this.unloadSpeed = unloadSpeed;
     }
 
+    public int getTerminalId() {
+        return terminalId;
+    }
+
+    public void setTerminalId(int terminalId) {
+        this.terminalId = terminalId;
+    }
+
     public Terminal getTerminal() {
-        return terminal;
+        return null; // TerminalDao.getById(terminalId);
     }
 
     public void setTerminal(Terminal terminal) {
-        this.terminal = terminal;
+        this.terminalId = terminal.getId();
     }
 
     public Time getOpen() {
