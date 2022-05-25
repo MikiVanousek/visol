@@ -1,5 +1,13 @@
-@import "../../../../node_modules/bootstrap/scss/bootstrap.scss"
+// Bootstrap file first
+@import "./_bootstrap.sass"
+
+// Mixins, Functions, Variables
+@import "./mixins/flex.sass"
+@import "./mixins/position.sass"
+@import "./mixins/size.sass"
+
+// Components
+@import "src/main/webapp/styles/components/form"
+@import "./components/planner.sass"
 
 
-button
-  min-width: 10vw

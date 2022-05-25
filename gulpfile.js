@@ -6,7 +6,7 @@ const del = require('del');
 const pathToApp = './src/main/webapp'
 
 gulp.task('styles', () => {
-    return gulp.src(pathToApp + '/styles/**/*.sass')
+    return gulp.src(pathToApp + '/styles/index.sass')
         .pipe(sass().on('error', sass.logError))
         .pipe(gulp.dest(pathToApp + '/'));
 });

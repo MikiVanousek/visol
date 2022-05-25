@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visol Project Landing Page</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./index.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 </head>
 <body class="">
@@ -12,21 +13,68 @@
 <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container-fluid">
         <a class="navbar-brand" href="./index.html">Visol</a>
-        <ul class="navbar-nav me-auto mb-lg-0">
-            <div class="mx-5">
 
+        <ul class="navbar-nav mb-lg-0"> <!-- mb-lg-0 == margin-bottom: 0 -->
+            <div class="mx-5">
                 <button class="btn btn-sm btn-outline-dark m-1" type="button">Undo</button>
                 <button class="btn btn-sm btn-outline-dark m-1" type="button">Redo</button>
                 <button class="btn btn-sm btn-outline-dark m-1" type="button">Optimise</button>
                 <button class="btn btn-sm btn-outline-dark m-1" type="button">Save</button>
                 <span class="text-muted m-1">last time saved 12:00</span>
-
             </div>
         </ul>
+
+        <ul class="navbar-nav mb-lg-0">
+            <div>
+                <button class="btn btn-sm btn-outline-dark m-1" type="button">Add vessel</button>
+                <button class="btn btn-sm btn-danger m-1" type="button">Schedule</button>
+            </div>
+        </ul>
+
     </div>
 </nav>
 
-<div style="height: 1000px"></div>
+<div class="planner">
+  <div class="planner-timeline">
+      <div class="planner-timeline-day">
+          <div class="planner-timeline-day-date">Thrusday 12/05/2022</div>
+          <div class="planner-timeline-day-hours">
+              <span class="planner-timeline-day-hours-hour">6:00</span>
+              <span class="planner-timeline-day-hours-hour">7:00</span>
+              <span class="planner-timeline-day-hours-hour">8:00</span>
+              <span class="planner-timeline-day-hours-hour">9:00</span>
+              <span class="planner-timeline-day-hours-hour">10:00</span>
+              <span class="planner-timeline-day-hours-hour">11:00</span>
+              <span class="planner-timeline-day-hours-hour">12:00</span>
+              <span class="planner-timeline-day-hours-hour">13:00</span>
+              <span class="planner-timeline-day-hours-hour">14:00</span>
+              <span class="planner-timeline-day-hours-hour">15:00</span>
+          </div>
+      </div>
+  </div>
+  <div class="planner-berths">
+    <div class="planner-berths-berth">
+      <div class="planner-berths-berth-header">Berth 1</div>
+      <div class="planner-berths-berth-ships">
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-md rounded mb-3 p-4 bg-secondary bg-opacity-10 text-dark fixed-bottom">
+    <div class="d-flex flex-column justify-content-md-start w-25">
+        <h4>Unscheduled vessels</h4>
+        <form class="input-group me-2 has-icon-end" role="search">
+            <input class="form-control border-end-0 border" type="text" placeholder="Search vessel" aria-label="Search">
+            <span class="fa fa-search form-control-feedback"></span>
+        </form>
+    </div>
+
+    <div class="d-flex flex-row justify-content-md-start w-75">
+        <div class="container small-vessel-label"></div>
+    </div>
+</div>
 
 </body>
 </html>

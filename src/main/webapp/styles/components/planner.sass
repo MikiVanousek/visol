@@ -1,0 +1,27 @@
+$timeline-width: 90px
+$day-date-bg: #3D3D3D
+$day-date-color: #FFF
+
+.planner
+  min-width: 1250px
+
+  &-timeline
+    +flex(center, center, column)
+    width: $timeline-width
+
+    &-day
+      +flex(center)
+
+      &-date
+        background-color: $day-date-bg
+        color: $day-date-color
+
+      &-hours
+        &-hour
+          border: 1px solid #000
+
+  &-berths
+    +flex
+
+    &-item
+      //
