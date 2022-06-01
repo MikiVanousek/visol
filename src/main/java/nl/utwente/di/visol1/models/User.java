@@ -1,5 +1,7 @@
 package nl.utwente.di.visol1.models;
 
+import org.jvnet.hk2.annotations.Optional;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -12,10 +14,10 @@ public class User {
     private String passwordHash;
 
     private Role role;
-    private int terminalId;
-    private int portId;
+    private Integer terminalId;
+    private Integer portId;
 
-    public User(String name, String email, String passwordHash, Role role, int terminalId, int portId) {
+    public User(String name, String email, String passwordHash, Role role, Integer terminalId, Integer portId) {
         this.name = name;
         this.email = email;
         this.passwordHash = passwordHash;
@@ -60,11 +62,11 @@ public class User {
         this.role = role;
     }
 
-    public int getTerminalId() {
+    public Integer getTerminalId() {
         return terminalId;
     }
 
-    public void setTerminalId(int terminalId) {
+    public void setTerminalId(Integer terminalId) {
         this.terminalId = terminalId;
     }
 
@@ -73,14 +75,14 @@ public class User {
     }
 
     public void setTerminal(Terminal terminal) {
-        this.terminalId = terminal.getId();
+        this.terminalId = terminal == null ? null : terminal.getId();
     }
 
-    public int getPortId() {
+    public Integer getPortId() {
         return portId;
     }
 
-    public void setPortId(int portId) {
+    public void setPortId(Integer portId) {
         this.portId = portId;
     }
 
@@ -89,6 +91,6 @@ public class User {
     }
 
     public void setPort(Port port) {
-        this.portId = port.getId();
+        this.portId = port == null ? null : port.getId();
     }
 }
