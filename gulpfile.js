@@ -11,6 +11,12 @@ gulp.task('styles', () => {
         .pipe(gulp.dest(pathToApp + '/'));
 });
 
+gulp.task('bootstrap', () => {
+  return gulp.src(pathToApp + '/styles/.sass')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest(pathToApp + '/'));
+});
+
 gulp.task('watch', () => {
     gulp.watch(pathToApp + '/styles/**/*.sass', (done) => {
         gulp.series(['clean', 'styles'])(done);
