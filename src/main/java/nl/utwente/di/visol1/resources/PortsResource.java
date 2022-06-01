@@ -1,5 +1,6 @@
 package nl.utwente.di.visol1.resources;
 
+import nl.utwente.di.visol1.dao.PortDao;
 import nl.utwente.di.visol1.models.Berth;
 import nl.utwente.di.visol1.models.Port;
 
@@ -19,15 +20,15 @@ public class PortsResource {
     Request request;
 
     @POST
-    //@Produces something
-    public void createPort(JAXBElement<Port> port){
-
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Port createPort(JAXBElement<Port> port){
+        return PortDao.createPort(port);
     }
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Port> getPorts() {
-        return null;
+        return PortDao.getPorts();
     }
 
     @Path("{port_id}")

@@ -1,6 +1,7 @@
 package nl.utwente.di.visol1.resources;
 
 import nl.utwente.di.visol1.dao.BerthDao;
+import nl.utwente.di.visol1.dao.ScheduleDao;
 import nl.utwente.di.visol1.models.Berth;
 import nl.utwente.di.visol1.models.Schedule;
 
@@ -43,10 +44,11 @@ public class BerthResource {
     public Berth getBerth() {
         return BerthDao.getBerth(id);
     }
+
     @Path("/schedules")
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Schedule> getSchedules(@QueryParam("from") Timestamp from, @QueryParam("to") Timestamp to){
-        return null;
+       return ScheduleDao.getSchedulesByBerth(id, from, to);
     }
 }

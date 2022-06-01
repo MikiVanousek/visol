@@ -1,5 +1,7 @@
 package nl.utwente.di.visol1.resources;
 
+import nl.utwente.di.visol1.dao.ScheduleDao;
+import nl.utwente.di.visol1.dao.VesselDao;
 import nl.utwente.di.visol1.models.Berth;
 import nl.utwente.di.visol1.models.Schedule;
 import nl.utwente.di.visol1.models.Vessel;
@@ -18,35 +20,35 @@ public class VesselResource {
     UriInfo uriInfo;
     @Context
     Request request;
-    String id;
+    int id;
     public VesselResource(UriInfo uriInfo, Request request, String id){
         this.uriInfo = uriInfo;
         this.request = request;
-        this.id = id;
+        this.id = Integer.parseInt(id);
     }
 
     @DELETE
     public void deleteVessel(){
-
+        VesselDao.deleteVessel(id);
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_XML)
     public void replaceVessel(JAXBElement<Vessel> vessel){
-
+        VesselDao.replaceVessel(id, vessel);
     }
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Vessel getVessel() {
-        return null;
+        return VesselDao.getVessel(id);
     }
 
     @Path("/schedule")
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Schedule> getSchedule() {
-        return null;
+    public Schedule getSchedule() {
+        return ScheduleDao.getScheduleByVessel(id);
     }
 
     @Path("/schedule")
@@ -58,7 +60,7 @@ public class VesselResource {
     @Path("/schedule")
     @PUT
     @Consumes(MediaType.APPLICATION_XML)
-    public void replaceSchedule(JAXBElement<Schedule> schedule){
-
+    public Schedule replaceSchedule(JAXBElement<Schedule> schedule){
+        return ScheduleDao.replaceSchedule(id, schedule);
     }
 }

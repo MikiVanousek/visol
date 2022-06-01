@@ -5,6 +5,8 @@ import nl.utwente.di.visol1.models.Berth;
 import javax.xml.bind.JAXBElement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BerthDao extends GenericDao{
 
@@ -27,11 +29,55 @@ public class BerthDao extends GenericDao{
         }
     }
 
+    public static List<Berth> getBerths(){
+        List<Berth> res = new ArrayList<>();
+        ResultSet rs = executeQuery("SELECT * FROM berth");
+
+        try {
+            while(rs.next()) {
+                res.add(new Berth(
+                        rs.getInt("id"),
+                        rs.getDouble("unloadSpeed"),
+                        rs.getInt("terminal"),
+                        rs.getTime("open"),
+                        rs.getTime("close"),
+                        rs.getInt("width"),
+                        rs.getInt("depth"),
+                        rs.getInt("length")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+    public static List<Berth> getBerthsByTerminal(int terminalId){
+        List<Berth> res = new ArrayList<>();
+        ResultSet rs = executeQuery("SELECT * FROM berth WHERE terminal = ?", stmt -> stmt.setInt(1, terminalId));
+        try {
+            while(rs.next()) {
+                res.add(new Berth(
+                        rs.getInt("id"),
+                        rs.getDouble("unloadSpeed"),
+                        rs.getInt("terminal"),
+                        rs.getTime("open"),
+                        rs.getTime("close"),
+                        rs.getInt("width"),
+                        rs.getInt("depth"),
+                        rs.getInt("length")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+
     public static void deleteBerth(int berthId) {
         executeUpdate("DELETE FROM berth WHERE id = ?;", stmt -> stmt.setInt(1, berthId));
     }
 
-    public static void createBerth(JAXBElement<Berth> berthXML){
+    public static Berth createBerth(JAXBElement<Berth> berthXML){
         String query = "INSERT INTO berth (unloadspeed, terminal, open, close, width, depth, length) VALUES(?, ?, ?, ?, ?, ?, ?);";
         Berth berth = berthXML.getValue();
         executeUpdate(query, stmt -> {
@@ -43,6 +89,7 @@ public class BerthDao extends GenericDao{
             stmt.setInt(6, berth.getDepth());
             stmt.setInt(7, berth.getLength());
         });
+        return berth;
     }
 
     public static void replaceBerth(int berthId, JAXBElement<Berth> berthXML){

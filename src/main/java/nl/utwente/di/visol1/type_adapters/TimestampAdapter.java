@@ -3,14 +3,14 @@ package nl.utwente.di.visol1.type_adapters;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.sql.Timestamp;
 
-public class TimestampAdapter  extends XmlAdapter<Long, Timestamp> {
+public class TimestampAdapter extends XmlAdapter<String, Timestamp> {
     @Override
-    public Long marshal(Timestamp timestamp) {
-        return timestamp == null ? null : timestamp.getTime();
+    public String marshal(Timestamp timestamp) {
+        return timestamp == null ? null : timestamp.toString();
     }
 
     @Override
-    public Timestamp unmarshal(Long value) {
-        return value == null ? null : new Timestamp(value);
+    public Timestamp unmarshal(String value) {
+        return value == null ? null : Timestamp.valueOf(value);
     }
 }

@@ -103,4 +103,8 @@ public class Berth {
     public void setLength(int length) {
         this.length = length;
     }
+
+    public boolean fits(Vessel vessel) {
+        return vessel.getWidth() < getWidth() && vessel.getDepth() < vessel.getDepth() && vessel.getLength() < getLength();
+    }
 }

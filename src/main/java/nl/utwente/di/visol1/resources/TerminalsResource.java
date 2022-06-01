@@ -1,11 +1,18 @@
 package nl.utwente.di.visol1.resources;
 
+import nl.utwente.di.visol1.dao.TerminalDao;
+import nl.utwente.di.visol1.models.Terminal;
+
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
+import javax.xml.bind.JAXBElement;
+
 @Path("/terminals")
 public class TerminalsResource {
     @Context
@@ -14,9 +21,9 @@ public class TerminalsResource {
     Request request;
 
     @POST
-    //@Produces something
-    public void createTerminal(){
-
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Terminal createTerminal(JAXBElement<Terminal> terminal){
+        return TerminalDao.createTerminal(terminal);
     }
 
     @Path("{terminal_id}")

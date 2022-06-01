@@ -19,15 +19,15 @@ public class BerthsResource {
     Request request;
 
     @POST
-    //@ TODO: Produces something
-    public void createBerth(JAXBElement<Berth> berth){
-        BerthDao.createBerth(berth);
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Berth createBerth(JAXBElement<Berth> berth){
+        return BerthDao.createBerth(berth);
     }
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Berth> getBerths() {
-        return null;
+        return BerthDao.getBerths();
     }
 
     @Path("{berth_id}")
