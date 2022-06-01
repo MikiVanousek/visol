@@ -1,3 +1,5 @@
+@use "sass:math"
+
 $day-date-bg: #3D3D3D
 $day-date-color: #FFF
 $day-date-width: 23px
@@ -9,13 +11,32 @@ $berth-background: #E8E8E8
 $berth-header-height: 30px
 $ship-background: #6B6B6B
 $closed-background: #000
+$current-color: #59CAA1
 
 .planner
+	+relative
 	+flex(flex-start, flex-start)
 	max-height: 73vh
 	overflow: scroll
 	margin: 20px auto
 	padding-top: $berth-header-height
+
+	&-current
+		$dot-size: 16px
+		+absolute
+		+size(100% 3px)
+		background-color: $current-color
+		z-index: 1
+		margin-left: $day-date-width
+
+		&::before
+			+absolute(50% null null (math.div(-$dot-size,2) + 1px))
+			transform: translateY(-50%)
+			content: ''
+			+size($dot-size)
+			background-color: $current-color
+			border-radius: 50%
+
 
 	&-timeline
 		+flex(center, center, column)
