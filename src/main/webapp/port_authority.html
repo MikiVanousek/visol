@@ -7,18 +7,13 @@
   <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <link href="./index.css" rel="stylesheet">
   <link href="./bootstrap.css" rel="stylesheet">
+  <script src="./script/index.js" type="module"></script>
   <script crossorigin="anonymous"
           integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
-<body class="">
+<body>
 
-<nav class="navbar navbar-expand-lg sticky-top">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="./index.html">
-      <div>ViSOL</div>
-      <div class="navbar-brand-role">port authority</div>
-    </a>
-
+  <nav-bar role="port authority">
     <ul class="navbar-nav mb-lg-0">
       <div>
         <button class="btn btn-sm btn-outline-dark m-1" type="button">Add vessel</button>
@@ -26,168 +21,38 @@
         <button class="btn btn-sm btn-danger m-1" type="button">Schedule</button>
       </div>
     </ul>
+  </nav-bar>
 
-  </div>
-</nav>
 
-<div class="container-sm d-flex flex-row">
-  <div class="me-3"><b>Old cost:</b> 1800</div>
-  <div><b>New cost:</b> 2000</div>
-</div>
-
-<div class="planner container-md">
-  <div class="planner-current" style="top: 100px"></div>
-  <div class="planner-timeline">
-    <div class="planner-timeline-day">
-      <div class="planner-timeline-day-date">
-        <p class="planner-timeline-day-date-text">Thrusday 12/05/2022</p>
-      </div>
-      <div class="planner-timeline-day-hours">
-        <div class="planner-timeline-day-hours-hour">00:00</div>
-        <div class="planner-timeline-day-hours-hour">01:00</div>
-        <div class="planner-timeline-day-hours-hour">02:00</div>
-        <div class="planner-timeline-day-hours-hour">03:00</div>
-        <div class="planner-timeline-day-hours-hour">04:00</div>
-        <div class="planner-timeline-day-hours-hour">05:00</div>
-        <div class="planner-timeline-day-hours-hour">06:00</div>
-        <div class="planner-timeline-day-hours-hour">07:00</div>
-        <div class="planner-timeline-day-hours-hour">08:00</div>
-        <div class="planner-timeline-day-hours-hour">09:00</div>
-        <div class="planner-timeline-day-hours-hour">10:00</div>
-        <div class="planner-timeline-day-hours-hour">11:00</div>
-        <div class="planner-timeline-day-hours-hour">12:00</div>
-        <div class="planner-timeline-day-hours-hour">13:00</div>
-        <div class="planner-timeline-day-hours-hour">14:00</div>
-        <div class="planner-timeline-day-hours-hour">15:00</div>
-        <div class="planner-timeline-day-hours-hour">16:00</div>
-        <div class="planner-timeline-day-hours-hour">17:00</div>
-        <div class="planner-timeline-day-hours-hour">18:00</div>
-        <div class="planner-timeline-day-hours-hour">19:00</div>
-        <div class="planner-timeline-day-hours-hour">20:00</div>
-        <div class="planner-timeline-day-hours-hour">21:00</div>
-        <div class="planner-timeline-day-hours-hour">22:00</div>
-        <div class="planner-timeline-day-hours-hour">23:00</div>
-      </div>
-    </div>
-    <div class="planner-timeline-day">
-      <div class="planner-timeline-day-date">
-        <p class="planner-timeline-day-date-text">Friday 13/05/2022</p>
-      </div>
-      <div class="planner-timeline-day-hours">
-        <div class="planner-timeline-day-hours-hour">00:00</div>
-        <div class="planner-timeline-day-hours-hour">01:00</div>
-        <div class="planner-timeline-day-hours-hour">02:00</div>
-        <div class="planner-timeline-day-hours-hour">03:00</div>
-        <div class="planner-timeline-day-hours-hour">04:00</div>
-        <div class="planner-timeline-day-hours-hour">05:00</div>
-        <div class="planner-timeline-day-hours-hour">06:00</div>
-        <div class="planner-timeline-day-hours-hour">07:00</div>
-        <div class="planner-timeline-day-hours-hour">08:00</div>
-        <div class="planner-timeline-day-hours-hour">09:00</div>
-        <div class="planner-timeline-day-hours-hour">10:00</div>
-        <div class="planner-timeline-day-hours-hour">11:00</div>
-        <div class="planner-timeline-day-hours-hour">12:00</div>
-        <div class="planner-timeline-day-hours-hour">13:00</div>
-        <div class="planner-timeline-day-hours-hour">14:00</div>
-        <div class="planner-timeline-day-hours-hour">15:00</div>
-        <div class="planner-timeline-day-hours-hour">16:00</div>
-        <div class="planner-timeline-day-hours-hour">17:00</div>
-        <div class="planner-timeline-day-hours-hour">18:00</div>
-        <div class="planner-timeline-day-hours-hour">19:00</div>
-        <div class="planner-timeline-day-hours-hour">20:00</div>
-        <div class="planner-timeline-day-hours-hour">21:00</div>
-        <div class="planner-timeline-day-hours-hour">22:00</div>
-        <div class="planner-timeline-day-hours-hour">23:00</div>
-      </div>
-    </div>
-  </div>
-  <div class="planner-berths">
-    <div class="planner-berths-berth">
-      <div class="planner-berths-berth-header">Berth 1</div>
-      <div class="planner-berths-berth-ships">
-        <div class="planner-berths-berth-ships-ship" style="height: 100px; top: 100px">
-          <p class="planner-berths-berth-ships-ship-name">Vessel 1</p>
-        </div>
-        <div class="planner-berths-berth-ships-closed" style="height: 300px; top: 500px">
-          <p class="planner-berths-berth-ships-closed-name">Berth closed</p>
-        </div>
-      </div>
-    </div>
-    <div class="planner-berths-berth">
-      <div class="planner-berths-berth-header">Berth 2</div>
-      <div class="planner-berths-berth-ships">
-        <div class="planner-berths-berth-ships-ship" style="height: 180px; top: 230px">
-          <p class="planner-berths-berth-ships-ship-name">Vessel 2</p>
-        </div>
-      </div>
-    </div>
-    <div class="planner-berths-berth">
-      <div class="planner-berths-berth-header">Berth 3</div>
-      <div class="planner-berths-berth-ships">
-
-      </div>
-    </div>
-    <div class="planner-berths-berth">
-      <div class="planner-berths-berth-header">Berth 4</div>
-      <div class="planner-berths-berth-ships">
-
-      </div>
-    </div>
-    <div class="planner-berths-berth">
-      <div class="planner-berths-berth-header">Berth 5</div>
-      <div class="planner-berths-berth-ships">
-
-      </div>
-    </div>
-    <div class="planner-berths-berth">
-      <div class="planner-berths-berth-header">Berth 6</div>
-      <div class="planner-berths-berth-ships">
-
-      </div>
-    </div>
-    <div class="planner-berths-berth">
-      <div class="planner-berths-berth-header">Berth 7</div>
-      <div class="planner-berths-berth-ships">
-
-      </div>
-    </div>
-    <div class="planner-berths-berth">
-      <div class="planner-berths-berth-header">Berth 8</div>
-      <div class="planner-berths-berth-ships">
-
-      </div>
-    </div>
-    <div class="planner-berths-berth">
-      <div class="planner-berths-berth-header">Berth 9</div>
-      <div class="planner-berths-berth-ships">
-
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="d-flex flex-row container-md rounded mb-3 p-4 bg-secondary bg-opacity-10 text-dark">
-  <div class="d-flex flex-column justify-content-md-start w-25">
-    <h5>Unscheduled vessels</h5>
-    <form class="form-group me-2 has-icon-beginning" role="search">
-      <span class="fa fa-search form-control-feedback"></span>
-      <input aria-label="Search" class="form-control" placeholder="Search vessel" type="text">
-    </form>
+  <div class="container-sm d-flex flex-row">
+    <div class="me-3"><b>Old cost:</b> 1800</div>
+    <div><b>New cost:</b> 2000</div>
   </div>
 
-  <div class="scrollable-container d-flex flex-row justify-content-start w-75">
-    <div class="container small-vessel-label">Han's Big Boat 1</div>
-    <div class="container small-vessel-label">Han's Big Boat 2</div>
-    <div class="container small-vessel-label">Han's Big Boat 3</div>
-    <div class="container small-vessel-label">Han's Big Boat 4</div>
-    <div class="container small-vessel-label">Han's Big Boat 5</div>
-    <div class="container small-vessel-label">Han's Big Boat 6</div>
-    <div class="container small-vessel-label">Han's Big Boat 8</div>
-    <div class="container small-vessel-label">Han's Big Boat 9</div>
-    <div class="container small-vessel-label">Han's Big Boat 10</div>
-    <div class="container small-vessel-label">Han's Big Boat 11</div>
+  <planner-schedule></planner-schedule>
+
+  <div class="d-flex flex-row container-md rounded mb-3 p-4 bg-secondary bg-opacity-10 text-dark">
+    <div class="d-flex flex-column justify-content-md-start w-25">
+      <h5>Unscheduled vessels</h5>
+      <form class="form-group me-2 has-icon-beginning" role="search">
+        <span class="fa fa-search form-control-feedback"></span>
+        <input aria-label="Search" class="form-control" placeholder="Search vessel" type="text">
+      </form>
+    </div>
+
+    <div class="scrollable-container d-flex flex-row justify-content-start w-75">
+      <div class="container small-vessel-label">Han's Big Boat 1</div>
+      <div class="container small-vessel-label">Han's Big Boat 2</div>
+      <div class="container small-vessel-label">Han's Big Boat 3</div>
+      <div class="container small-vessel-label">Han's Big Boat 4</div>
+      <div class="container small-vessel-label">Han's Big Boat 5</div>
+      <div class="container small-vessel-label">Han's Big Boat 6</div>
+      <div class="container small-vessel-label">Han's Big Boat 8</div>
+      <div class="container small-vessel-label">Han's Big Boat 9</div>
+      <div class="container small-vessel-label">Han's Big Boat 10</div>
+      <div class="container small-vessel-label">Han's Big Boat 11</div>
+    </div>
   </div>
-</div>
 
 </body>
 </html>

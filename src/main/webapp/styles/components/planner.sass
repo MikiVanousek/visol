@@ -7,9 +7,7 @@ $day-hour-height: 24px
 $day-hour-width: 64px
 $day-height: $day-hour-height*24
 $timeline-width: $day-date-width+$day-hour-width
-$berth-background: #E8E8E8
 $berth-header-height: 30px
-$ship-background: #6B6B6B
 $closed-background: #000
 $current-color: #59CAA1
 
@@ -23,11 +21,10 @@ $current-color: #59CAA1
 
 	&-current
 		$dot-size: 16px
-		+absolute
-		+size(100% 3px)
+		+absolute(null null -$day-hour-width null)
+		+size(calc(100% + $day-hour-width) 3px)
 		background-color: $current-color
 		z-index: 1
-		margin-left: $day-date-width
 
 		&::before
 			+absolute(50% null null (math.div(-$dot-size,2) + 1px))
@@ -71,6 +68,7 @@ $current-color: #59CAA1
 						border-top: 1px solid #000
 
 	&-berths
+		+relative
 		+flex(flex-start, flex-start)
 
 		&-berth

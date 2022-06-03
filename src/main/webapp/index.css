@@ -25,11 +25,12 @@
 }
 .planner-current {
   position: absolute;
-  width: 100%;
+  right: -64px;
+  left: -64px;
+  width: calc(100% + 64px);
   height: 3px;
   background-color: #59CAA1;
   z-index: 1;
-  margin-left: 23px;
 }
 .planner-current::before {
   position: absolute;
@@ -86,6 +87,7 @@
   border-top: 1px solid #000;
 }
 .planner-berths {
+  position: relative;
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
