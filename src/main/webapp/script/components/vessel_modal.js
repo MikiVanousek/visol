@@ -3,6 +3,21 @@ class VesselModal extends HTMLElement {
     super();
   }
 
+   set_schedule_type(type) {
+    if (type==="disabled") {
+      document.getElementById("schedule-edit").setAttribute("hidden","")
+    } else {
+      document.getElementById("schedule-edit").removeAttribute("hidden")
+      for (let item of document.getElementsByClassName("disabled-if-auto")) {
+        if (type === "manual") {
+          item.removeAttribute("disabled")
+        } else {
+          item.setAttribute("disabled", "")
+        }
+      }
+    }
+  }
+
   connectedCallback() {
     this.innerHTML = `
 		<div class="modal fade" id="${this.getAttribute('name')}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -70,30 +85,36 @@ class VesselModal extends HTMLElement {
 							</div>
 						</div>
 
-						<div class="mb-3">
-							<label class="label me-3 mt-2" for="label"><b>Schedule:</b></label>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" onclick="set_manual(false)" checked>
-								<label class="form-check-label" for="flexRadioDefault1">
+						<div class="mb-3 row mt-2">
+							<label class="label me-3 col" for="label"><b>Schedule:</b></label>
+							<div class="form-check form-check-inline col">
+								<input class="form-check-input" type="radio" name="flexRadioDefault" id="radio-auto" checked>
+								<label class="form-check-label" for="radio-auto">
 									Automatic
 								</label>
 							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" onclick="set_manual(true)">
-								<label class="form-check-label" for="flexRadioDefault2">
+							<div class="form-check form-check-inline col">
+								<input class="form-check-input" type="radio" name="flexRadioDefault" id="radio-manual">
+								<label class="form-check-label" for="radio-manual">
 									Manual
+								</label>
+							</div>
+							<div class="form-check form-check-inline col">
+								<input class="form-check-input" type="radio" name="flexRadioDefault" id="radio-disabled">
+								<label class="form-check-label" for="radio-disabled">
+									Disabled
 								</label>
 							</div>
 						</div>
 
-						<div class="row mb-3">
+						<div class="row mb-3" id="schedule-edit">
 							<div class="col">
 								<label for="form-berth" class="form-label">Berth:</label>
-								<input type="number" class="form-control form-control-sm disabled-if-manual" id="form-berth" disabled>
+								<input type="number" class="form-control form-control-sm disabled-if-auto" id="form-berth" disabled>
 							</div>
 							<div class="col">
 								<label for="form-handel" class="form-label">Handel:</label>
-								<input type="date" class="form-control form-control-sm disabled-if-manual" id="form-handel" disabled>
+								<input type="date" class="form-control form-control-sm disabled-if-auto" id="form-handel" disabled>
 							</div>
 						</div>
 					</div>
@@ -105,16 +126,10 @@ class VesselModal extends HTMLElement {
 			</div>
 		</div>
 	`
-  }
 
-  set_manual(manual) {
-    for (let item of root.getElementsByClassName("disabled-if-manual")) {
-      if(manual) {
-        item.removeAttribute("disabled", "")
-      } else {
-        item.setAttribute("disabled", "")
-      }
-    }
+    document.getElementById("radio-auto").addEventListener("click", () => this.set_schedule_type("auto"));
+    document.getElementById("radio-manual").addEventListener("click", () => this.set_schedule_type("manual"));
+    document.getElementById("radio-disabled").addEventListener("click", () => this.set_schedule_type("disabled"));
   }
 }
 
