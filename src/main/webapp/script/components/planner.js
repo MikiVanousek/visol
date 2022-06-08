@@ -4,6 +4,7 @@ class PlannerSchedule extends HTMLElement {
   }
 
   connectedCallback() {
+
     this.innerHTML = `
     <div class="container-md">
       <div class="planner">

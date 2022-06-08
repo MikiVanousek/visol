@@ -1,8 +1,11 @@
-let root = document.getElementById('anchor-modal')
+class VesselModal extends HTMLElement {
+  constructor() {
+    super();
+  }
 
-function build_modal(manual){
-	let modal = `
-		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  connectedCallback() {
+    this.innerHTML = `
+		<div class="modal fade" id="${this.getAttribute('name')}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -102,17 +105,17 @@ function build_modal(manual){
 			</div>
 		</div>
 	`
-	root.innerHTML = modal;
-}
+  }
 
-function set_manual(manual) {
-	for (let item of root.getElementsByClassName("disabled-if-manual")) {
-    if(manual) {
-      item.removeAttribute("disabled", "")
-    } else {
-      item.setAttribute("disabled", "")
+  set_manual(manual) {
+    for (let item of root.getElementsByClassName("disabled-if-manual")) {
+      if(manual) {
+        item.removeAttribute("disabled", "")
+      } else {
+        item.setAttribute("disabled", "")
+      }
     }
-	}
+  }
 }
 
-build_modal(false)
+customElements.define('vessel-modal', VesselModal);
