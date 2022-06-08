@@ -116,7 +116,7 @@ deploy:jdk11:
     stage: deploy
     image: maven:3.8.5-jdk-11
     script:
-        - mvn $MAVEN_CLI_OPTS package
+        - mvn $MAVEN_CLI_OPTS verify
         - if [ ! -f ci_settings.xml ];
             then echo "CI settings missing\!";
             else mvn $MAVEN_CLI_OPTS deploy -s ci_settings.xml
