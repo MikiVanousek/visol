@@ -1,0 +1,50 @@
+stages:          # List of stages for jobs, and their order of execution
+    - build
+    - test
+    - deploy
+    - accessibility
+    - performance
+
+variables:
+    a11y_urls: "https://wttr.in"
+    ASDF_JAVA_VERSION: 11
+    LM_JAVA_VERSION: 11
+
+include:
+    - template: Jobs/Code-Quality.gitlab-ci.yml                 # https://docs.gitlab.com/ee/user/project/merge_requests/code_quality.html
+    - template: Jobs/Dependency-Scanning.gitlab-ci.yml          # https://docs.gitlab.com/ee/user/application_security/dependency_scanning/
+    - template: Jobs/Browser-Performance-Testing.gitlab-ci.yml  # https://docs.gitlab.com/ee/user/project/merge_requests/browser_performance_testing.html
+    - template: Jobs/Secret-Detection.gitlab-ci.yml             # https://docs.gitlab.com/ee/user/application_security/secret_detection/
+    - template: Jobs/License-Scanning.gitlab-ci.yml             # https://docs.gitlab.com/ee/user/compliance/license_compliance/index.html
+    - template: Verify/Accessibility.gitlab-ci.yml              # https://docs.gitlab.com/ee/user/project/merge_requests/accessibility_testing.html
+
+build-job:       # This job runs in the build stage, which runs first.
+    stage: build
+    script:
+        - echo "Compiling the code..."
+        - mvn package
+        - echo "Compile complete."
+
+unit-test-job:   # This job runs in the test stage.
+    stage: test  # It only starts when the job in the build stage completes successfully.
+    script:
+        - echo "Running unit tests... This will take about 60 seconds."
+        - sleep 60
+        - echo "Code coverage is 90%"
+
+lint-test-job:   # This job also runs in the test stage.
+    stage: test  # It can run at the same time as unit-test-job (in parallel).
+    script:
+        - echo "Linting code... This will take about 10 seconds."
+        - sleep 10
+        - echo "No lint issues found."
+
+deploy-job:        # This job runs in the deploy stage.
+    stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+    script:
+        - echo "Deploying application..."
+        - echo "Application successfully deployed."
+
+browser_performance:
+  variables:
+    URL: "https://wttr.in"
