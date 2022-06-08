@@ -1,0 +1,585 @@
+FORMAT: 1A
+HOST: https://todo.get-this.info/
+
+# ViSOL
+
+Visual Interactive Optimization Tool. You can view this documentation over at [Apiary](https://visol.docs.apiary.io).
+
+# Group Vessels
+
+## Vessel [/vessels/{vessel_id}]
+A Vessel object has the following attributes:
+
++ name: `BigBoatHan` (string) - The name of the Vessel.
++ arrival: `2022-05-11T13:10Z` (timestamp) - When the Vessel is expected to arrive.
++ deadline: `2022-05-12T09:54Z` (timestamp) - When the Vessel must be completely processed.
++ container_amount: `5` (integer) - The amount of containers on the Vessel to be unloaded.
++ cost: `2.6` (float) - The cost per time unit of the Vessel from arrival till fully unloaded.
++ destination_terminal: `3` (integer) - The terminal where the Vessel should be unloaded.
++ dimension - Physical dimensions of the Vessel.
+    + length: `30` (integer) - The length of the Vessel in metres.
+    + width: `10` (integer) - The width of the Vessel in metres.
+    + depth: `20` (integer) - The depth of the Vessel in metres.
+
++ Parameters
+    + vessel_id: `1` (integer) - ID of the Vessel.
+
++ Model (application/json)
+
+    ```json
+    {
+        "name": "Vessel 1",
+        "arrival": "2022-05-11T13:56Z",
+        "deadline": "2022-05-12T18:13Z",
+        "container_amount": 30,
+        "cost": 2.6,
+        "destination_terminal": 4,
+        "dimension": {
+            "length": 30,
+            "width": 10,
+            "depth": 30
+        }
+    }
+    ```
+
+### Create a Vessel [POST /vessels]
+
++ Request
+    [Vessel][]
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /vessels/3
+
+    + Body
+    
+            {
+                "name": "Vessel 1",
+                "arrival": "2022-05-11T13:56Z",
+                "deadline": "2022-05-12T18:13Z",
+                "container_amount": 30,
+                "cost": 2.6,
+                "destination_terminal": 4,
+                "dimension": {
+                    "length": 30,
+                    "width": 10,
+                    "depth": 30
+                }
+            }
+
+### Retrieve a Vessel [GET]
+
++ Response 200
+    [Vessel][]
+
++ Response 404
+
+### Replace a Vessel [PUT]
+
++ Request
+    [Vessel][]
+
++ Response 200
+    [Vessel][]
+
++ Response 404
+
+### Delete a Vessel [DELETE]
+
++ Response 204
+
++ Response 404
+
+## Schedule [/vessels/{vessel_id}/schedule]
+A Schedule object has the following attributes:
+
++ vessel: `1` (integer) - ID of the Vessel.
++ type: `manual` (`manual` or `automatic`) - Whether the Vessel should be planned at the supplied Berth and timestamp or by the software, respectively.
++ berth: `20` (integer) - ID of the Berth the Vessel should be processed at.
++ start: `2022-05-12T07:23Z` (timestamp) - When the Vessel should start being processed.
++ end: `2022-05-13T21:41Z` (timestamp) - When the Vessel is expected to end being processed.
+
++ Parameters
+    + vessel_id: `1` (integer) - ID of the Vessel.
+
++ Model (application/json)
+
+    ```json
+    {
+        "vessel": 1,
+        "type": "manual",
+        "berth": 30,
+        "start": "2022-05-11T16:32Z",
+        "end": "2022-05-11T21:26Z"
+    }
+    ```
+    
+### Retrieve a Vessel's Schedule [GET]
+
++ Response 200
+    [Schedule][]
+
++ Response 404
+
+### Replace or Create a Vessel's Schedule [PUT]
+
++ Request
+    [Schedule][]
+
++ Response 200
+    [Schedule][]
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /vessels/1/schedule
+
+    + Body
+    
+            {
+                "vessel": 1,
+                "type": "manual",
+                "berth": 30,
+                "start": "2022-05-11T16:32Z",
+                "end": "2022-05-11T21:26Z"
+            }
+
++ Response 404
+
+### Delete a Vessel's Schedule [DELETE]
+
++ Response 204
+
++ Response 404
+
+# Group Berths
+
+## Berth [/berths/{berth_id}]
+
+A Berth object has the following attributes:
++ open_time: `06:45` (time) - The time at which the Berth starts processing.
++ close_time: `21:30` (time) - The time at which the Berth stops processing.
++ unload_speed: `6.3` (float) - The amount of containers per time unit the Berth can process.
++ dimension - Physical dimensions of the Berth.
+    + length: `150` (integer) - The length of the Berth in metres.
+    + width: `30` (integer) - The maximum length of Vessel in the Berth in metres.
+    + depth: `50` (integer) - The depth of the Berth in metres.
+
++ Parameters
+    + berth_id: `1` (integer) - The id of the Berth.
+
++ Model (application/json)
+
+    ```json
+    {
+        "open_time": "06:45",
+        "close_time": "21:30",
+        "unload_speed": 6.3,
+        "dimension": {
+            "length": 150,
+            "width": 30,
+            "depth": 50
+        }
+    }
+    ```
+
+### Create a Berth [POST /berths]
+
++ Request
+    [Berth][]
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /berths/3
+
+    + Body
+    
+            {
+                "open_time": "06:45",
+                "close_time": "21:30",
+                "unload_speed": 6.3,
+                "dimension": {
+                    "length": 150,
+                    "width": 30,
+                    "depth": 50
+                }
+            }
+
+### Retrieve a Berth [GET]
+
++ Response 200
+    [Berth][]
+
++ Response 404
+
+### Replace a Berth [PUT]
+
++ Request
+    [Berth][]
+
++ Response 200
+    [Berth][]
+
++ Response 404
+
+### Delete a Berth [DELETE]
+
++ Response 204
+
++ Response 404
+
+### Retrieve a Berth's Schedules [GET /berths/{berth_id}/schedules{?from,to}]
+
++ Parameters
+    + from: `2022-05-11T14:24Z` (timestamp, optional) - Time to start looking from
+    + to: `2022-05-12T14:24Z` (timestamp, optional) - Time to end looking at
+
++ Response 200 (application/json)
+
+        [
+            {
+                "vessel": 1,
+                "type": "manual",
+                "berth": 30,
+                "start": "2022-05-11T16:32Z",
+                "end": "2022-05-11T21:26Z"
+            },
+            {
+                "vessel": 2,
+                "type": "automatic",
+                "berth": 30,
+                "start": "2022-05-14T09:21Z",
+                "end": "2022-05-15T13:53Z"
+            }
+        ]
+
++ Response 200 (application/json)
+
+        [
+            {
+                "vessel": 1,
+                "type": "manual",
+                "berth": 30,
+                "start": "2022-05-11T16:32Z",
+                "end": "2022-05-11T21:26Z"
+            }
+        ]
+
+# Group Terminals
+
+## Terminal [/terminals/{terminal_id}]
+
+A Terminal object has the following attributes:
+
++ name: `Han & Co. Ltd.` (string) - The name of the Terminal.
+
++ Parameters
+    + terminal_id: `1` (integer) - ID of the Terminal.
+
++ Model (application/json)
+
+    ```json
+    {
+        "name": "Han & Co. Ltd."
+    }
+    ```
+
+### Create a Terminal [POST /terminals]
+
++ Request
+    [Terminal][]
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /terminals/1
+
+    + Body
+    
+            {
+                "name": "Han & Co. Ltd."
+            }
+
+### Retrieve a Terminal [GET]
+
++ Response 200
+    [Terminal][]
+
++ Response 404
+
+### Replace a Terminal [PUT]
+
++ Request
+    [Terminal][]
+
++ Response 200
+    [Terminal][]
+
++ Response 404
+
+### Delete a Terminal [DELETE]
+
++ Response 204
+
++ Response 404
+
+### Retrieve a Terminal's Berths [GET /terminal/{terminal_id}/berths]
+
++ Response 200 (application/json)
+
+        {
+            "1": {
+                "open_time": "06:45",
+                "close_time": "21:30",
+                "unload_speed": 6.3,
+                "dimension": {
+                    "length": 150,
+                    "width": 30,
+                    "depth": 50
+                }
+            },
+            "2": {
+                "open_time": "08:30",
+                "close_time": "19:15",
+                "unload_speed": 2.7,
+                "dimension": {
+                    "length": 60,
+                    "width": 20,
+                    "depth": 30,
+                }
+            }
+        }
+
++ Response 404
+
+### Retrieve a Terminal's Schedules [GET /terminals/{terminal_id}/schedules{?from,to}]
+
++ Parameters
+    + from: `2022-05-11T14:24Z` (timestamp, optional) - Time to start looking from
+    + to: `2022-05-12T14:24Z` (timestamp, optional) - Time to end looking at
+
++ Response 200 (application/json)
+
+        {
+            "30": [
+                {
+                    "vessel": 1,
+                    "type": "manual",
+                    "berth": 30,
+                    "start": "2022-05-11T16:32Z",
+                    "end": "2022-05-11T21:26Z"
+                },
+                {
+                    "vessel": 2,
+                    "type": "automatic",
+                    "berth": 30,
+                    "start": "2022-05-14T09:21Z",
+                    "end": "2022-05-15T13:53Z"
+                }
+            ],
+            "31": []
+        }
+
++ Response 200 (application/json)
+
+        {
+            "30": [
+                {
+                    "vessel": 1,
+                    "type": "manual",
+                    "berth": 30,
+                    "start": "2022-05-11T16:32Z",
+                    "end": "2022-05-11T21:26Z"
+                }
+            ],
+            "31": []
+        }
+
+### Retrieve calculated optimal Schedules for given Schedules in the Terminal [GET /terminals/{terminal_id}/schedules/calculate]
+
++ Request (application/json)
+
+        {
+            "30": [
+                {
+                    "vessel": 1,
+                    "type": "manual",
+                    "berth": 30,
+                    "start": "2022-05-11T16:32Z",
+                    "end": "2022-05-11T21:26Z"
+                },
+                {
+                    "vessel": 2,
+                    "type": "automatic",
+                    "berth": 30,
+                    "start": "2022-05-14T09:21Z",
+                    "end": "2022-05-15T13:53Z"
+                }
+            ],
+            "31": []
+        }
+
++ Response 200 (application/json)
+
+        {
+            "30": [
+                {
+                    "vessel": 1,
+                    "type": "manual",
+                    "berth": 30,
+                    "start": "2022-05-11T16:32Z",
+                    "end": "2022-05-11T21:26Z"
+                }
+            ],
+            "31": [
+                {
+                    "vessel": 2,
+                    "type": "automatic",
+                    "berth": 31,
+                    "start": "2022-05-11T17:30Z",
+                    "end": "2022-05-11T19:41Z"
+                }
+            ]
+        }
+
+# Group Ports
+
+## Port [/ports/{port_id}]
+
+A Port object has the following attributes:
+
++ name: `Han Shipping` (string) - The name of the Port.
+
++ Parameters
+    + port_id: `1` (integer) - ID of the Port.
+
++ Model (application/json)
+
+    ```json
+    {
+        "name": "Han Shipping"
+    }
+    ```
+
+### Create a Port [POST /ports]
+
++ Request
+    [Port][]
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /ports/1
+
+    + Body
+    
+            {
+                "name": "Han Shipping"
+            }
+
+### Retrieve a Port [GET]
+
++ Response 200
+    [Port][]
+
++ Response 404
+
+### Replace a Port [PUT]
+
++ Request
+    [Port][]
+
++ Response 200
+    [Port][]
+
++ Response 404
+
+### Delete a Port [DELETE]
+
++ Response 204
+
++ Response 404
+
+### Retrieve a Port's Terminals [GET /port/{port_id}/terminals]
+
++ Response 200 (application/json)
+
+        {
+            "1": {
+                "name": "Han & Co. Ltd."
+            },
+            "2": {
+                "name": "Bui Buoys"
+            }
+        }
+
++ Response 404
+
+### Retrieve a Port's Schedules [GET /terminals/{terminal_id}/schedules{?from,to}]
+
++ Parameters
+    + from: `2022-05-11T14:24Z` (timestamp, optional) - Time to start looking from
+    + to: `2022-05-12T14:24Z` (timestamp, optional) - Time to end looking at
+
++ Response 200 (application/json)
+
+        {
+            "1": {
+                "30": [
+                    {
+                        "vessel": 1,
+                        "type": "manual",
+                        "berth": 30,
+                        "start": "2022-05-11T16:32Z",
+                        "end": "2022-05-11T21:26Z"
+                    },
+                    {
+                        "vessel": 2,
+                        "type": "automatic",
+                        "berth": 30,
+                        "start": "2022-05-14T09:21Z",
+                        "end": "2022-05-15T13:53Z"
+                    }
+                ],
+                "31": []
+            }
+        }
+
++ Response 200 (application/json)
+
+        {
+            "1": {
+                "30": [
+                    {
+                        "vessel": 1,
+                        "type": "manual",
+                        "berth": 30,
+                        "start": "2022-05-11T16:32Z",
+                        "end": "2022-05-11T21:26Z"
+                    }
+                ],
+                "31": []
+            }
+        }
+
+## Ports [/ports]
+
+### Retrieve all Ports [GET]
+
++ Response 200 (application/json)
+
+        {
+            "1": {
+                "name": "Han Shipping"
+            },
+            "2": {
+                "name": "Thai Transport"
+            }
+        }
