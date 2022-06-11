@@ -18,7 +18,7 @@ gulp.task('bootstrap', () => {
 });
 
 gulp.task('watch', () => {
-  gulp.watch(pathToApp + '/styles/**/*.sass', (done) => {
+  gulp.watch(pathToApp + '/styles/**/*', (done) => {
     gulp.series(['clean', 'styles'])(done);
   });
 });

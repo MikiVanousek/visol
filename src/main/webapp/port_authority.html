@@ -1,58 +1,66 @@
 <!DOCTYPE HTML>
-<html lang=”en”>
-<head>
-  <meta charset="UTF-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Visol Project Landing Page</title>
-  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-  <link href="./index.css" rel="stylesheet">
-  <link href="./bootstrap.css" rel="stylesheet">
-  <script src="./script/index.js" type="module"></script>
-  <script crossorigin="anonymous"
-          integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
-</head>
-<body>
+<html lang="”en”">
+  <head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Visol Project Landing Page</title>
+    <link href="./index.css" rel="stylesheet">
+    <link href="./bootstrap.css" rel="stylesheet">
+    <script src="./script/index.js" type="module"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+  <body>
 
-  <nav-bar role="port authority">
-    <ul class="navbar-nav mb-lg-0">
-      <div>
-        <button class="btn btn-sm btn-outline-dark m-1" type="button">Add vessel</button>
-        <button class="btn btn-sm btn-outline-dark m-1" type="button">Add terminal</button>
-        <button class="btn btn-sm btn-danger m-1" type="button">Schedule</button>
+    <nav-bar role="port authority">
+      <ul class="navbar-nav mb-lg-0">
+        <div>
+          <button class="btn btn-sm btn-outline-dark m-1" type="button">Add vessel</button>
+          <button class="btn btn-sm btn-outline-dark m-1" type="button">Add terminal</button>
+          <button class="btn btn-sm btn-danger m-1" type="button">Schedule</button>
+        </div>
+      </ul>
+    </nav-bar>
+
+    <icon-cirle name="ship" view="primary"></icon-cirle>
+
+    <icon-cirle name="cloud-moon" view="closed"></icon-cirle>
+
+    <icon-cirle name="anchor" view="berth"></icon-cirle>
+
+    <icon-cirle name="arrow-right" view="default"></icon-cirle>
+
+
+    <div class="container-sm d-flex flex-row">
+      <div class="me-3"><b>Old cost:</b> 1800</div>
+      <div><b>New cost:</b> 2000</div>
+    </div>
+
+    <planner-schedule></planner-schedule>
+
+    <div class="d-flex flex-row container-md rounded mb-3 p-4 bg-secondary bg-opacity-10 text-dark">
+      <div class="d-flex flex-column justify-content-md-start w-25">
+        <h5>Unscheduled vessels</h5>
+        <form class="form-group me-2 has-icon-beginning" role="search">
+          <span class="fa fa-search form-control-feedback"></span>
+          <input aria-label="Search" class="form-control" placeholder="Search vessel" type="text">
+        </form>
       </div>
-    </ul>
-  </nav-bar>
 
-
-  <div class="container-sm d-flex flex-row">
-    <div class="me-3"><b>Old cost:</b> 1800</div>
-    <div><b>New cost:</b> 2000</div>
-  </div>
-
-  <planner-schedule></planner-schedule>
-
-  <div class="d-flex flex-row container-md rounded mb-3 p-4 bg-secondary bg-opacity-10 text-dark">
-    <div class="d-flex flex-column justify-content-md-start w-25">
-      <h5>Unscheduled vessels</h5>
-      <form class="form-group me-2 has-icon-beginning" role="search">
-        <span class="fa fa-search form-control-feedback"></span>
-        <input aria-label="Search" class="form-control" placeholder="Search vessel" type="text">
-      </form>
+      <div class="scrollable-container d-flex flex-row justify-content-start w-75">
+        <div class="container small-vessel-label">Han's Big Boat 1</div>
+        <div class="container small-vessel-label">Han's Big Boat 2</div>
+        <div class="container small-vessel-label">Han's Big Boat 3</div>
+        <div class="container small-vessel-label">Han's Big Boat 4</div>
+        <div class="container small-vessel-label">Han's Big Boat 5</div>
+        <div class="container small-vessel-label">Han's Big Boat 6</div>
+        <div class="container small-vessel-label">Han's Big Boat 8</div>
+        <div class="container small-vessel-label">Han's Big Boat 9</div>
+        <div class="container small-vessel-label">Han's Big Boat 10</div>
+        <div class="container small-vessel-label">Han's Big Boat 11</div>
+      </div>
     </div>
 
-    <div class="scrollable-container d-flex flex-row justify-content-start w-75">
-      <div class="container small-vessel-label">Han's Big Boat 1</div>
-      <div class="container small-vessel-label">Han's Big Boat 2</div>
-      <div class="container small-vessel-label">Han's Big Boat 3</div>
-      <div class="container small-vessel-label">Han's Big Boat 4</div>
-      <div class="container small-vessel-label">Han's Big Boat 5</div>
-      <div class="container small-vessel-label">Han's Big Boat 6</div>
-      <div class="container small-vessel-label">Han's Big Boat 8</div>
-      <div class="container small-vessel-label">Han's Big Boat 9</div>
-      <div class="container small-vessel-label">Han's Big Boat 10</div>
-      <div class="container small-vessel-label">Han's Big Boat 11</div>
-    </div>
-  </div>
-
-</body>
+  </body>
 </html>

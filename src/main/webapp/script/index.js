@@ -1,3 +1,5 @@
+import "./components/icon-circle.js"
+import "./components/icon-plain.js"
 import "./components/vessel_modal.js"
 import "./components/navbar.js"
 import "./components/planner.js"
