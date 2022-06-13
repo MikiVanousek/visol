@@ -17,3 +17,8 @@
 (Luka) Create a logo \
 (Luka) Install GitLab Runner \
 (Miki) Add basic API integration on forms
+
+### Sunday
+(Luka) Extend database diagram with Change table \
+(Luka) Change API documentation to incorporate changes to the data storage flow \
+(Luka) Add performance endpoints to the API documentation
