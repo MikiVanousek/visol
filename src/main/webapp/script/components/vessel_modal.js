@@ -1,4 +1,4 @@
-import Requets from "../requests.js"
+import Requests from "../requests.js"
 class VesselModal extends HTMLElement {
   constructor() {
     super();
@@ -21,48 +21,51 @@ class VesselModal extends HTMLElement {
 
   connectedCallback() {
     this.innerHTML = `
-<div class="modal fade" id="${this.getAttribute('name')}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div aria-hidden="true" aria-labelledby="exampleModalLabel" id="${this.getAttribute('name')}" aria-labelledby="exampleModalLabel" class="modal fade" id="EXTERNAL_FRAGMENT" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel"><b>Vessel information</b></h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
       </div>
       <form id="modal-form">
         <div class="modal-body">
           <div class="mb-3">
-            <label for="form-name" class="form-label">Name:</label>
-            <input type="text" class="form-control form-control-sm" id="form-name" name="name" placeholder="Titanic" required>
+            <label class="form-label" for="form-name">Name:</label>
+            <input class="form-control form-control-sm" id="form-name" name="vessel-name" placeholder="Titanic" required
+                   type="text">
           </div>
 
           <div class="row mb-3">
             <div class="col">
-              <label for="form-arrival" class="form-label">Arrival:</label>
-              <input type="datetime-local" class="form-control form-control-sm" id="form-arrival" name="arrival" required>
+              <label class="form-label" for="form-arrival">Arrival:</label>
+              <input class="form-control form-control-sm" id="form-arrival" name="vessel-arrival" required
+                     type="datetime-local" value="${new Date().toJSON().slice(0,16)}">
             </div>
             <div class="col">
-              <label for="form-deadline" class="form-label">Deadline:</label>
-              <input type="datetime-local" class="form-control form-control-sm" id="form-deadline" name="deadline">
+              <label class="form-label" for="form-deadline">Deadline:</label>
+              <input class="form-control form-control-sm" id="form-deadline" name="vessel-deadline" type="datetime-local">
             </div>
           </div>
 
           <div class="row mb-3">
             <div class="col">
-              <label for="form-containers" class="form-label">Container amount:</label>
-              <input type="number" min="-1" class="form-control form-control-sm" id="form-containers"
-                     name="container_amount" required>
+              <label class="form-label" for="form-containers">Container amount:</label>
+              <input class="form-control form-control-sm" id="form-containers" min="-1" name="vessel-container_amount"
+                     required type="number">
             </div>
             <div class="col">
-              <label for="form-cost" class="form-label">Cost:</label>
-              <input type="number" class="form-control form-control-sm" id="form-cost" name="cost" required>
+              <label class="form-label" for="form-cost">Cost:</label>
+              <input class="form-control form-control-sm" id="form-cost" name="vessel-cost" required type="number">
             </div>
           </div>
 
           <div class="dropdown mb-3 row">
             <div class="col d-grid">
-              <label for="dropdown-terminal" class="form-label me-3"><b>Terminal:</b></label>
-              <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                      id="dropdown-terminal">
+              <label class="form-label me-3" for="dropdown-terminal"><b>Terminal:</b></label>
+              <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown"
+                      id="dropdown-terminal"
+                      type="button">
                 Not selected...
               </button>
               <ul class="dropdown-menu">
@@ -72,38 +75,38 @@ class VesselModal extends HTMLElement {
               </ul>
             </div>
             <div class="col">
-              <label for="form-length" class="form-label">Length:</label>
-              <input type="number" class="form-control form-control-sm" id="form-length" required>
+              <label class="form-label" for="form-length">Length:</label>
+              <input class="form-control form-control-sm" id="form-length" name="dimension-length" required type="number" value="0">
             </div>
           </div>
 
           <div class="row mb-3">
             <div class="col">
-              <label for="form-width" class="form-label">Width:</label>
-              <input type="number" class="form-control form-control-sm" id="form-width" name="width" required>
+              <label class="form-label" for="form-width">Width:</label>
+              <input class="form-control form-control-sm" id="form-width" name="dimension-width" required type="number" value="0">
             </div>
             <div class="col">
-              <label for="form-depth" class="form-label">Depth:</label>
-              <input type="number" class="form-control form-control-sm" id="form-depth" name="width" required>
+              <label class="form-label" for="form-depth">Depth:</label>
+              <input class="form-control form-control-sm" id="form-depth" name="dimension-depth" required type="number" value="0">
             </div>
           </div>
 
           <div class="mb-3 row mt-2">
             <label class="label me-3 col" for="label"><b>Schedule:</b></label>
             <div class="form-check form-check-inline col">
-              <input class="form-check-input" type="radio" name="flexRadioDefault" id="radio-auto" checked>
+              <input checked class="form-check-input" id="radio-auto" name="radio-auto" type="radio">
               <label class="form-check-label" for="radio-auto">
                 Automatic
               </label>
             </div>
             <div class="form-check form-check-inline col">
-              <input class="form-check-input" type="radio" name="flexRadioDefault" id="radio-manual">
+              <input class="form-check-input" id="radio-manual" name="radio-manual" type="radio">
               <label class="form-check-label" for="radio-manual">
                 Manual
               </label>
             </div>
             <div class="form-check form-check-inline col">
-              <input class="form-check-input" type="radio" name="flexRadioDefault" id="radio-disabled">
+              <input class="form-check-input" id="radio-disabled" name="radio-disabled" type="radio">
               <label class="form-check-label" for="radio-disabled">
                 Disabled
               </label>
@@ -112,20 +115,22 @@ class VesselModal extends HTMLElement {
 
           <div class="row mb-3" id="schedule-edit">
             <div class="col">
-              <label for="form-berth" class="form-label">Berth:</label>
-              <input type="number" class="form-control form-control-sm disabled-if-auto" id="form-berth" disabled required>
+              <label class="form-label" for="form-berth">Berth:</label>
+              <input class="form-control form-control-sm disabled-if-auto" disabled id="form-berth" name="schedule-berth" required
+                     type="number">
             </div>
             <div class="col">
-              <label for="form-handel" class="form-label">Handel:</label>
-              <input type="date" class="form-control form-control-sm disabled-if-auto" id="form-handel" disabled required>
+              <label class="form-label" for="form-handel">Handel:</label>
+              <input class="form-control form-control-sm disabled-if-auto" disabled id="form-handel" name-="schedule-handel" required
+                     type="datetime-local">
             </div>
           </div>
         </div>
         <div class="modal-footer" id="modal-footer-btn">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-primary" id="btn-save">Save changes</button>
+          <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+          <button class="btn btn-primary" id="btn-save" type="submit">Save changes</button>
         </div>
-        <div id="modal-footer-loading" hidden>
+        <div hidden id="modal-footer-loading">
           <div class="modal-footer d-flex justify-content-center">
             <div class="spinner-grow text-primary" role="status">
               <span class="sr-only">Loading...</span>
@@ -136,30 +141,41 @@ class VesselModal extends HTMLElement {
     </div>
   </div>
 	`
-    let ids = ["auto", "manual", "disabled"]
-    ids.forEach(id => {
+    let radio_ids = ["auto", "manual", "disabled"]
+    radio_ids.forEach(id => {
       document.getElementById(`radio-${id}`).addEventListener("click", () => {
         this.set_schedule_type(id)
       })
     })
-    document.getElementById('modal-form').addEventListener('submit', e => {
-      e.preventDefault()
-      const form = document.getElementById("modal-form")
-      const formData = new FormData(form);
-      const vessel = {};
 
+    const form = document.getElementById("modal-form")
+    form.addEventListener('submit', e => {
+      e.preventDefault()
+      // TODO Why are there multiple listeners?
+      e.stopImmediatePropagation();
+
+      const serializedForm = {};
+      for (const prefix of ["vessel", "schedule", "dimension", "radio"]){
+        serializedForm[prefix] = {}
+      }
+
+      const formData = new FormData(form);
       for (const [name, value] of formData) {
         if (value !== "") {
-          vessel[name] = value;
+          let words = name.split("-")
+          let prefix = words[0]
+          let key = words[1]
+          console.log(prefix)
+          serializedForm[prefix][key] = value;
         }
       }
-      console.log(JSON.stringify(vessel));
+      console.log(JSON.stringify(serializedForm));
 
       let buttons = document.getElementById("modal-footer-btn")
       let loader = document.getElementById("modal-footer-loading")
       buttons.setAttribute("hidden", "")
       loader.removeAttribute("hidden")
-      Requets.postData("/vessels", vessel).then()
+      Requests.postData("/vessels", serializedForm).then()
     })
   }
 }
