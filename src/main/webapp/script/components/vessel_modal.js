@@ -147,8 +147,11 @@ class VesselModal extends HTMLElement {
       const form = document.getElementById("modal-form")
       const formData = new FormData(form);
       const vessel = {};
+
       for (const [name, value] of formData) {
+        if (value !== "") {
           vessel[name] = value;
+        }
       }
       console.log(JSON.stringify(vessel));
 
