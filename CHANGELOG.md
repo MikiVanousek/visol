@@ -23,6 +23,11 @@
 ![][Luka] Change API documentation to incorporate changes to the data storage flow \
 ![][Luka] Add performance endpoints to the API documentation
 
+## Week 8
+### Monday
+![][Luka] Improve the changelog \
+![][Luka] Improve the .gitignore
+
 [Han]: profile-pictures/Han.png "Han"
 [Hessel]: profile-pictures/Hessel.png "Hessel"
 [Krystof]: profile-pictures/Krystof.png "Krystof"
