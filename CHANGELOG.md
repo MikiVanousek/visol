@@ -22,11 +22,14 @@
 ![][Luka] Extend database diagram with Change table \
 ![][Luka] Change API documentation to incorporate changes to the data storage flow \
 ![][Luka] Add performance endpoints to the API documentation
+![][Krystof] Adding fa icons to sass
 
 ## Week 8
 ### Monday
 ![][Luka] Improve the changelog \
 ![][Luka] Improve the .gitignore
+![][Krystof] Building more web components
+![][Krystof] Polishing figma design
 
 [Han]: profile-pictures/Han.png "Han"
 [Hessel]: profile-pictures/Hessel.png "Hessel"
