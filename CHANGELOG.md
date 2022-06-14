@@ -23,6 +23,7 @@
 ![][Luka] Change API documentation to incorporate changes to the data storage flow \
 ![][Luka] Add performance endpoints to the API documentation
 ![][Krystof] Adding fa icons to sass
+![][Miki] Form: validation and required fields
 
 ## Week 8
 ### Monday
@@ -30,6 +31,7 @@
 ![][Luka] Improve the .gitignore
 ![][Krystof] Building more web components
 ![][Krystof] Polishing figma design
+![][Miki] Form: default value and serialization
 
 [Han]: profile-pictures/Han.png "Han"
 [Hessel]: profile-pictures/Hessel.png "Hessel"
