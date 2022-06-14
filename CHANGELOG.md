@@ -21,9 +21,9 @@
 ### Sunday
 ![][Luka] Extend database diagram with Change table \
 ![][Luka] Change API documentation to incorporate changes to the data storage flow \
-![][Luka] Add performance endpoints to the API documentation
-![][Krystof] Adding fa icons to sass
-![][Miki] Form: validation and required fields
+![][Luka] Add performance endpoints to the API documentation \
+![][Krystof] Add FA icons to SASS \
+![][Miki] Form: validation and required fields \
 
 ## Week 8
 ### Monday
