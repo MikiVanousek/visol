@@ -1,16 +1,19 @@
-class Requets {
-  static baseUrl = 'https://private-anon-10598d6953-visol.apiary-mock.com';
+class Requests {
+  static baseUrl = 'https://private-db987b-visolopenapi.apiary-mock.com'
+  static portId = 1
 
-  static async postData(path = '', data = {}) {
+  static async postData(path, data = {}) {
     const res = await fetch(this.baseUrl + path, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
       body: JSON.stringify(data)
     });
-  return res.json();
-}
+    return res.json();
+  }
+
+  static async getData(path) {
+    const res = await fetch(this.baseUrl + path);
+    return res.json();
+  }
 }
 
-export default Requets;
+export default Requests;

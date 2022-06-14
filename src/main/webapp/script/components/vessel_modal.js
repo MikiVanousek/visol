@@ -1,10 +1,15 @@
 import Requests from "../requests.js"
 class VesselModal extends HTMLElement {
+  schedule_type = "auto"
+  terminals
+
   constructor() {
     super();
+     this.terminals = Requests.getData(`/ports/${Requests.portId}/terminals`)
   }
 
    set_schedule_type(type) {
+    this.schedule_type = type
     if (type==="disabled") {
       document.getElementById("schedule-edit").setAttribute("hidden","")
     } else {
@@ -19,7 +24,13 @@ class VesselModal extends HTMLElement {
     }
   }
 
+
   connectedCallback() {
+    this.terminals.then(t => {
+      this.buildModal(t)
+    })
+  }
+  buildModal(terminals) {
     this.innerHTML = `
 <div aria-hidden="true" aria-labelledby="exampleModalLabel" id="${this.getAttribute('name')}" aria-labelledby="exampleModalLabel" class="modal fade" id="EXTERNAL_FRAGMENT" tabindex="-1">
   <div class="modal-dialog">
@@ -40,7 +51,7 @@ class VesselModal extends HTMLElement {
             <div class="col">
               <label class="form-label" for="form-arrival">Arrival:</label>
               <input class="form-control form-control-sm" id="form-arrival" name="vessel-arrival" required
-                     type="datetime-local" value="${new Date().toJSON().slice(0,16)}">
+                     type="datetime-local" value="${new Date().toJSON().slice(0, 16)}">
             </div>
             <div class="col">
               <label class="form-label" for="form-deadline">Deadline:</label>
@@ -60,22 +71,15 @@ class VesselModal extends HTMLElement {
             </div>
           </div>
 
-          <div class="dropdown mb-3 row">
+          <div class="mb-3 row">
             <div class="col d-grid">
-              <label class="form-label me-3" for="dropdown-terminal"><b>Terminal:</b></label>
-              <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown"
-                      id="dropdown-terminal"
-                      type="button">
-                Not selected...
-              </button>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Terminal 1</a></li>
-                <li><a class="dropdown-item" href="#">Terminal 2</a></li>
-                <li><a class="dropdown-item" href="#">Terminal 3</a></li>
-              </ul>
-            </div>
-            <div class="col">
-              <label class="form-label" for="form-length">Length:</label>
+              <label class="form-label me-3" for="select-terminal"><b>Terminal:</b></label>
+              <select class="form-select form-select-sm" name="vessel-destination_terminal"> 
+                ${Object.keys(terminals).map(i => `<option value="${i}">${terminals[i]['name']}</option>`).join('\n')}
+              </select>
+              </div>
+              <div class="col">
+                <label class="form-label" for="form-length">Length:</label>
               <input class="form-control form-control-sm" id="form-length" name="dimension-length" required type="number" value="0">
             </div>
           </div>
@@ -121,7 +125,7 @@ class VesselModal extends HTMLElement {
             </div>
             <div class="col">
               <label class="form-label" for="form-handel">Handel:</label>
-              <input class="form-control form-control-sm disabled-if-auto" disabled id="form-handel" name-="schedule-handel" required
+              <input class="form-control form-control-sm disabled-if-auto" disabled id="form-handel" name="schedule-handel" required
                      type="datetime-local">
             </div>
           </div>
@@ -151,8 +155,6 @@ class VesselModal extends HTMLElement {
     const form = document.getElementById("modal-form")
     form.addEventListener('submit', e => {
       e.preventDefault()
-      // TODO Why are there multiple listeners?
-      e.stopImmediatePropagation();
 
       const serializedForm = {};
       for (const prefix of ["vessel", "schedule", "dimension", "radio"]){
@@ -165,18 +167,36 @@ class VesselModal extends HTMLElement {
           let words = name.split("-")
           let prefix = words[0]
           let key = words[1]
-          console.log(prefix)
           serializedForm[prefix][key] = value;
         }
       }
-      console.log(JSON.stringify(serializedForm));
 
-      let buttons = document.getElementById("modal-footer-btn")
-      let loader = document.getElementById("modal-footer-loading")
-      buttons.setAttribute("hidden", "")
-      loader.removeAttribute("hidden")
-      Requests.postData("/vessels", serializedForm).then()
+      let vessel = serializedForm["vessel"]
+      vessel["dimension"] = serializedForm["dimension"]
+      this.hideBtnFooter()
+      Requests.postData("/vessels", vessel).then(response => {
+        console.log(response)
+        this.showBtnFooter()
+        let schedule = serializedForm["schedule"]
+        console.log(schedule)
+      })
     })
+  }
+
+  generateSelect(terminals) {
+  }
+
+  hideBtnFooter() {
+    let buttons = document.getElementById("modal-footer-btn")
+    let loader = document.getElementById("modal-footer-loading")
+    buttons.setAttribute("hidden", "")
+    loader.removeAttribute("hidden")
+  }
+  showBtnFooter() {
+    let buttons = document.getElementById("modal-footer-btn")
+    let loader = document.getElementById("modal-footer-loading")
+    loader.setAttribute("hidden", "")
+    buttons.removeAttribute("hidden")
   }
 }
 

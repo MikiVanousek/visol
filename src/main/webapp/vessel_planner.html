@@ -22,7 +22,11 @@
   </head>
   <body>
 
+    <!-- Button triggers modal -->
+    <button class="btn btn-sm btn-outline-dark m-1" type="button" data-bs-toggle="modal" data-bs-target="#vessel-create">Add vessel</button>
+    <!-- TODO Miki separate modal for update -->
     <vessel-planner></vessel-planner>
 
+    <vessel-modal name="vessel-create" create="true"></vessel-modal>
   </body>
 </html>
