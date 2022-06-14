@@ -382,8 +382,7 @@ A Terminal object has the following attributes:
                     "start": "2022-05-14T09:21Z",
                     "end": "2022-05-15T13:53Z"
                 }
-            ],
-            "31": []
+            ]
         }
 
 + Response 200 (application/json)
@@ -397,46 +396,15 @@ A Terminal object has the following attributes:
                     "start": "2022-05-11T16:32Z",
                     "end": "2022-05-11T21:26Z"
                 }
-            ],
-            "31": []
+            ]
         }
 
-### Retrieve calculated optimal Schedules for given Schedules in the Terminal [GET /terminals/{terminal_id}/schedules/calculate]
-
-+ Request (application/json)
-
-        {
-            "30": [
-                {
-                    "vessel": 1,
-                    "type": "manual",
-                    "berth": 30,
-                    "start": "2022-05-11T16:32Z",
-                    "end": "2022-05-11T21:26Z"
-                },
-                {
-                    "vessel": 2,
-                    "type": "automatic",
-                    "berth": 30,
-                    "start": "2022-05-14T09:21Z",
-                    "end": "2022-05-15T13:53Z"
-                }
-            ],
-            "31": []
-        }
+### Optimise a Terminal's Schedules [POST /terminals/{terminal_id}/schedules/optimise]
+The response contains an array of all Schedules that were changed, grouped by Berth.
 
 + Response 200 (application/json)
 
         {
-            "30": [
-                {
-                    "vessel": 1,
-                    "type": "manual",
-                    "berth": 30,
-                    "start": "2022-05-11T16:32Z",
-                    "end": "2022-05-11T21:26Z"
-                }
-            ],
             "31": [
                 {
                     "vessel": 2,
@@ -446,6 +414,20 @@ A Terminal object has the following attributes:
                     "end": "2022-05-11T19:41Z"
                 }
             ]
+        }
+
+### Calculate a Terminal's Perfomance [GET /terminals/{terminal_id}/performance{?from,to}]
+
++ Parameters
+    + from: `2022-05-11T14:24Z` (timestamp, optional) - Time to start calculating from
+    + to: `2022-05-12T14:24Z` (timestamp, optional) - Time to end calculating at
+
++ Response 200 (application/json)
+
+        {
+            "cost": 263,
+            "scheduled_vessels": 13,
+            "unscheduled_vessels": 14
         }
 
 # Group Ports
@@ -507,7 +489,7 @@ A Port object has the following attributes:
 
 + Response 404
 
-### Retrieve a Port's Terminals [GET /port/{port_id}/terminals]
+### Retrieve a Port's Terminals [GET /ports/{port_id}/terminals]
 
 + Response 200 (application/json)
 
@@ -522,7 +504,7 @@ A Port object has the following attributes:
 
 + Response 404
 
-### Retrieve a Port's Schedules [GET /terminals/{terminal_id}/schedules{?from,to}]
+### Retrieve a Port's Schedules [GET /ports/{port_id}/schedules{?from,to}]
 
 + Parameters
     + from: `2022-05-11T14:24Z` (timestamp, optional) - Time to start looking from
@@ -564,10 +546,24 @@ A Port object has the following attributes:
                         "start": "2022-05-11T16:32Z",
                         "end": "2022-05-11T21:26Z"
                     }
-                ],
-                "31": []
+                ]
             }
         }
+
+### Calculate a Port's Perfomance [GET /ports/{port_id}/performance{?from,to}]
+
++ Parameters
+    + from: `2022-05-11T14:24Z` (timestamp, optional) - Time to start calculating from
+    + to: `2022-05-12T14:24Z` (timestamp, optional) - Time to end calculating at
+
++ Response 200 (application/json)
+
+        {
+            "cost": 5152,
+            "scheduled_vessels": 27,
+            "unscheduled_vessels": 14
+        }
+
 
 ## Ports [/ports]
 
@@ -583,3 +579,387 @@ A Port object has the following attributes:
                 "name": "Thai Transport"
             }
         }
+
+
+# Group Changes
+
+## Vessel Changes [/changes/vessels/{vessel_id}]
+Changes about a Vessel's information.
+
++ Parameters
+    + vessel_id: `1` (integer) - ID of the Vessel.
+
+### Create a Vessel's Change [POST /changes/vessels/{vessel_id}]
+
++ Request (application/json)
+
+        {  
+            "date": "2022-05-11T16:32:35Z",
+            "changes": {
+                "name": "New Vessel 1",
+                "container_amount": 40
+            },
+            "reason": "Additional cargo (#2524)"
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /changes/vessels/30/2022-05-11T16:32:35Z
+
+    + Body
+    
+            {
+                "vessel": 30,
+                "date": "2022-05-11T16:32:35Z",
+                "old": {
+                    "name": "Vessel 1",
+                    "container_amount": 30
+                },
+                "new": {
+                    "name": "New Vessel 1",
+                    "container_amount": 40
+                },
+                "reason": "Additional cargo (#2524)"
+            }
+
+### Retrieve all Vessels' Changes [GET /changes/vessels{?from,to}]
+
++ Parameters
+    + from: `2022-05-11T14:24Z` (timestamp, optional) - Time to start looking from
+    + to: `2022-05-12T14:24Z` (timestamp, optional) - Time to end looking at
+
++ Response 200 (application/json)
+
+        {
+            "30": [
+                {
+                    "vessel": 30,
+                    "date": "2022-05-11T16:32:35Z",
+                    "old": {
+                        "name": "Vessel 1",
+                        "container_amount": 30
+                    },
+                    "new": {
+                        "name": "New Vessel 1",
+                        "container_amount": 40
+                    },
+                    "reason": "Additional cargo (#2524)"
+                },
+                {
+                    "vessel": 30,
+                    "date": "2022-05-11T21:26:24Z"",
+                    "old": {
+                        "arrival": "2022-05-11T13:56Z",
+                        "deadline": "2022-05-12T18:13Z"
+                    },
+                    "new": {
+                        "arrival": "2022-05-18T13:56Z",
+                        "deadline": "2022-05-19T18:13Z"
+                    },
+                    "reason": "Ship delayed (#3517)"
+                }
+            ]
+        }
+
++ Response 200 (application/json)
+
+        {
+            "30": [
+                {
+                    "vessel": 30,
+                    "date": "2022-05-11T16:32:35Z",
+                    "old": {
+                        "name": "Vessel 1",
+                        "container_amount": 30
+                    },
+                    "new": {
+                        "name": "New Vessel 1",
+                        "container_amount": 40
+                    },
+                    "reason": "Additional cargo (#2524)"
+                }
+            ]
+        }
+
+### Retrieve a Vessel's Changes [GET /changes/vessels/{vessel_id}{?from,to}]
+
++ Parameters
+    + from: `2022-05-11T14:24Z` (timestamp, optional) - Time to start looking from
+    + to: `2022-05-12T14:24Z` (timestamp, optional) - Time to end looking at
+    
++ Response 200 (application/json)
+
+        [
+            {
+                "vessel": 30,
+                "date": "2022-05-11T16:32:35Z",
+                "old": {
+                    "name": "Vessel 1",
+                    "container_amount": 30
+                },
+                "new": {
+                    "name": "New Vessel 1",
+                    "container_amount": 40
+                },
+                "reason": "Additional cargo (#2524)"
+            },
+            {
+                "vessel": 30,
+                "date": "2022-05-11T21:26:24Z"",
+                "old": {
+                    "arrival": "2022-05-11T13:56Z",
+                    "deadline": "2022-05-12T18:13Z"
+                },
+                "new": {
+                    "arrival": "2022-05-18T13:56Z",
+                    "deadline": "2022-05-19T18:13Z"
+                },
+                "reason": "Ship delayed (#3517)"
+            }
+        ]
+
++ Response 200 (application/json)
+
+        [
+            {
+                "vessel": 30,
+                "date": "2022-05-11T16:32:35Z",
+                "old": {
+                    "name": "Vessel 1",
+                    "container_amount": 30
+                },
+                "new": {
+                    "name": "New Vessel 1",
+                    "container_amount": 40
+                },
+                "reason": "Additional cargo (#2524)"
+            }
+        ]
+
+### Retrieve a Vessel's Change [GET /changes/vessels/{vessel_id}/{date}]
+
++ Parameters
+    + date: `2022-05-11T16:32:35Z` (timestamp) - Time at which the change was made. Can be formatted without colons and dashes.
+
++ Response 200 (application/json)
+
+        {
+            "vessel": 30,
+            "date": "2022-05-11T16:32:35Z",
+            "old": {
+                "name": "Vessel 1",
+                "container_amount": 30
+            },
+            "new": {
+                "name": "New Vessel 1",
+                "container_amount": 40
+            },
+            "reason": "Additional cargo (#2524)"
+        }
+
+### Delete a Vessel's Changes [DELETE /changes/vessels/{vessel_id}{?from,to}]
+
++ Parameters
+    + from: `2022-05-11T14:24Z` (timestamp, optional) - Time to start deleting from
+    + to: `2022-05-12T14:24Z` (timestamp, optional) - Time to end deleting at
+
++ Response 204
+
++ Response 404
+
+### Delete a Vessel's Change [DELETE /changes/vessels/{vessel_id}/{date}]
+
++ Parameters
+    + date: `2022-05-11T16:32:35Z` (timestamp) - Time at which the change was made. Can be formatted without colons and dashes.
+
++ Response 204
+
++ Response 404
+
+## Schedule Changes [/changes/schedules/{vessel_id}]
+Changes about a Vessel's Schedule.
+
++ Parameters
+    + vessel_id: `1` (integer) - ID of the Vessel which's Schedule should be changed.
+
+### Create a Schedule's Change [POST /changes/schedules/{vessel_id}]
+
++ Request (application/json)
+
+        {  
+            "date": "2022-05-11T16:32:35Z",
+            "changes": {
+                "type": "automatic"
+            },
+            "reason": "Turn on automatic scheduling"
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /changes/schedules/30/2022-05-11T16:32:35Z
+
+    + Body
+    
+            {
+                "vessel": 30,
+                "date": "2022-05-11T16:32:35Z",
+                "old": {
+                    "type": "manual"
+                },
+                "new": {
+                    "type": "automatic"
+                },
+                "reason": "Turn on automatic scheduling"
+            }
+
+### Retrieve all Schedules' Changes [GET /changes/schedules{?from,to}]
+
++ Parameters
+    + from: `2022-05-11T14:24Z` (timestamp, optional) - Time to start looking from
+    + to: `2022-05-12T14:24Z` (timestamp, optional) - Time to end looking at
+
++ Response 200 (application/json)
+
+        {
+            "30": [
+                {
+                    "vessel": 30,
+                    "date": "2022-05-11T16:32:35Z",
+                    "old": {
+                        "type": "manual"
+                    },
+                    "new": {
+                        "type": "automatic"
+                    },
+                    "reason": "Turn on automatic scheduling"
+                },
+                {
+                    "vessel": 30,
+                    "date": "2022-05-11T21:26:24Z",
+                    "old": {
+                        "berth": 20,
+                        "start": "2022-05-15T16:32Z",
+                        "end": "2022-05-15T21:26Z"
+                    },
+                    "new": {
+                        "berth": 18,
+                        "start": "2022-05-09T10:24Z",
+                        "end": "2022-05-10T16:17Z"
+                    },
+                    "reason": "Automatic scheduling job"
+                }
+            ]
+        }
+
++ Response 200 (application/json)
+
+        {
+            "30": [
+                {
+                    "vessel": 30,
+                    "date": "2022-05-11T16:32:35Z",
+                    "old": {
+                        "type": "manual"
+                    },
+                    "new": {
+                        "type": "automatic"
+                    },
+                    "reason": "Turn on automatic scheduling"
+                }
+            ]
+        }
+
+### Retrieve all Schedule's Changes [GET /changes/schedules/{vessel_id}{?from,to}]
+
++ Parameters
+    + from: `2022-05-11T14:24Z` (timestamp, optional) - Time to start looking from
+    + to: `2022-05-12T14:24Z` (timestamp, optional) - Time to end looking at
+
++ Response 200 (application/json)
+
+        [
+            {
+                "vessel": 30,
+                "date": "2022-05-11T16:32:35Z",
+                "old": {
+                    "type": "manual"
+                },
+                "new": {
+                    "type": "automatic"
+                },
+                "reason": "Turn on automatic scheduling"
+            },
+            {
+                "vessel": 30,
+                "date": "2022-05-11T21:26:24Z",
+                "old": {
+                    "berth": 20,
+                    "start": "2022-05-15T16:32Z",
+                    "end": "2022-05-15T21:26Z"
+                },
+                "new": {
+                    "berth": 18,
+                    "start": "2022-05-09T10:24Z",
+                    "end": "2022-05-10T16:17Z"
+                },
+                "reason": "Automatic scheduling job"
+            }
+        ]
+
++ Response 200 (application/json)
+
+        [
+            {
+                "vessel": 30,
+                "date": "2022-05-11T16:32:35Z",
+                "old": {
+                    "type": "manual"
+                },
+                "new": {
+                    "type": "automatic"
+                },
+                "reason": "Turn on automatic scheduling"
+            }
+        ]
+
+### Retrieve a Schedule's Change [GET /changes/schedules/{vessel_id}/{date}]
+
++ Parameters
+    + date: `2022-05-11T16:32:35Z` (timestamp) - Time at which the change was made. Can be formatted without colons and dashes.
+
++ Response 200 (application/json)
+
+        {
+            "vessel": 30,
+            "date": "2022-05-11T16:32:35Z",
+            "old": {
+                "type": "manual"
+            },
+            "new": {
+                "type": "automatic"
+            },
+            "reason": "Turn on automatic scheduling"
+        }
+
+### Delete a Schedule's Changes [DELETE /changes/vessels/{vessel_id}{?from,to}]
+
++ Parameters
+    + from: `2022-05-11T14:24Z` (timestamp, optional) - Time to start deleting from
+    + to: `2022-05-12T14:24Z` (timestamp, optional) - Time to end deleting at
+
++ Response 204
+
++ Response 404
+
+### Delete a Schedule's Change [DELETE /changes/vessels/{vessel_id}/{date}]
+
++ Parameters
+    + date: `2022-05-11T16:32:35Z` (timestamp) - Time at which the change was made. Can be formatted without colons and dashes.
+
++ Response 204
+
++ Response 404
