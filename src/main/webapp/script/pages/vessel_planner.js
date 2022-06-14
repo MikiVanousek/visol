@@ -6,7 +6,7 @@ class VesselPlanner extends HTMLElement {
 
   connectedCallback() {
     this.innerHTML = `
-    <nav-bar></nav-bar>
+    <nav-bar role="planner"></nav-bar>
   
     <planner-schedule></planner-schedule>
 

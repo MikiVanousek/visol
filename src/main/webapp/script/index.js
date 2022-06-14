@@ -5,6 +5,7 @@ import "./components/vessel_modal.js"
 import "./components/navbar.js"
 import "./components/planner-schedule.js"
 import "./components/unscheduled-vessels.js"
+import "./components/drop-down.js"
 
 import "./pages/port-authority.js"
 import "./pages/landing-page.js"

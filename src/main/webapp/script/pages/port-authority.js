@@ -1,57 +1,41 @@
-import IconCircle from "../components/icon-circle.js";
-import FullButton from "../components/full-button.js";
-
 class PortAuthority extends HTMLElement {
+  static terminalDropdownTag = "chooseTerminal";
 
   constructor() {
     super();
   }
 
   connectedCallback() {
-    const children = this.innerHTML
     this.innerHTML = `
 
-    <nav-bar>
-        <div class="dropdown">
-      
-        <div data-bs-toggle="dropdown" aria-expanded="false" id="dropdownMenu">
-          <full-button icon="caret-down" view="${FullButton.VIEW.secondary}">
-            Car terminal
-          </full-button>
-        </div>
-        
-        <ul aria-labelledby="dropdownMenu" class="dropdown-menu" >
-          <li>
-            <button class="dropdown-item active" type="button">Car Terminal</button>
-          </li>
-          <li>
-            <button class="dropdown-item" type="button">Fish Terminal</button>
-          </li>
-          <li>
-            <button class="dropdown-item" type="button">Banana Terminal</button>
-          </li>
-          <li>
-            <button class="dropdown-item" type="button">Trees Terminal</button>
-          </li>
-        </ul>
-        
-      </div>
+    <nav-bar role="authority">
+        <drop-down name="${(PortAuthority.terminalDropdownTag)}" id="${(PortAuthority.terminalDropdownTag)}"></drop-down>
     </nav-bar>
-
-    <icon-cirle name="ship" view="${IconCircle.VIEW.default}"></icon-cirle>
-
-    <icon-cirle name="cloud-moon" view="${IconCircle.VIEW.closed}"></icon-cirle>
-
-    <icon-cirle name="anchor" view="${IconCircle.VIEW.berth}"></icon-cirle>
-
-    <icon-cirle name="arrow-right" view="${IconCircle.VIEW.default}"></icon-cirle>
-
-    <full-button view="${FullButton.VIEW.primary}">Save</full-button>
 
     <planner-schedule></planner-schedule>
 
     <unscheduled-vessels></unscheduled-vessels>`;
+
+    this.addData()
   }
+
+  addData() {
+    const dropDown = document.getElementById(PortAuthority.terminalDropdownTag);
+    dropDown.data = {
+      car: "Car Terminal",
+      fish: "Fish Terminal",
+      banana: "Banana Terminal",
+      trees: "Trees Terminal"
+    };
+    dropDown.active = dropDown.data.banana;
+    dropDown.callBack = this.changeTerminal
+    dropDown.render();
+  }
+
+  changeTerminal(newVal) {
+    console.log(newVal)
+  }
+
 }
 
 
