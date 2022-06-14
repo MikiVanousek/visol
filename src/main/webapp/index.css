@@ -8209,6 +8209,34 @@ readers do not read off random characters that represent icons */
   font-weight: 900;
 }
 
+.full-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 140px;
+  font-weight: 600;
+  font-size: 14px;
+  border: 1px solid #4CA6A8;
+  padding: 3.6px;
+  border-radius: 8px;
+  appearance: none;
+  transition: transform 200ms;
+  transform: scale(1);
+}
+.full-button:hover {
+  transform: scale(0.97);
+}
+.full-button.view-primary {
+  background-color: #4CA6A8;
+  color: #FFF;
+  border-color: #4CA6A8;
+}
+.full-button.view-secondary {
+  background-color: #D6EBEC;
+  color: #4CA6A8;
+  border-color: #D6EBEC;
+}
+
 .has-icon-beginning .form-control {
   padding-left: 2.375rem;
 }
@@ -8231,7 +8259,7 @@ readers do not read off random characters that represent icons */
   align-items: flex-start;
   max-height: 73vh;
   overflow: scroll;
-  margin: 20px auto;
+  margin: 0 auto 6px;
   padding-top: 30px;
 }
 .planner-current {
@@ -8391,6 +8419,8 @@ readers do not read off random characters that represent icons */
 
 .navbar {
   background-color: white;
+  padding: 18px 30px !important;
+  margin-bottom: 24px;
 }
 .navbar-brand-role {
   color: darkgrey;
@@ -8438,4 +8468,9 @@ readers do not read off random characters that represent icons */
 .icon-circle.view-berth {
   background-color: #DFD9F5;
   color: #7557D4;
+}
+
+icon-plain {
+  font-size: 12px;
+  padding-left: 6px;
 }

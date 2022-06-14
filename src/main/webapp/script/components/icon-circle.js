@@ -20,3 +20,5 @@ class IconCircle extends HTMLElement {
 }
 
 customElements.define("icon-cirle", IconCircle)
+
+export default IconCircle;
