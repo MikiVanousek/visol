@@ -28,9 +28,9 @@
 ## Week 8
 ### Monday
 ![][Luka] Improve the changelog \
-![][Luka] Improve the .gitignore
-![][Krystof] Building more web components
-![][Krystof] Polishing figma design
+![][Luka] Improve the `.gitignore` \
+![][Krystof] Building more web components \
+![][Krystof] Polishing figma design \
 ![][Miki] Form: default value and serialization
 
 [Han]: profile-pictures/Han.png "Han"
