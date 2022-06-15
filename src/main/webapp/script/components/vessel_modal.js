@@ -53,7 +53,7 @@ class VesselModal extends HTMLElement {
             <div class="col">
               <label class="form-label" for="form-arrival">Arrival:</label>
               <input class="form-control form-control-sm" id="form-arrival" name="vessel-arrival" required
-                     type="datetime-local" value="${new Date().toJSON().slice(0, 16)}">
+                     type="datetime-local" value="${VesselModal.nowJsonString()}">
             </div>
             <div class="col">
               <label class="form-label" for="form-deadline">Deadline:</label>
@@ -200,6 +200,11 @@ class VesselModal extends HTMLElement {
     let loader = document.getElementById("modal-footer-loading")
     loader.setAttribute("hidden", "")
     buttons.removeAttribute("hidden")
+  }
+
+  static nowJsonString() {
+    var tzoffset = new Date().getTimezoneOffset() * 60000 //offset in milliseconds
+    return new Date(Date.now() - tzoffset).toJSON().substring(0,16)
   }
 }
 
