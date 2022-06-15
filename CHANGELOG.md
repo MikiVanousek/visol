@@ -31,7 +31,7 @@
 ![][Luka] Improve the `.gitignore` \
 ![][Krystof] Building more web components \
 ![][Krystof] Polishing figma design \
-![][Miki] Form: default value and serialization
+![][Miki] Form: default value and serialization \
 ![][Hessel] Finish unit test all create and get api methods \
 ![][Hessel] Fix backend bugs until all tests finished succesfully \
 
