@@ -4,6 +4,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -80,5 +81,18 @@ public class Schedule {
 
     public void setFinish(Timestamp finish) {
         this.finish = finish;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Schedule)) return false;
+        Schedule schedule = (Schedule) o;
+        return vesselId == schedule.vesselId && berthId == schedule.berthId && manual == schedule.manual && Objects.equals(start, schedule.start) && Objects.equals(finish, schedule.finish);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(vesselId, berthId, manual, start, finish);
     }
 }

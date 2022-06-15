@@ -27,7 +27,8 @@ public class BerthsResource {
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Berth> getBerths() {
-        return BerthDao.getBerths();
+        return null;
+        //TODO;
     }
 
     @Path("{berth_id}")

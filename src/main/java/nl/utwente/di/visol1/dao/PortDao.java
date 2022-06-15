@@ -16,6 +16,7 @@ public class PortDao extends GenericDao {
         ResultSet rs = executeQuery("SELECT * FROM port WHERE id = ?", stmt -> stmt.setInt(1, portId));
 
         try {
+            rs.next();
             return new Port(
                     rs.getInt("id"),
                     rs.getString("name")
@@ -58,7 +59,7 @@ public class PortDao extends GenericDao {
         return port;
     }
 
-    public static void deletePortById(int portId) {
+    public static void deletePort(int portId) {
         executeUpdate("DELETE FROM port WHERE id = ?;", stmt -> stmt.setInt(1, portId));
     }
 

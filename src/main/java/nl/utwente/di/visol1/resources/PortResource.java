@@ -3,7 +3,6 @@ package nl.utwente.di.visol1.resources;
 import nl.utwente.di.visol1.dao.PortDao;
 import nl.utwente.di.visol1.dao.ScheduleDao;
 import nl.utwente.di.visol1.dao.TerminalDao;
-import nl.utwente.di.visol1.models.Berth;
 import nl.utwente.di.visol1.models.Port;
 import nl.utwente.di.visol1.models.Schedule;
 import nl.utwente.di.visol1.models.Terminal;
@@ -14,9 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBElement;
-import java.sql.ResultSet;
 import java.sql.Timestamp;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +31,7 @@ public class PortResource {
 
     @DELETE
     public void deletePort(){
-        PortDao.deletePortById(id);
+        PortDao.deletePort(id);
     }
 
     @PUT

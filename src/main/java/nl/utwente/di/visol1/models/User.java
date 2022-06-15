@@ -5,6 +5,7 @@ import org.jvnet.hk2.annotations.Optional;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Objects;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -92,5 +93,18 @@ public class User {
 
     public void setPort(Port port) {
         this.portId = port == null ? null : port.getId();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return Objects.equals(name, user.name) && Objects.equals(email, user.email) && Objects.equals(passwordHash, user.passwordHash) && role == user.role && Objects.equals(terminalId, user.terminalId) && Objects.equals(portId, user.portId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, email, passwordHash, role, terminalId, portId);
     }
 }

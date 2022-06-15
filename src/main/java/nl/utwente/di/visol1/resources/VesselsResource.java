@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBElement;
+import java.util.List;
 
 @Path("/vessels")
 public class VesselsResource {
@@ -29,5 +30,11 @@ public class VesselsResource {
     @Path("{vessel_id}")
     public VesselResource getVessel(@PathParam("vessel_id") String id) {
         return new VesselResource(uriInfo, request, id);
+    }
+
+    @Path("/terminals/{terminal_id}") //TODO: change path to path in API
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Vessel> getVesselsByTerminal(@PathParam("terminal_id") String id) {
+        return VesselDao.getVesselsByTerminal(Integer.parseInt(id));
     }
 }

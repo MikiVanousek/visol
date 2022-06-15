@@ -1,6 +1,7 @@
 package nl.utwente.di.visol1.dao;
 
 import java.sql.*;
+import java.util.function.Supplier;
 
 public abstract class GenericDao {
     @FunctionalInterface
@@ -11,13 +12,32 @@ public abstract class GenericDao {
     //public or private?
     private static final String HOST = "bronto.ewi.utwente.nl";
     private static final String DB_NAME = "dab_di21222b_138";
-    private static final String URL = "jdbc:postgresql://" + HOST + ":5432/" + DB_NAME + "?currentSchema=visol_project";
+    private static String SCHEMA;
+    private static final Supplier<String> URL = () -> "jdbc:postgresql://" + HOST + ":5432/" + DB_NAME + "?currentSchema=" + SCHEMA;
     private static final String USERNAME = DB_NAME;
-    private static final String PASSWORD = "";
+    private static final String PASSWORD = System.getenv("db_password");
 
+    private static Connection connection;
+
+
+    static {
+        useTestSchema(false);
+    }
 
     protected GenericDao() {
 
+    }
+
+    public static void truncateAllTables() {
+        String[] tables = {"schedule", "vessel", "berth", "terminal", "port"};
+        for (String table : tables) {
+            executeUpdate("truncate table " + table + " restart identity cascade");
+
+        }
+    }
+
+    public static void useTestSchema(boolean useTestSchema) {
+        SCHEMA = useTestSchema ? "visol_project_test" : "visol_project";
     }
 
     protected static ResultSet executeQuery(String query) {
@@ -28,17 +48,45 @@ public abstract class GenericDao {
         }
 
         try {
-            Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            connection = DriverManager.getConnection(URL.get(), USERNAME, PASSWORD);
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
-
-            connection.close();
-
             return rs;
 
         } catch (SQLException sqle) {
             System.err.println("Sql error: " + sqle);
             return null;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    protected static int executeUpdate(String query) {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException cnfe) {
+            System.err.println("Error loading driver: " + cnfe);
+        }
+
+        try {
+            connection = DriverManager.getConnection(URL.get(), USERNAME, PASSWORD);
+            Statement statement = connection.createStatement();
+            int res = statement.executeUpdate(query);
+            return res;
+
+        } catch (SQLException sqle) {
+            System.err.println("Sql error: " + sqle);
+            return -1;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -50,19 +98,23 @@ public abstract class GenericDao {
         }
 
         try {
-            Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            connection = DriverManager.getConnection(URL.get(), USERNAME, PASSWORD);
             PreparedStatement statement = connection.prepareStatement(query);
             prepare.inject(statement);
             ResultSet rs = statement.executeQuery();
-            connection.close();
-
             return rs;
+
 
         } catch (SQLException sqle) {
             System.err.println("Sql error: " + sqle);
             return null;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-
     }
 
     protected static int executeUpdate(String query, PrepareStatement prepare) {
@@ -73,18 +125,21 @@ public abstract class GenericDao {
         }
 
         try {
-            Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            connection = DriverManager.getConnection(URL.get(), USERNAME, PASSWORD);
             PreparedStatement statement = connection.prepareStatement(query);
             prepare.inject(statement);
             int res = statement.executeUpdate();
-            connection.close();
-
             return res;
 
         } catch (SQLException sqle) {
             System.err.println("Sql error: " + sqle);
             return -1;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
-
 }

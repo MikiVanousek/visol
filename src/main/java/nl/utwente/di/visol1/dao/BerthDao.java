@@ -14,12 +14,10 @@ public class BerthDao extends GenericDao{
 
         ResultSet rs = executeQuery("SELECT * FROM berth WHERE id = ?;", stmt -> stmt.setInt(1, berthId));
         try {
+            rs.next();
             return new Berth(
                     rs.getInt("id"),
-                    rs.getDouble("unloadSpeed"),
-                    rs.getInt("terminal"),
-                    rs.getTime("open"),
-                    rs.getTime("close"),
+                    rs.getInt("terminal"), rs.getTime("open"), rs.getTime("close"), rs.getDouble("unloadSpeed"),
                     rs.getInt("width"),
                     rs.getInt("depth"),
                     rs.getInt("length"));
@@ -29,27 +27,6 @@ public class BerthDao extends GenericDao{
         }
     }
 
-    public static List<Berth> getBerths(){
-        List<Berth> res = new ArrayList<>();
-        ResultSet rs = executeQuery("SELECT * FROM berth");
-
-        try {
-            while(rs.next()) {
-                res.add(new Berth(
-                        rs.getInt("id"),
-                        rs.getDouble("unloadSpeed"),
-                        rs.getInt("terminal"),
-                        rs.getTime("open"),
-                        rs.getTime("close"),
-                        rs.getInt("width"),
-                        rs.getInt("depth"),
-                        rs.getInt("length")));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return res;
-    }
 
     public static List<Berth> getBerthsByTerminal(int terminalId){
         List<Berth> res = new ArrayList<>();
@@ -58,10 +35,7 @@ public class BerthDao extends GenericDao{
             while(rs.next()) {
                 res.add(new Berth(
                         rs.getInt("id"),
-                        rs.getDouble("unloadSpeed"),
-                        rs.getInt("terminal"),
-                        rs.getTime("open"),
-                        rs.getTime("close"),
+                        rs.getInt("terminal"), rs.getTime("open"), rs.getTime("close"), rs.getDouble("unloadSpeed"),
                         rs.getInt("width"),
                         rs.getInt("depth"),
                         rs.getInt("length")));
@@ -107,5 +81,7 @@ public class BerthDao extends GenericDao{
         });
 
     }
+
+
 
 }

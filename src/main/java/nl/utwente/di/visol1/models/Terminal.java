@@ -4,6 +4,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Time;
+import java.util.Objects;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -62,5 +63,18 @@ public class Terminal {
 
     public void setPort(Port port) {
         this.portId = port.getId();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Terminal)) return false;
+        Terminal terminal = (Terminal) o;
+        return id == terminal.id && portId == terminal.portId && Objects.equals(open, terminal.open) && Objects.equals(close, terminal.close);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, open, close, portId);
     }
 }

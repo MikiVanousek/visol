@@ -16,11 +16,10 @@ import java.util.Map;
 public class ScheduleDao extends GenericDao {
     private final static String table = "schedule"; //needed??
 
-    public static Schedule getSchedule(int scheduleId) {
-        ResultSet rs = executeQuery("SELECT * FROM schedule WHERE id = ?", stmt -> stmt.setInt(1, scheduleId));
-
+    public static Schedule getScheduleByVessel(int vesselId){
+        ResultSet rs = executeQuery("SELECT * FROM schedule WHERE vessel = ?", stmt -> stmt.setInt(1, vesselId));
         try {
-            //public Schedule(Future<Vessel> vessel, Future<Berth> berth, boolean manual, Timestamp start, Timestamp finish) {
+            rs.next();
             //TODO: add promises for vessel and berth
             return new Schedule(
                     rs.getInt("vessel"),
@@ -93,8 +92,8 @@ public class ScheduleDao extends GenericDao {
 
     public static Map<Integer, List<Schedule>> getSchedulesByTerminal(int terminalId, Timestamp from ,Timestamp to) {
         Map<Integer, List<Schedule>> res = new HashMap<>();
-        ResultSet rs = executeQuery("SELECT s.* FROM schedule s, berth b" +
-                "WHERE s.berth = b.id AND b.terminal = ?" +
+        ResultSet rs = executeQuery("SELECT s.* FROM schedule s, berth b " +
+                "WHERE s.berth = b.id AND b.terminal = ? " +
                 "AND ((s.start >= ? AND s.start <= ?) OR (s.finish >= ? AND s.finish <= ?))", stmt -> {
             stmt.setInt(1, terminalId);
             stmt.setTimestamp(2, from);
@@ -124,22 +123,7 @@ public class ScheduleDao extends GenericDao {
         executeUpdate("DELETE FROM vessel where id = ?", stmt -> stmt.setInt(1, vesselId));
     }
 
-    public static Schedule getScheduleByVessel(int vesselId){
-        ResultSet rs = executeQuery("SELECT * FROM schedule WHERE vessel = ?", stmt -> stmt.setInt(1, vesselId));
-        try {
-            //TODO: add promises for vessel and berth
-            return new Schedule(
-                    rs.getInt("vessel"),
-                    rs.getInt("berth"),
-                    rs.getBoolean("manual"),
-                    rs.getTimestamp("start"),
-                    rs.getTimestamp("finish")
-            );
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-            return null;
-        }
-    }
+
 
     public static Schedule replaceSchedule(int vesselId, JAXBElement<Schedule> scheduleXML){
         Schedule schedule = scheduleXML.getValue();

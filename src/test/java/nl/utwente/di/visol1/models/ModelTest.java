@@ -1,7 +1,5 @@
 package nl.utwente.di.visol1.models;
 
-import org.postgresql.util.MD5Digest;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -71,8 +69,7 @@ public class ModelTest {
             Vessel vessel = new Vessel();
             vessel.setId(1);
             vessel.setName("BigBoatHan");
-            vessel.setContainerAmount(12);
-            vessel.setCost(3.2);
+            vessel.setContainers(12);
             vessel.setDestinationTerminal(terminal);
             vessel.setEta(Timestamp.valueOf(LocalDateTime.now().plusHours(1)));
             vessel.setDeadline(Timestamp.valueOf(LocalDateTime.now().plusDays(2).plusMinutes(24)));

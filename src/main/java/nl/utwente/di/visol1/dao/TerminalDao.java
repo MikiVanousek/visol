@@ -14,6 +14,7 @@ public class TerminalDao extends GenericDao{
     public static Terminal getTerminal(int terminalId) {
         ResultSet rs = executeQuery("SELECT * FROM terminal WHERE id = ?", stmt -> stmt.setInt(1, terminalId));
         try {
+            rs.next();
             return new Terminal(
                     rs.getInt("id"),
                     rs.getTime("open"),
