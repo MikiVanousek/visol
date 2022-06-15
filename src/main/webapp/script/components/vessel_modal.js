@@ -2,10 +2,12 @@ import Requests from "../requests.js"
 class VesselModal extends HTMLElement {
   schedule_type = "auto"
   terminals
+  form_id
 
   constructor() {
     super();
      this.terminals = Requests.getData(`/ports/${Requests.portId}/terminals`)
+     this.form_id = this.getAttribute('name') + '-modal-form'
   }
 
    set_schedule_type(type) {
@@ -32,14 +34,14 @@ class VesselModal extends HTMLElement {
   }
   buildModal(terminals) {
     this.innerHTML = `
-<div aria-hidden="true" aria-labelledby="exampleModalLabel" id="${this.getAttribute('name')}" aria-labelledby="exampleModalLabel" class="modal fade" id="EXTERNAL_FRAGMENT" tabindex="-1">
-  <div class="modal-dialog">
+<div class="modal fade" id="${this.getAttribute('name')}-modal" tabindex="-1">
+  <div class="modal-dialog" >
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"><b>Vessel information</b></h5>
-        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+        <h5 class="modal-title"><b>Vessel information</b></h5>
+        <button class="btn-close" data-bs-dismiss="modal" type="button"></button>
       </div>
-      <form id="modal-form">
+      <form id="${this.form_id}">
         <div class="modal-body">
           <div class="mb-3">
             <label class="form-label" for="form-name">Name:</label>
@@ -152,7 +154,7 @@ class VesselModal extends HTMLElement {
       })
     })
 
-    const form = document.getElementById("modal-form")
+    const form = document.getElementById(this.form_id)
     form.addEventListener('submit', e => {
       e.preventDefault()
 
@@ -174,6 +176,7 @@ class VesselModal extends HTMLElement {
       let vessel = serializedForm["vessel"]
       vessel["dimension"] = serializedForm["dimension"]
       this.hideBtnFooter()
+      console.log(serializedForm)
       Requests.postData("/vessels", vessel).then(response => {
         console.log(response)
         this.showBtnFooter()

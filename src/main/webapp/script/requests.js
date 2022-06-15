@@ -19,8 +19,7 @@ class Requests {
         'Accept': 'application/json'
       },
     });
-    console.log(res)
-    return res.json().catch(e => console.log(e));
+    return res.json();
   }
 }
 
