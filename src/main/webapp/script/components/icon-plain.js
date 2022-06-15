@@ -1,4 +1,9 @@
 class IconPlain extends HTMLElement {
+  static VIEW = {
+    default: "default",
+    button: "button"
+  }
+
   constructor() {
     super();
   }

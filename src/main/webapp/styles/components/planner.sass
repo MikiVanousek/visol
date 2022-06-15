@@ -14,10 +14,27 @@ $current-color: #59CAA1
 .planner
 	+relative
 	+flex(flex-start, flex-start)
-	max-height: 73vh
+	min-height: 73vh
 	overflow: scroll
 	margin: 0 auto $base-spacing
 	padding-top: $berth-header-height
+
+	&-header
+		+flex(center)
+		width: 100%
+
+		&-sub
+			+flex(center)
+			flex: 1
+
+			&-in
+				+flex(center)
+
+			&:first-child > &-in
+				margin-right: auto
+
+			&:last-child > &-in
+				margin-left: auto
 
 	&-current
 		$dot-size: 16px

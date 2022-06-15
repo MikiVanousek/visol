@@ -8257,10 +8257,33 @@ readers do not read off random characters that represent icons */
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  max-height: 73vh;
+  min-height: 73vh;
   overflow: scroll;
   margin: 0 auto 6px;
   padding-top: 30px;
+}
+.planner-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.planner-header-sub {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+.planner-header-sub-in {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.planner-header-sub:first-child > .planner-header-sub-in {
+  margin-right: auto;
+}
+.planner-header-sub:last-child > .planner-header-sub-in {
+  margin-left: auto;
 }
 .planner-current {
   position: absolute;
