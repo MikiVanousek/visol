@@ -43,6 +43,7 @@
 ![][Luka] Make presentation for sprint review
 ![][Luka] (Help) fix a few odd bugs here and there
 ![][Luka] Add a favicon
+![][Miki] Fix timezones Issues 
 
 [Han]: profile-pictures/Han.png "Han"
 [Hessel]: profile-pictures/Hessel.png "Hessel"
