@@ -38,6 +38,12 @@
 ### Tuesday
 ![][Luka] Transform API documentation from API Blueprint to OpenAPI 3.0.0
 
+### Wednesday
+![][Luka] Finish OpenAPI documentation
+![][Luka] Make presentation for sprint review
+![][Luka] (Help) fix a few odd bugs here and there
+![][Luka] Add a favicon
+
 [Han]: profile-pictures/Han.png "Han"
 [Hessel]: profile-pictures/Hessel.png "Hessel"
 [Krystof]: profile-pictures/Krystof.png "Krystof"
