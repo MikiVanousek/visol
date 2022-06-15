@@ -8213,7 +8213,6 @@ readers do not read off random characters that represent icons */
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 140px;
   font-weight: 600;
   font-size: 14px;
   border: 1px solid #4CA6A8;
@@ -8236,6 +8235,12 @@ readers do not read off random characters that represent icons */
   color: #4CA6A8;
   border-color: #D6EBEC;
 }
+.full-button.size-medium {
+  width: 100px;
+}
+.full-button.size-large {
+  width: 140px;
+}
 
 .has-icon-beginning .form-control {
   padding-left: 2.375rem;
@@ -8254,19 +8259,14 @@ readers do not read off random characters that represent icons */
 
 .planner {
   position: relative;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  min-height: 73vh;
-  overflow: scroll;
   margin: 0 auto 6px;
-  padding-top: 30px;
 }
 .planner-header {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
+  margin-bottom: 18px;
 }
 .planner-header-sub {
   display: flex;
@@ -8279,143 +8279,118 @@ readers do not read off random characters that represent icons */
   justify-content: center;
   align-items: center;
 }
+.planner-header-sub-in > *:not(:last-child) {
+  margin-right: 18px;
+}
 .planner-header-sub:first-child > .planner-header-sub-in {
   margin-right: auto;
 }
 .planner-header-sub:last-child > .planner-header-sub-in {
   margin-left: auto;
 }
-.planner-current {
-  position: absolute;
-  right: -64px;
-  left: -64px;
-  width: calc(100% + 64px);
-  height: 3px;
-  background-color: #59CAA1;
-  z-index: 1;
+.planner-header-date {
+  font-size: 18px;
+  font-weight: 600;
+  padding: 0 24px;
+  margin: 0;
 }
-.planner-current::before {
-  position: absolute;
-  top: 50%;
-  left: -7px;
-  transform: translateY(-50%);
-  content: "";
-  width: 16px;
-  height: 16px;
-  background-color: #59CAA1;
-  border-radius: 50%;
-}
-.planner-timeline {
+.planner-schedule {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  max-height: 73vh;
+  overflow: scroll;
+  border: 1px solid #EBEBEB;
+  border-radius: 8px;
 }
-.planner-timeline-day {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 576px;
-}
-.planner-timeline-day-date {
-  position: relative;
-  width: 23px;
-  height: 100%;
-  display: block;
-  background-color: #3D3D3D;
-  color: #FFF;
-}
-.planner-timeline-day-date-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  color: #FFF;
-  transform: translate(-50%, -50%) rotate(-90deg);
-  white-space: nowrap;
-}
-.planner-timeline-day-hours-hour {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 64px;
-  height: 24px;
-  border: 1px solid #000;
-  border-collapse: collapse;
-  border-top: none;
-  border-right: none;
-}
-.planner-timeline-day-hours-hour:first-child {
-  border-top: 1px solid #000;
-}
-.planner-berths {
+.planner-schedule-in {
+  width: auto;
+  height: 2950px;
   position: relative;
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
+  flex-shrink: 0;
+}
+.planner-schedule.view-day .planner-timeline-divider {
+  width: 100%;
+  height: 60px;
+}
+.planner-timeline {
+  padding-top: 70px;
+  flex-basis: 96px;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.planner-timeline-divider-time {
+  text-align: right;
+  font-size: 12px;
+  color: #9CA8BA;
+  margin: 0;
+  padding-right: 18px;
+  transform: translateY(-50%);
+}
+.planner-timeline-divider::before {
+  content: "";
+  position: absolute;
+  left: 96px;
+  width: 100%;
+  height: 1px;
+  background-color: #EBEBEB;
+  z-index: 1;
+}
+.planner-berths {
+  width: auto;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-top: 70px;
 }
 .planner-berths-berth {
   position: relative;
   width: 100%;
   height: 100%;
-  min-width: 150px;
+  min-width: 300px;
 }
 .planner-berths-berth-header {
   position: sticky;
-  top: -30px;
+  top: 0;
   width: 100%;
-  height: 30px;
-  border: 1px solid #000;
+  height: 70px;
+  border: 1px solid #EBEBEB;
   border-left: none;
+  border-top: none;
   font-size: 18px;
   text-align: center;
-  margin-top: -29px;
+  margin-top: -69px;
   margin-bottom: -1px;
   background-color: #FFF;
   z-index: 1;
 }
+.planner-berths-berth-header-info {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 12px;
+}
+.planner-berths-berth-header-info-name {
+  font-size: 14px;
+  font-weight: 600;
+  margin-left: 12px;
+}
 .planner-berths-berth-ships {
   position: relative;
   width: 100%;
-  height: 1152px;
-  background-color: #7557D4;
-  border: 1px solid #000;
-  border-top: none;
-  border-left: none;
-}
-.planner-berths-berth-ships-closed {
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  background-color: #000;
-  padding: 5px;
-}
-.planner-berths-berth-ships-closed-name {
-  font-size: 12px;
-  font-weight: bold;
-  text-transform: uppercase;
-  color: #FFF;
-  margin: 0;
-}
-.planner-berths-berth-ships-ship {
-  position: absolute;
-  width: 100%;
-  background-color: #4CA6A8;
-  padding: 5px;
-  cursor: pointer;
-}
-.planner-berths-berth-ships-ship-name {
-  color: #FFF;
-  font-size: 14px;
-  font-style: italic;
+  height: 100%;
+  background-color: #FFF;
+  border-right: 1px solid #EBEBEB;
 }
 .planner-berths-berth:first-child .planner-berths-berth-header {
-  border-left: 1px solid #000;
+  border-left: 1px solid #EBEBEB;
 }
 .planner-berths-berth:first-child .planner-berths-berth-ships {
-  border-left: 1px solid #000;
+  border-left: 1px solid #EBEBEB;
 }
 
 .scrollable-container {
@@ -8494,6 +8469,15 @@ readers do not read off random characters that represent icons */
 }
 
 icon-plain {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: currentColor;
+}
+icon-plain .view-button {
   font-size: 12px;
   padding-left: 6px;
+}
+icon-plain .view-default {
+  font-size: 14px;
 }

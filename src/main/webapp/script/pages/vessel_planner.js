@@ -1,3 +1,5 @@
+import FullButton from "../components/full-button.js";
+
 class VesselPlanner extends HTMLElement {
 
   constructor() {
@@ -6,7 +8,18 @@ class VesselPlanner extends HTMLElement {
 
   connectedCallback() {
     this.innerHTML = `
-    <nav-bar role="planner"></nav-bar>
+    <nav-bar role="planner">
+        <ul class="navbar-nav mb-lg-0">
+          <div>
+            <full-button 
+                icon="download" 
+                view="${FullButton.VIEW.secondary}" 
+                size="${FullButton.SIZE.large}">
+                Export
+            </full-button>
+          </div>
+        </ul>
+    </nav-bar>
   
     <planner-schedule></planner-schedule>
 
