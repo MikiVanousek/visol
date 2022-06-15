@@ -3,7 +3,7 @@ info:
     title: ViSOL
     description: Visual Interactive Optimization Tool. You can view this documentation over at [Apiary](https://visol.docs.apiary.io).
     contact: {}
-    version: '1.0.0'
+    version: 1.0.0
 servers:
     - url: https://todo.get-this.info/
       variables: {}
@@ -20,10 +20,10 @@ paths:
                 + name: `BigBoatHan` (string) - The name of the Vessel.
                 
                 
-                + arrival: `2022-05-11T13:10Z` (timestamp) - When the Vessel is expected to arrive.
+                + arrival: `2022-05-11T13:10:00Z` (timestamp) - When the Vessel is expected to arrive.
                 
                 
-                + deadline: `2022-05-12T09:54Z` (timestamp) - When the Vessel must be completely processed.
+                + deadline: `2022-05-12T09:54:00Z` (timestamp) - When the Vessel must be completely processed.
                 
                 
                 + container_amount: `5` (integer) - The amount of containers on the Vessel to be unloaded.
@@ -48,9 +48,7 @@ paths:
                   style: form
                   explode: true
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/VesselID'
             requestBody:
                 description: ''
                 content:
@@ -59,8 +57,8 @@ paths:
                             $ref: '#/components/schemas/Vessel'
                         example:
                             name: Vessel 1
-                            arrival: 2022-05-11T13:56Z
-                            deadline: 2022-05-12T18:13Z
+                            arrival: 2022-05-11T13:56:00Z
+                            deadline: 2022-05-12T18:13:00Z
                             container_amount: 30
                             cost: 2.6
                             destination_terminal: 4
@@ -86,8 +84,8 @@ paths:
                                 $ref: '#/components/schemas/Vessel'
                             example:
                                 name: Vessel 1
-                                arrival: 2022-05-11T13:56Z
-                                deadline: 2022-05-12T18:13Z
+                                arrival: 2022-05-11T13:56:00Z
+                                deadline: 2022-05-12T18:13:00Z
                                 container_amount: 30
                                 cost: 2.6
                                 destination_terminal: 4
@@ -107,10 +105,10 @@ paths:
                 + name: `BigBoatHan` (string) - The name of the Vessel.
                 
                 
-                + arrival: `2022-05-11T13:10Z` (timestamp) - When the Vessel is expected to arrive.
+                + arrival: `2022-05-11T13:10:00Z` (timestamp) - When the Vessel is expected to arrive.
                 
                 
-                + deadline: `2022-05-12T09:54Z` (timestamp) - When the Vessel must be completely processed.
+                + deadline: `2022-05-12T09:54:00Z` (timestamp) - When the Vessel must be completely processed.
                 
                 
                 + container_amount: `5` (integer) - The amount of containers on the Vessel to be unloaded.
@@ -134,9 +132,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/VesselID'
             responses:
                 '200':
                     description: ''
@@ -147,8 +143,8 @@ paths:
                                 $ref: '#/components/schemas/Vessel'
                             example:
                                 name: Vessel 1
-                                arrival: 2022-05-11T13:56Z
-                                deadline: 2022-05-12T18:13Z
+                                arrival: 2022-05-11T13:56:00Z
+                                deadline: 2022-05-12T18:13:00Z
                                 container_amount: 30
                                 cost: 2.6
                                 destination_terminal: 4
@@ -171,10 +167,10 @@ paths:
                 + name: `BigBoatHan` (string) - The name of the Vessel.
                 
                 
-                + arrival: `2022-05-11T13:10Z` (timestamp) - When the Vessel is expected to arrive.
+                + arrival: `2022-05-11T13:10:00Z` (timestamp) - When the Vessel is expected to arrive.
                 
                 
-                + deadline: `2022-05-12T09:54Z` (timestamp) - When the Vessel must be completely processed.
+                + deadline: `2022-05-12T09:54:00Z` (timestamp) - When the Vessel must be completely processed.
                 
                 
                 + container_amount: `5` (integer) - The amount of containers on the Vessel to be unloaded.
@@ -198,9 +194,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/VesselID'
             requestBody:
                 description: ''
                 content:
@@ -209,8 +203,8 @@ paths:
                             $ref: '#/components/schemas/Vessel'
                         example:
                             name: Vessel 1
-                            arrival: 2022-05-11T13:56Z
-                            deadline: 2022-05-12T18:13Z
+                            arrival: 2022-05-11T13:56:00Z
+                            deadline: 2022-05-12T18:13:00Z
                             container_amount: 30
                             cost: 2.6
                             destination_terminal: 4
@@ -229,8 +223,8 @@ paths:
                                 $ref: '#/components/schemas/Vessel'
                             example:
                                 name: Vessel 1
-                                arrival: 2022-05-11T13:56Z
-                                deadline: 2022-05-12T18:13Z
+                                arrival: 2022-05-11T13:56:00Z
+                                deadline: 2022-05-12T18:13:00Z
                                 container_amount: 30
                                 cost: 2.6
                                 destination_terminal: 4
@@ -253,10 +247,10 @@ paths:
                 + name: `BigBoatHan` (string) - The name of the Vessel.
                 
                 
-                + arrival: `2022-05-11T13:10Z` (timestamp) - When the Vessel is expected to arrive.
+                + arrival: `2022-05-11T13:10:00Z` (timestamp) - When the Vessel is expected to arrive.
                 
                 
-                + deadline: `2022-05-12T09:54Z` (timestamp) - When the Vessel must be completely processed.
+                + deadline: `2022-05-12T09:54:00Z` (timestamp) - When the Vessel must be completely processed.
                 
                 
                 + container_amount: `5` (integer) - The amount of containers on the Vessel to be unloaded.
@@ -280,9 +274,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/VesselID'
             responses:
                 '204':
                     description: ''
@@ -310,10 +302,10 @@ paths:
                 + berth: `20` (integer) - ID of the Berth the Vessel should be processed at.
                 
                 
-                + start: `2022-05-12T07:23Z` (timestamp) - When the Vessel should start being processed.
+                + start: `2022-05-12T07:23:00Z` (timestamp) - When the Vessel should start being processed.
                 
                 
-                + end: `2022-05-13T21:41Z` (timestamp) - When the Vessel is expected to end being processed.
+                + end: `2022-05-13T21:41:00Z` (timestamp) - When the Vessel is expected to end being processed.
             operationId: RetrieveaVessel'sSchedule
             parameters:
                 - name: vessel_id
@@ -322,9 +314,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/VesselID'
             responses:
                 '200':
                     description: ''
@@ -337,8 +327,8 @@ paths:
                                 vessel: 1
                                 type: manual
                                 berth: 30
-                                start: 2022-05-11T16:32Z
-                                end: 2022-05-11T21:26Z
+                                start: 2022-05-11T16:32:00Z
+                                end: 2022-05-11T21:26:00Z
                 '404':
                     description: ''
                     headers: {}
@@ -360,10 +350,10 @@ paths:
                 + berth: `20` (integer) - ID of the Berth the Vessel should be processed at.
                 
                 
-                + start: `2022-05-12T07:23Z` (timestamp) - When the Vessel should start being processed.
+                + start: `2022-05-12T07:23:00Z` (timestamp) - When the Vessel should start being processed.
                 
                 
-                + end: `2022-05-13T21:41Z` (timestamp) - When the Vessel is expected to end being processed.
+                + end: `2022-05-13T21:41:00Z` (timestamp) - When the Vessel is expected to end being processed.
             operationId: ReplaceorCreateaVessel'sSchedule
             parameters:
                 - name: vessel_id
@@ -372,9 +362,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/VesselID'
             requestBody:
                 description: ''
                 content:
@@ -385,8 +373,8 @@ paths:
                             vessel: 1
                             type: manual
                             berth: 30
-                            start: 2022-05-11T16:32Z
-                            end: 2022-05-11T21:26Z
+                            start: 2022-05-11T16:32:00Z
+                            end: 2022-05-11T21:26:00Z
                 required: true
             responses:
                 '200':
@@ -400,8 +388,8 @@ paths:
                                 vessel: 1
                                 type: manual
                                 berth: 30
-                                start: 2022-05-11T16:32Z
-                                end: 2022-05-11T21:26Z
+                                start: 2022-05-11T16:32:00Z
+                                end: 2022-05-11T21:26:00Z
                 '201':
                     description: ''
                     headers:
@@ -420,8 +408,8 @@ paths:
                                 vessel: 1
                                 type: manual
                                 berth: 30
-                                start: 2022-05-11T16:32Z
-                                end: 2022-05-11T21:26Z
+                                start: 2022-05-11T16:32:00Z
+                                end: 2022-05-11T21:26:00Z
                 '404':
                     description: ''
                     headers: {}
@@ -443,10 +431,10 @@ paths:
                 + berth: `20` (integer) - ID of the Berth the Vessel should be processed at.
                 
                 
-                + start: `2022-05-12T07:23Z` (timestamp) - When the Vessel should start being processed.
+                + start: `2022-05-12T07:23:00Z` (timestamp) - When the Vessel should start being processed.
                 
                 
-                + end: `2022-05-13T21:41Z` (timestamp) - When the Vessel is expected to end being processed.
+                + end: `2022-05-13T21:41:00Z` (timestamp) - When the Vessel is expected to end being processed.
             operationId: DeleteaVessel'sSchedule
             parameters:
                 - name: vessel_id
@@ -455,9 +443,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/VesselID'
             responses:
                 '204':
                     description: ''
@@ -498,9 +484,7 @@ paths:
                   style: form
                   explode: true
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/BerthID'
             requestBody:
                 description: ''
                 content:
@@ -561,9 +545,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/BerthID'
             responses:
                 '200':
                     description: ''
@@ -613,9 +595,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/BerthID'
             requestBody:
                 description: ''
                 content:
@@ -680,9 +660,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/BerthID'
             responses:
                 '204':
                     description: ''
@@ -722,9 +700,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/BerthID'
                 - name: from
                   in: query
                   description: Time to start looking from
@@ -733,6 +709,8 @@ paths:
                   schema:
                       type: string
                       format: date-time
+                      # ISO 8601 RegEx excluding timezone
+                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                       example: 2022-05-11T14:24:00Z
                 - name: to
                   in: query
@@ -742,6 +720,8 @@ paths:
                   schema:
                       type: string
                       format: date-time
+                      # ISO 8601 RegEx excluding timezone
+                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                       example: 2022-05-12T14:24:00Z
             responses:
                 '200':
@@ -750,33 +730,18 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/Schedule'
-                                uniqueItems: true
-                                description: ''
-                                example:
-                                    - vessel: 1
-                                      type: manual
-                                      berth: 30
-                                      start: 2022-05-11T16:32Z
-                                      end: 2022-05-11T21:26Z
-                                    - vessel: 2
-                                      type: automatic
-                                      berth: 30
-                                      start: 2022-05-14T09:21Z
-                                      end: 2022-05-15T13:53Z
+                                $ref: '#/components/schemas/BerthSchedules'
                             example:
                                 - vessel: 1
                                   type: manual
                                   berth: 30
-                                  start: 2022-05-11T16:32Z
-                                  end: 2022-05-11T21:26Z
+                                  start: 2022-05-11T16:32:00Z
+                                  end: 2022-05-11T21:26:00Z
                                 - vessel: 2
                                   type: automatic
                                   berth: 30
-                                  start: 2022-05-14T09:21Z
-                                  end: 2022-05-15T13:53Z
+                                  start: 2022-05-14T09:21:00Z
+                                  end: 2022-05-15T13:53:00Z
     /terminals:
         post:
             tags:
@@ -796,9 +761,7 @@ paths:
                   style: form
                   explode: true
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/TerminalID'
             requestBody:
                 description: ''
                 content:
@@ -843,9 +806,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/TerminalID'
             responses:
                 '200':
                     description: ''
@@ -877,9 +838,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/TerminalID'
             requestBody:
                 description: ''
                 content:
@@ -920,9 +879,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/TerminalID'
             responses:
                 '204':
                     description: ''
@@ -950,9 +907,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/TerminalID'
             responses:
                 '200':
                     description: ''
@@ -1000,9 +955,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/TerminalID'
                 - name: from
                   in: query
                   description: Time to start looking from
@@ -1011,6 +964,8 @@ paths:
                   schema:
                       type: string
                       format: date-time
+                      # ISO 8601 RegEx excluding timezone
+                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                       example: 2022-05-11T14:24:00Z
                 - name: to
                   in: query
@@ -1020,6 +975,8 @@ paths:
                   schema:
                       type: string
                       format: date-time
+                      # ISO 8601 RegEx excluding timezone
+                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                       example: 2022-05-12T14:24:00Z
             responses:
                 '200':
@@ -1028,7 +985,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Schedules'
+                                $ref: '#/components/schemas/TerminalSchedules'
     /terminals/{terminal_id}/schedules/optimise:
         post:
             tags:
@@ -1047,9 +1004,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/TerminalID'
                 - name: from
                   in: query
                   description: Time to start calculating from
@@ -1058,6 +1013,8 @@ paths:
                   schema:
                       type: string
                       format: date-time
+                      # ISO 8601 RegEx excluding timezone
+                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                       example: 2022-05-11T14:24:00Z
                 - name: to
                   in: query
@@ -1067,6 +1024,8 @@ paths:
                   schema:
                       type: string
                       format: date-time
+                      # ISO 8601 RegEx excluding timezone
+                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                       example: 2022-05-12T14:24:00Z
             responses:
                 '200':
@@ -1075,7 +1034,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Schedules'
+                                $ref: '#/components/schemas/TerminalSchedules'
     /terminals/{terminal_id}/performance:
         get:
             tags:
@@ -1094,9 +1053,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/TerminalID'
                 - name: from
                   in: query
                   description: Time to start calculating from
@@ -1105,6 +1062,8 @@ paths:
                   schema:
                       type: string
                       format: date-time
+                      # ISO 8601 RegEx excluding timezone
+                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                       example: 2022-05-11T14:24:00Z
                 - name: to
                   in: query
@@ -1114,6 +1073,8 @@ paths:
                   schema:
                       type: string
                       format: date-time
+                      # ISO 8601 RegEx excluding timezone
+                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                       example: 2022-05-12T14:24:00Z
             responses:
                 '200':
@@ -1175,7 +1136,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Ports'
+                                $ref: '#/components/schemas/PortMap'
     /ports/{port_id}:
         get:
             tags:
@@ -1194,9 +1155,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/PortID'
             responses:
                 '200':
                     description: ''
@@ -1228,9 +1187,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/PortID'
             requestBody:
                 description: ''
                 content:
@@ -1271,9 +1228,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/PortID'
             responses:
                 '204':
                     description: ''
@@ -1301,9 +1256,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/PortID'
             responses:
                 '200':
                     description: ''
@@ -1339,9 +1292,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/PortID'
                 - name: from
                   in: query
                   description: Time to start looking from
@@ -1350,6 +1301,8 @@ paths:
                   schema:
                       type: string
                       format: date-time
+                      # ISO 8601 RegEx excluding timezone
+                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                       example: 2022-05-11T14:24:00Z
                 - name: to
                   in: query
@@ -1359,6 +1312,8 @@ paths:
                   schema:
                       type: string
                       format: date-time
+                      # ISO 8601 RegEx excluding timezone
+                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                       example: 2022-05-12T14:24:00Z
             responses:
                 '200':
@@ -1367,9 +1322,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: object
-                                additionalProperties:
-                                    $ref: '#/components/schemas/Schedule'
+                                $ref: '#/components/schemas/PortSchedules'
     /ports/{port_id}/performance:
         get:
             tags:
@@ -1388,9 +1341,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/PortID'
                 - name: from
                   in: query
                   description: Time to start calculating from
@@ -1399,6 +1350,8 @@ paths:
                   schema:
                       type: string
                       format: date-time
+                      # ISO 8601 RegEx excluding timezone
+                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                       example: 2022-05-11T14:24:00Z
                 - name: to
                   in: query
@@ -1408,6 +1361,8 @@ paths:
                   schema:
                       type: string
                       format: date-time
+                      # ISO 8601 RegEx excluding timezone
+                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                       example: 2022-05-12T14:24:00Z
             responses:
                 '200':
@@ -1435,9 +1390,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/VesselID'
             requestBody:
                 description: ''
                 content:
@@ -1489,9 +1442,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/VesselID'
                 - name: from
                   in: query
                   description: Time to start looking from
@@ -1500,6 +1451,8 @@ paths:
                   schema:
                       type: string
                       format: date-time
+                      # ISO 8601 RegEx excluding timezone
+                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                       example: 2022-05-11T14:24:00Z
                 - name: to
                   in: query
@@ -1509,6 +1462,8 @@ paths:
                   schema:
                       type: string
                       format: date-time
+                      # ISO 8601 RegEx excluding timezone
+                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                       example: 2022-05-12T14:24:00Z
             responses:
                 '200':
@@ -1517,7 +1472,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: object
+                                $ref: '#/components/schemas/VesselChanges'
         delete:
             tags:
                 - Changes
@@ -1531,9 +1486,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/VesselID'
                 - name: from
                   in: query
                   description: Time to start deleting from
@@ -1542,6 +1495,8 @@ paths:
                   schema:
                       type: string
                       format: date-time
+                      # ISO 8601 RegEx excluding timezone
+                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                       example: 2022-05-11T14:24:00Z
                 - name: to
                   in: query
@@ -1551,6 +1506,8 @@ paths:
                   schema:
                       type: string
                       format: date-time
+                      # ISO 8601 RegEx excluding timezone
+                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                       example: 2022-05-12T14:24:00Z
             responses:
                 '204':
@@ -1569,16 +1526,6 @@ paths:
             description: Changes about a Vessel's information.
             operationId: RetrieveallVessels'Changes
             parameters:
-                - name: vessel_id
-                  in: query
-                  description: ID of the Vessel.
-                  required: true
-                  style: form
-                  explode: true
-                  schema:
-                      type: integer
-                      format: int32
-                      example: 1
                 - name: from
                   in: query
                   description: Time to start looking from
@@ -1587,6 +1534,8 @@ paths:
                   schema:
                       type: string
                       format: date-time
+                      # ISO 8601 RegEx excluding timezone
+                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                       example: 2022-05-11T14:24:00Z
                 - name: to
                   in: query
@@ -1596,6 +1545,8 @@ paths:
                   schema:
                       type: string
                       format: date-time
+                      # ISO 8601 RegEx excluding timezone
+                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                       example: 2022-05-12T14:24:00Z
             responses:
                 '200':
@@ -1604,7 +1555,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: object
+                                $ref: '#/components/schemas/VesselChangesMap'
     /changes/vessels/{vessel_id}/{date}:
         get:
             tags:
@@ -1619,9 +1570,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/VesselID'
                 - name: date
                   in: path
                   description: Time at which the change was made. Can be formatted without colons and dashes.
@@ -1630,6 +1579,8 @@ paths:
                   schema:
                       type: string
                       format: date-time
+                      # ISO 8601 RegEx excluding timezone
+                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                       example: 2022-05-11T16:32:35Z
             responses:
                 '200':
@@ -1639,16 +1590,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/VesselChange'
-                            example:
-                                vessel: 30
-                                date: 2022-05-11T16:32:35Z
-                                old:
-                                    name: Vessel 1
-                                    container_amount: 30
-                                new:
-                                    name: New Vessel 1
-                                    container_amount: 40
-                                reason: Additional cargo (#2524)
         delete:
             tags:
                 - Changes
@@ -1662,9 +1603,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/VesselID'
                 - name: date
                   in: path
                   description: Time at which the change was made. Can be formatted without colons and dashes.
@@ -1673,6 +1612,8 @@ paths:
                   schema:
                       type: string
                       format: date-time
+                      # ISO 8601 RegEx excluding timezone
+                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                       example: 2022-05-11T16:32:35Z
             responses:
                 '204':
@@ -1697,9 +1638,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/VesselID'
             requestBody:
                 description: ''
                 content:
@@ -1748,9 +1687,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/VesselID'
                 - name: from
                   in: query
                   description: Time to start looking from
@@ -1759,6 +1696,8 @@ paths:
                   schema:
                       type: string
                       format: date-time
+                      # ISO 8601 RegEx excluding timezone
+                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                       example: 2022-05-11T14:24:00Z
                 - name: to
                   in: query
@@ -1768,6 +1707,8 @@ paths:
                   schema:
                       type: string
                       format: date-time
+                      # ISO 8601 RegEx excluding timezone
+                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                       example: 2022-05-12T14:24:00Z
             responses:
                 '200':
@@ -1793,12 +1734,12 @@ paths:
                                       date: 2022-05-11T21:26:24Z
                                       old:
                                           berth: 20
-                                          start: 2022-05-15T16:32Z
-                                          end: 2022-05-15T21:26Z
+                                          start: 2022-05-15T16:32:00Z
+                                          end: 2022-05-15T21:26:00Z
                                       new:
                                           berth: 18
-                                          start: 2022-05-09T10:24Z
-                                          end: 2022-05-10T16:17Z
+                                          start: 2022-05-09T10:24:00Z
+                                          end: 2022-05-10T16:17:00Z
                                       reason: Automatic scheduling job
                             example:
                                 - vessel: 30
@@ -1812,12 +1753,12 @@ paths:
                                   date: 2022-05-11T21:26:24Z
                                   old:
                                       berth: 20
-                                      start: 2022-05-15T16:32Z
-                                      end: 2022-05-15T21:26Z
+                                      start: 2022-05-15T16:32:00Z
+                                      end: 2022-05-15T21:26:00Z
                                   new:
                                       berth: 18
-                                      start: 2022-05-09T10:24Z
-                                      end: 2022-05-10T16:17Z
+                                      start: 2022-05-09T10:24:00Z
+                                      end: 2022-05-10T16:17:00Z
                                   reason: Automatic scheduling job
         delete:
             tags:
@@ -1832,9 +1773,7 @@ paths:
                     required: true
                     style: simple
                     schema:
-                        type: integer
-                        format: int32
-                        example: 1
+                        $ref: '#/components/schemas/VesselID'
                 -   name: from
                     in: query
                     description: Time to start deleting from
@@ -1843,6 +1782,8 @@ paths:
                     schema:
                         type: string
                         format: date-time
+                        # ISO 8601 RegEx excluding timezone
+                        pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                         example: 2022-05-11T14:24:00Z
                 -   name: to
                     in: query
@@ -1852,6 +1793,8 @@ paths:
                     schema:
                         type: string
                         format: date-time
+                        # ISO 8601 RegEx excluding timezone
+                        pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                         example: 2022-05-12T14:24:00Z
             responses:
                 '204':
@@ -1877,9 +1820,7 @@ paths:
                   style: form
                   explode: true
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/VesselID'
                 - name: from
                   in: query
                   description: Time to start looking from
@@ -1888,6 +1829,8 @@ paths:
                   schema:
                       type: string
                       format: date-time
+                      # ISO 8601 RegEx excluding timezone
+                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                       example: 2022-05-11T14:24:00Z
                 - name: to
                   in: query
@@ -1897,6 +1840,8 @@ paths:
                   schema:
                       type: string
                       format: date-time
+                      # ISO 8601 RegEx excluding timezone
+                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                       example: 2022-05-12T14:24:00Z
             responses:
                 '200':
@@ -1922,9 +1867,7 @@ paths:
                   required: true
                   style: simple
                   schema:
-                      type: integer
-                      format: int32
-                      example: 1
+                      $ref: '#/components/schemas/VesselID'
                 - name: date
                   in: path
                   description: Time at which the change was made. Can be formatted without colons and dashes.
@@ -1933,6 +1876,8 @@ paths:
                   schema:
                       type: string
                       format: date-time
+                      # ISO 8601 RegEx excluding timezone
+                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                       example: 2022-05-11T16:32:35Z
             responses:
                 '200':
@@ -1963,9 +1908,7 @@ paths:
                     required: true
                     style: simple
                     schema:
-                        type: integer
-                        format: int32
-                        example: 1
+                        $ref: '#/components/schemas/VesselID'
                 -   name: date
                     in: path
                     description: Time at which the change was made. Can be formatted without colons and dashes.
@@ -1974,6 +1917,8 @@ paths:
                     schema:
                         type: string
                         format: date-time
+                        # ISO 8601 RegEx excluding timezone
+                        pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                         example: 2022-05-11T16:32:35Z
             responses:
                 '204':
@@ -1986,6 +1931,121 @@ paths:
                     content: { }
 components:
     schemas:
+        Schedule:
+            title: Schedule
+            type: object
+            properties:
+                vessel:
+                    $ref: '#/components/schemas/VesselID'
+                type:
+                    type: string
+                    enum: [ automatic, manual ]
+                berth:
+                    $ref: '#/components/schemas/BerthID'
+                start:
+                    type: string
+                    format: date-time
+                    # ISO 8601 RegEx excluding timezone
+                    pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
+                end:
+                    type: string
+                    format: date-time
+                    # ISO 8601 RegEx excluding timezone
+                    pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
+            additionalProperties: false
+            required:
+                - vessel
+                - type
+                - berth
+                - start
+                - end
+            example:
+                vessel: 1
+                type: manual
+                berth: 30
+                start: 2022-05-11T16:32:00Z
+                end: 2022-05-11T21:26:00Z
+        BerthSchedules:
+            title: Berth Schedules
+            type: array
+            items:
+                $ref: '#/components/schemas/Schedule'
+            maxItems: 2147483647
+            uniqueItems: true
+            example:
+                -   'vessel': 1
+                    'type': 'manual'
+                    'berth': 30
+                    'start': '2022-05-11T16:32:00Z'
+                    'end': '2022-05-11T21:26:00Z'
+                -   'vessel': 2
+                    'type': 'automatic'
+                    'berth': 30
+                    'start': '2022-05-14T09:21:00Z'
+                    'end': '2022-05-15T13:53:00Z'
+        TerminalSchedules:
+            title: Terminal Schedules
+            type: object
+            additionalProperties:
+                $ref: '#/components/schemas/BerthSchedules'
+            example:
+                '30':
+                    -   'vessel': 1
+                        'type': 'manual'
+                        'berth': 30
+                        'start': '2022-05-11T16:32:00Z'
+                        'end': '2022-05-11T21:26:00Z'
+                    -   'vessel': 2
+                        'type': 'automatic'
+                        'berth': 30
+                        'start': '2022-05-14T09:21:00Z'
+                        'end': '2022-05-15T13:53:00Z'
+        PortSchedules:
+            title: Port Schedules
+            type: object
+            additionalProperties:
+                $ref: '#/components/schemas/TerminalSchedules'
+            example:
+                '1':
+                    '30':
+                        -   'vessel': 1
+                            'type': 'manual'
+                            'berth': 30
+                            'start': '2022-05-11T16:32:00Z'
+                            'end': '2022-05-11T21:26:00Z'
+                        -   'vessel': 2
+                            'type': 'automatic'
+                            'berth': 30
+                            'start': '2022-05-14T09:21:00Z'
+                            'end': '2022-05-15T13:53:00Z'
+        Performance:
+            title: Performance
+            type: object
+            properties:
+                cost:
+                    type: integer
+                    format: int32
+                    minimum: 0
+                    maximum: 2147483647
+                scheduled_vessels:
+                    type: integer
+                    format: int32
+                    minimum: 0
+                    maximum: 2147483647
+                unscheduled_vessels:
+                    type: integer
+                    format: int32
+                    minimum: 0
+                    maximum: 2147483647
+            additionalProperties: false
+            required:
+                - cost
+                - scheduled_vessels
+                - unscheduled_vessels
+            example:
+                cost: 5152
+                scheduled_vessels: 27
+                unscheduled_vessels: 14
         OptionalDimension:
             title: Optional Dimension
             type: object
@@ -1993,12 +2053,19 @@ components:
                 length:
                     type: integer
                     format: int32
+                    minimum: 0
+                    maximum: 2147483647
                 width:
                     type: integer
                     format: int32
+                    minimum: 0
+                    maximum: 2147483647
                 depth:
                     type: integer
                     format: int32
+                    minimum: 0
+                    maximum: 2147483647
+            additionalProperties: false
             example:
                 length: 30
                 width: 10
@@ -2010,12 +2077,19 @@ components:
                 length:
                     type: integer
                     format: int32
+                    minimum: 0
+                    maximum: 2147483647
                 width:
                     type: integer
                     format: int32
+                    minimum: 0
+                    maximum: 2147483647
                 depth:
                     type: integer
                     format: int32
+                    minimum: 0
+                    maximum: 2147483647
+            additionalProperties: false
             required:
                 - length
                 - width
@@ -2024,26 +2098,45 @@ components:
                 length: 30
                 width: 10
                 depth: 30
+        VesselID:
+            title: Vessel ID
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 2147483647
+            example: 1
         OptionalVessel:
             title: Vessel
             type: object
             properties:
                 name:
                     type: string
+                    # Capture everything of length 1 or longer
+                    pattern: '^(?:.|\s)+$'
+                    maxLength: 64
                 arrival:
                     type: string
+                    format: date-time
+                    # ISO 8601 RegEx excluding timezone
+                    pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                 deadline:
                     type: string
+                    format: date-time
+                    # ISO 8601 RegEx excluding timezone
+                    pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                 container_amount:
                     type: integer
                     format: int32
+                    minimum: 0
+                    maximum: 2147483647
                 cost:
                     type: number
+                    format: real
                 destination_terminal:
-                    type: integer
-                    format: int32
+                    $ref: '#/components/schemas/TerminalID'
                 dimension:
                     $ref: '#/components/schemas/OptionalDimension'
+            additionalProperties: false
             example:
                 name: New Vessel 1
                 container_amount: 40
@@ -2053,20 +2146,31 @@ components:
             properties:
                 name:
                     type: string
+                    # Capture everything of length 1 or longer
+                    pattern: '^(?:.|\s)+$'
+                    maxLength: 64
                 arrival:
                     type: string
+                    format: date-time
+                    # ISO 8601 RegEx excluding timezone
+                    pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                 deadline:
                     type: string
+                    format: date-time
+                    # ISO 8601 RegEx excluding timezone
+                    pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                 container_amount:
                     type: integer
                     format: int32
+                    minimum: 0
+                    maximum: 2147483647
                 cost:
                     type: number
                 destination_terminal:
-                    type: integer
-                    format: int32
+                    $ref: '#/components/schemas/TerminalID'
                 dimension:
                     $ref: '#/components/schemas/Dimension'
+            additionalProperties: false
             required:
                 - name
                 - arrival
@@ -2077,8 +2181,8 @@ components:
                 - dimension
             example:
                 name: Vessel 1
-                arrival: 2022-05-11T13:56Z
-                deadline: 2022-05-12T18:13Z
+                arrival: 2022-05-11T13:56:00Z
+                deadline: 2022-05-12T18:13:00Z
                 container_amount: 30
                 cost: 2.6
                 destination_terminal: 4
@@ -2086,23 +2190,38 @@ components:
                     length: 30
                     width: 10
                     depth: 30
+        BerthID:
+            title: Berth ID
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 2147483647
+            example: 1
         Berth:
             title: Berth
+            type: object
+            properties:
+                open_time:
+                    type: string
+                    format: time
+                    pattern: '^([0-1]?[0-9]|2[0-3]):?[0-5][0-9]$'
+                close_time:
+                    type: string
+                    format: time
+                    pattern: '^([0-1]?[0-9]|2[0-3]):?[0-5][0-9]$'
+                unload_speed:
+                    type: number
+                    format: real
+                    minimum: 0
+                    maximum: 1E+37
+                dimension:
+                    $ref: '#/components/schemas/Dimension'
+            additionalProperties: false
             required:
                 - open_time
                 - close_time
                 - unload_speed
                 - dimension
-            type: object
-            properties:
-                open_time:
-                    type: string
-                close_time:
-                    type: string
-                unload_speed:
-                    type: number
-                dimension:
-                    $ref: '#/components/schemas/Dimension'
             example:
                 open_time: 06:45
                 close_time: 21:30
@@ -2133,14 +2252,25 @@ components:
                         length: 60
                         width: 20
                         depth: 30
+        TerminalID:
+            title: Terminal ID
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 2147483647
+            example: 1
         Terminal:
             title: Terminal
-            required:
-                - name
             type: object
             properties:
                 name:
                     type: string
+                    # Capture everything of length 1 or longer
+                    pattern: '^(?:.|\s)+$'
+                    maxLength: 64
+            additionalProperties: false
+            required:
+                - name
             example:
                 name: Han & Co. Ltd.
         TerminalMap:
@@ -2153,88 +2283,29 @@ components:
                     name: Han & Co. Ltd.
                 '2':
                     name: Bui Buoys
-        OptionalSchedule:
-            title: Optional Schedule
-            type: object
-            properties:
-                vessel:
-                    type: integer
-                    format: int32
-                type:
-                    type: string
-                    enum: [ automatic, manual ]
-                berth:
-                    type: integer
-                    format: int32
-                start:
-                    type: string
-                    format: date-time
-                end:
-                    type: string
-                    format: date-time
-            example:
-                type: automatic
-        Schedule:
-            title: Schedule
-            type: object
-            properties:
-                vessel:
-                    type: integer
-                    format: int32
-                type:
-                    type: string
-                    enum: [ automatic, manual ]
-                berth:
-                    type: integer
-                    format: int32
-                start:
-                    type: string
-                    format: date-time
-                end:
-                    type: string
-                    format: date-time
-            required:
-                - vessel
-                - type
-                - berth
-                - start
-                - end
-            example:
-                vessel: 1
-                type: manual
-                berth: 30
-                start: 2022-05-11T16:32Z
-                end: 2022-05-11T21:26Z
-        Schedules:
-            title: Schedules
-            type: object
-            additionalProperties:
-                $ref: '#/components/schemas/Schedule'
-            example:
-                '1':
-                    '30':
-                        - 'vessel': 1
-                          'type': 'manual'
-                          'berth': 30
-                          'start': '2022-05-11T16:32Z'
-                          'end': '2022-05-11T21:26Z'
-                        - 'vessel': 2
-                          'type': 'automatic'
-                          'berth': 30
-                          'start': '2022-05-14T09:21Z'
-                          'end': '2022-05-15T13:53Z'
+        PortID:
+            title: Port ID
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 2147483647
+            example: 1
         Port:
             title: Port
-            required:
-                - name
             type: object
             properties:
                 name:
                     type: string
+                    # Capture everything of length 1 or longer
+                    pattern: '^(?:.|\s)+$'
+                    maxLength: 64
+            additionalProperties: false
+            required:
+                - name
             example:
                 name: Han Shipping
-        Ports:
-            title: Ports
+        PortMap:
+            title: Port Map
             type: object
             additionalProperties:
                 $ref: '#/components/schemas/Port'
@@ -2243,27 +2314,30 @@ components:
                     name: Han Shipping
                 '2':
                     name: Thai Transport
-        Performance:
-            title: Performance
-            required:
-                - cost
-                - scheduled_vessels
-                - unscheduled_vessels
+        OptionalSchedule:
+            title: Optional Schedule
             type: object
             properties:
-                cost:
-                    type: integer
-                    format: int32
-                scheduled_vessels:
-                    type: integer
-                    format: int32
-                unscheduled_vessels:
-                    type: integer
-                    format: int32
+                vessel:
+                    $ref: '#/components/schemas/VesselID'
+                type:
+                    type: string
+                    enum: [ automatic, manual ]
+                berth:
+                    $ref: '#/components/schemas/BerthID'
+                start:
+                    type: string
+                    format: date-time
+                    # ISO 8601 RegEx excluding timezone
+                    pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
+                end:
+                    type: string
+                    format: date-time
+                    # ISO 8601 RegEx excluding timezone
+                    pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
+            additionalProperties: false
             example:
-                cost: 5152
-                scheduled_vessels: 27
-                unscheduled_vessels: 14
+                type: automatic
         NewVesselChange:
             title: New Vessel Change
             type: object
@@ -2271,11 +2345,16 @@ components:
                 date:
                     type: string
                     format: date-time
+                    # ISO 8601 RegEx excluding timezone
+                    pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                 changes:
                     $ref: '#/components/schemas/OptionalVessel'
                 reason:
                     type: string
+                    # Capture everything of length 0 or longer
+                    pattern: '^(?:.|\s)*$'
                     nullable: true
+            additionalProperties: false
             required:
                 - date
                 - changes
@@ -2291,18 +2370,22 @@ components:
             type: object
             properties:
                 vessel:
-                    type: integer
-                    format: int32
+                    $ref: '#/components/schemas/VesselID'
                 date:
                     type: string
                     format: date-time
+                    # ISO 8601 RegEx excluding timezone
+                    pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                 old:
                     $ref: '#/components/schemas/OptionalVessel'
                 new:
                     $ref: '#/components/schemas/OptionalVessel'
                 reason:
                     type: string
+                    # Capture everything of length 0 or longer
+                    pattern: '^(?:.|\s)*$'
                     nullable: true
+            additionalProperties: false
             required:
                 - vessel
                 - date
@@ -2319,6 +2402,56 @@ components:
                     name: New Vessel 1
                     container_amount: 40
                 reason: Additional cargo (#2524)
+        VesselChanges:
+            title: Vessel Changes
+            type: array
+            items:
+                $ref: '#/components/schemas/VesselChange'
+            maxItems: 2147483647
+            example:
+                -   vessel: 30
+                    date: 2022-05-11T16:32:35Z
+                    old:
+                        name: Vessel 1
+                        container_amount: 30
+                    new:
+                        name: New Vessel 1
+                        container_amount: 40
+                    reason: Additional cargo (#2524)
+                -   vessel: 30
+                    date: 2022-05-11T21:26:24Z
+                    old:
+                        arrival: 2022-05-11T13:56:00Z
+                        deadline: 2022-05-12T18:13:00Z
+                    new:
+                        arrival: 2022-05-18T13:56:00Z
+                        deadline: 2022-05-19T18:13:00Z
+                    reason: Ship delayed (#3517)
+        VesselChangesMap:
+            title: Vessel Changes Map
+            type: object
+            additionalProperties:
+                $ref: '#/components/schemas/VesselChanges'
+            example:
+                '30':
+                    -   vessel: 30
+                        date: 2022-05-11T16:32:35Z
+                        old:
+                            name: Vessel 1
+                            container_amount: 30
+                        new:
+                            name: New Vessel 1
+                            container_amount: 40
+                        reason: Additional cargo (#2524)
+                    -   vessel: 30
+                        date: 2022-05-11T21:26:24Z
+                        old:
+                            arrival: 2022-05-11T13:56:00Z
+                            deadline: 2022-05-12T18:13:00Z
+                        new:
+                            arrival: 2022-05-18T13:56:00Z
+                            deadline: 2022-05-19T18:13:00Z
+                        reason: Ship delayed (#3517)
         NewScheduleChange:
             title: New Schedule Change
             type: object
@@ -2326,11 +2459,16 @@ components:
                 date:
                     type: string
                     format: date-time
+                    # ISO 8601 RegEx excluding timezone
+                    pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                 changes:
                     $ref: '#/components/schemas/OptionalSchedule'
                 reason:
                     type: string
+                    # Capture everything of length 0 or longer
+                    pattern: '^(?:.|\s)*$'
                     nullable: true
+            additionalProperties: false
             required:
                 - date
                 - changes
@@ -2345,18 +2483,22 @@ components:
             type: object
             properties:
                 vessel:
-                    type: integer
-                    format: int32
+                    $ref: '#/components/schemas/VesselID'
                 date:
                     type: string
                     format: date-time
+                    # ISO 8601 RegEx excluding timezone
+                    pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
                 old:
                     $ref: '#/components/schemas/OptionalSchedule'
                 new:
                     $ref: '#/components/schemas/OptionalSchedule'
                 reason:
                     type: string
+                    # Capture everything of length 0 or longer
+                    pattern: '^(?:.|\s)*$'
                     nullable: true
+            additionalProperties: false
             required:
                 - vessel
                 - date

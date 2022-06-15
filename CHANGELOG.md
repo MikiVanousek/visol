@@ -33,6 +33,9 @@
 ![][Krystof] Polishing figma design \
 ![][Miki] Form: default value and serialization
 
+### Tuesday
+![][Luka] Transform API documentation from API Blueprint to OpenAPI 3.0.0
+
 [Han]: profile-pictures/Han.png "Han"
 [Hessel]: profile-pictures/Hessel.png "Hessel"
 [Krystof]: profile-pictures/Krystof.png "Krystof"
