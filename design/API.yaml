@@ -2,53 +2,18 @@ openapi: 3.0.0
 info:
     title: ViSOL
     description: Visual Interactive Optimization Tool. You can view this documentation over at [Apiary](https://visol.docs.apiary.io).
-    contact: {}
+    contact: { }
     version: 1.0.0
 servers:
-    - url: https://todo.get-this.info/
-      variables: {}
+    -   url: https://todo.get-this.info/
+        variables: { }
 paths:
     /vessels:
         post:
             tags:
                 - Vessels
             summary: Create a Vessel
-            description: >-
-                A Vessel object has the following attributes:
-                
-                
-                + name: `BigBoatHan` (string) - The name of the Vessel.
-                
-                
-                + arrival: `2022-05-11T13:10:00Z` (timestamp) - When the Vessel is expected to arrive.
-                
-                
-                + deadline: `2022-05-12T09:54:00Z` (timestamp) - When the Vessel must be completely processed.
-                
-                
-                + container_amount: `5` (integer) - The amount of containers on the Vessel to be unloaded.
-                
-                
-                + cost: `2.6` (float) - The cost per time unit of the Vessel from arrival till fully unloaded.
-                
-                
-                + destination_terminal: `3` (integer) - The terminal where the Vessel should be unloaded.
-                
-                
-                + dimension - Physical dimensions of the Vessel.
-                    + length: `30` (integer) - The length of the Vessel in metres.
-                    + width: `10` (integer) - The width of the Vessel in metres.
-                    + depth: `20` (integer) - The depth of the Vessel in metres.
-            operationId: CreateaVessel
-            parameters:
-                - name: vessel_id
-                  in: query
-                  description: ID of the Vessel.
-                  required: true
-                  style: form
-                  explode: true
-                  schema:
-                      $ref: '#/components/schemas/VesselID'
+            operationId: createVessel
             requestBody:
                 description: ''
                 content:
@@ -59,9 +24,9 @@ paths:
                             name: Vessel 1
                             arrival: 2022-05-11T13:56:00Z
                             deadline: 2022-05-12T18:13:00Z
-                            container_amount: 30
-                            cost: 2.6
-                            destination_terminal: 4
+                            containers: 30
+                            cost_per_hour: 2.6
+                            destination: 4
                             dimension:
                                 length: 30
                                 width: 10
@@ -72,12 +37,12 @@ paths:
                     description: ''
                     headers:
                         Location:
-                            content:
-                                text/plain:
-                                    schema:
-                                        type: string
-                                        example: /vessels/3
-                                    example: /vessels/3
+                            schema:
+                                type: string
+                                pattern: '^\/vessels\/[0-9]+$'
+                                # Maximum /vessels/2147483647
+                                maxLength: 19
+                                example: /vessels/3
                     content:
                         application/json:
                             schema:
@@ -86,57 +51,29 @@ paths:
                                 name: Vessel 1
                                 arrival: 2022-05-11T13:56:00Z
                                 deadline: 2022-05-12T18:13:00Z
-                                container_amount: 30
-                                cost: 2.6
-                                destination_terminal: 4
+                                containers: 30
+                                cost_per_hour: 2.6
+                                destination: 4
                                 dimension:
                                     length: 30
                                     width: 10
                                     depth: 30
     /vessels/{vessel_id}:
+        parameters:
+            -   name: vessel_id
+                in: path
+                description: ID of the Vessel.
+                required: true
+                schema:
+                    $ref: '#/components/schemas/VesselID'
         get:
             tags:
                 - Vessels
             summary: Retrieve a Vessel
-            description: >-
-                A Vessel object has the following attributes:
-                
-                
-                + name: `BigBoatHan` (string) - The name of the Vessel.
-                
-                
-                + arrival: `2022-05-11T13:10:00Z` (timestamp) - When the Vessel is expected to arrive.
-                
-                
-                + deadline: `2022-05-12T09:54:00Z` (timestamp) - When the Vessel must be completely processed.
-                
-                
-                + container_amount: `5` (integer) - The amount of containers on the Vessel to be unloaded.
-                
-                
-                + cost: `2.6` (float) - The cost per time unit of the Vessel from arrival till fully unloaded.
-                
-                
-                + destination_terminal: `3` (integer) - The terminal where the Vessel should be unloaded.
-                
-                
-                + dimension - Physical dimensions of the Vessel.
-                    + length: `30` (integer) - The length of the Vessel in metres.
-                    + width: `10` (integer) - The width of the Vessel in metres.
-                    + depth: `20` (integer) - The depth of the Vessel in metres.
-            operationId: RetrieveaVessel
-            parameters:
-                - name: vessel_id
-                  in: path
-                  description: ID of the Vessel.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/VesselID'
+            operationId: retrieveVessel
             responses:
                 '200':
                     description: ''
-                    headers: {}
                     content:
                         application/json:
                             schema:
@@ -145,56 +82,20 @@ paths:
                                 name: Vessel 1
                                 arrival: 2022-05-11T13:56:00Z
                                 deadline: 2022-05-12T18:13:00Z
-                                container_amount: 30
-                                cost: 2.6
-                                destination_terminal: 4
+                                containers: 30
+                                cost_per_hour: 2.6
+                                destination: 4
                                 dimension:
                                     length: 30
                                     width: 10
                                     depth: 30
                 '404':
-                    description: ''
-                    headers: {}
-                    content: {}
+                    $ref: '#/components/responses/NotFound'
         put:
             tags:
                 - Vessels
             summary: Replace a Vessel
-            description: >-
-                A Vessel object has the following attributes:
-                
-                
-                + name: `BigBoatHan` (string) - The name of the Vessel.
-                
-                
-                + arrival: `2022-05-11T13:10:00Z` (timestamp) - When the Vessel is expected to arrive.
-                
-                
-                + deadline: `2022-05-12T09:54:00Z` (timestamp) - When the Vessel must be completely processed.
-                
-                
-                + container_amount: `5` (integer) - The amount of containers on the Vessel to be unloaded.
-                
-                
-                + cost: `2.6` (float) - The cost per time unit of the Vessel from arrival till fully unloaded.
-                
-                
-                + destination_terminal: `3` (integer) - The terminal where the Vessel should be unloaded.
-                
-                
-                + dimension - Physical dimensions of the Vessel.
-                    + length: `30` (integer) - The length of the Vessel in metres.
-                    + width: `10` (integer) - The width of the Vessel in metres.
-                    + depth: `20` (integer) - The depth of the Vessel in metres.
-            operationId: ReplaceaVessel
-            parameters:
-                - name: vessel_id
-                  in: path
-                  description: ID of the Vessel.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/VesselID'
+            operationId: replaceVessel
             requestBody:
                 description: ''
                 content:
@@ -205,9 +106,9 @@ paths:
                             name: Vessel 1
                             arrival: 2022-05-11T13:56:00Z
                             deadline: 2022-05-12T18:13:00Z
-                            container_amount: 30
-                            cost: 2.6
-                            destination_terminal: 4
+                            containers: 30
+                            cost_per_hour: 2.6
+                            destination: 4
                             dimension:
                                 length: 30
                                 width: 10
@@ -216,7 +117,6 @@ paths:
             responses:
                 '200':
                     description: ''
-                    headers: {}
                     content:
                         application/json:
                             schema:
@@ -225,100 +125,41 @@ paths:
                                 name: Vessel 1
                                 arrival: 2022-05-11T13:56:00Z
                                 deadline: 2022-05-12T18:13:00Z
-                                container_amount: 30
-                                cost: 2.6
-                                destination_terminal: 4
+                                containers: 30
+                                cost_per_hour: 2.6
+                                destination: 4
                                 dimension:
                                     length: 30
                                     width: 10
                                     depth: 30
                 '404':
-                    description: ''
-                    headers: {}
-                    content: {}
+                    $ref: '#/components/responses/NotFound'
         delete:
             tags:
                 - Vessels
             summary: Delete a Vessel
-            description: >-
-                A Vessel object has the following attributes:
-                
-                
-                + name: `BigBoatHan` (string) - The name of the Vessel.
-                
-                
-                + arrival: `2022-05-11T13:10:00Z` (timestamp) - When the Vessel is expected to arrive.
-                
-                
-                + deadline: `2022-05-12T09:54:00Z` (timestamp) - When the Vessel must be completely processed.
-                
-                
-                + container_amount: `5` (integer) - The amount of containers on the Vessel to be unloaded.
-                
-                
-                + cost: `2.6` (float) - The cost per time unit of the Vessel from arrival till fully unloaded.
-                
-                
-                + destination_terminal: `3` (integer) - The terminal where the Vessel should be unloaded.
-                
-                
-                + dimension - Physical dimensions of the Vessel.
-                    + length: `30` (integer) - The length of the Vessel in metres.
-                    + width: `10` (integer) - The width of the Vessel in metres.
-                    + depth: `20` (integer) - The depth of the Vessel in metres.
-            operationId: DeleteaVessel
-            parameters:
-                - name: vessel_id
-                  in: path
-                  description: ID of the Vessel.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/VesselID'
+            operationId: deleteVessel
             responses:
                 '204':
                     description: ''
-                    headers: {}
-                    content: {}
                 '404':
-                    description: ''
-                    headers: {}
-                    content: {}
+                    $ref: '#/components/responses/NotFound'
     /vessels/{vessel_id}/schedule:
+        parameters:
+            -   name: vessel_id
+                in: path
+                description: ID of the Vessel.
+                required: true
+                schema:
+                    $ref: '#/components/schemas/VesselID'
         get:
             tags:
                 - Vessels
             summary: Retrieve a Vessel's Schedule
-            description: >-
-                A Schedule object has the following attributes:
-                
-                
-                + vessel: `1` (integer) - ID of the Vessel.
-                
-                
-                + type: `manual` (`manual` or `automatic`) - Whether the Vessel should be planned at the supplied Berth and timestamp or by the software, respectively.
-                
-                
-                + berth: `20` (integer) - ID of the Berth the Vessel should be processed at.
-                
-                
-                + start: `2022-05-12T07:23:00Z` (timestamp) - When the Vessel should start being processed.
-                
-                
-                + end: `2022-05-13T21:41:00Z` (timestamp) - When the Vessel is expected to end being processed.
-            operationId: RetrieveaVessel'sSchedule
-            parameters:
-                - name: vessel_id
-                  in: path
-                  description: ID of the Vessel.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/VesselID'
+            operationId: retrieveVesselSchedule
             responses:
                 '200':
                     description: ''
-                    headers: {}
                     content:
                         application/json:
                             schema:
@@ -330,39 +171,12 @@ paths:
                                 start: 2022-05-11T16:32:00Z
                                 end: 2022-05-11T21:26:00Z
                 '404':
-                    description: ''
-                    headers: {}
-                    content: {}
+                    $ref: '#/components/responses/NotFound'
         put:
             tags:
                 - Vessels
             summary: Replace or Create a Vessel's Schedule
-            description: >-
-                A Schedule object has the following attributes:
-                
-                
-                + vessel: `1` (integer) - ID of the Vessel.
-                
-                
-                + type: `manual` (`manual` or `automatic`) - Whether the Vessel should be planned at the supplied Berth and timestamp or by the software, respectively.
-                
-                
-                + berth: `20` (integer) - ID of the Berth the Vessel should be processed at.
-                
-                
-                + start: `2022-05-12T07:23:00Z` (timestamp) - When the Vessel should start being processed.
-                
-                
-                + end: `2022-05-13T21:41:00Z` (timestamp) - When the Vessel is expected to end being processed.
-            operationId: ReplaceorCreateaVessel'sSchedule
-            parameters:
-                - name: vessel_id
-                  in: path
-                  description: ID of the Vessel.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/VesselID'
+            operationId: replaceOrCreateVesselSchedule
             requestBody:
                 description: ''
                 content:
@@ -379,7 +193,6 @@ paths:
             responses:
                 '200':
                     description: ''
-                    headers: {}
                     content:
                         application/json:
                             schema:
@@ -394,12 +207,12 @@ paths:
                     description: ''
                     headers:
                         Location:
-                            content:
-                                text/plain:
-                                    schema:
-                                        type: string
-                                        example: /vessels/1/schedule
-                                    example: /vessels/1/schedule
+                            schema:
+                                type: string
+                                pattern: '^\/vessels\/[0-9]+\/schedule$'
+                                # Maximum /vessels/2147483647/schedule
+                                maxLength: 28
+                                example: /vessels/1/schedule
                     content:
                         application/json:
                             schema:
@@ -411,80 +224,23 @@ paths:
                                 start: 2022-05-11T16:32:00Z
                                 end: 2022-05-11T21:26:00Z
                 '404':
-                    description: ''
-                    headers: {}
-                    content: {}
+                    $ref: '#/components/responses/NotFound'
         delete:
             tags:
                 - Vessels
             summary: Delete a Vessel's Schedule
-            description: >-
-                A Schedule object has the following attributes:
-                
-                
-                + vessel: `1` (integer) - ID of the Vessel.
-                
-                
-                + type: `manual` (`manual` or `automatic`) - Whether the Vessel should be planned at the supplied Berth and timestamp or by the software, respectively.
-                
-                
-                + berth: `20` (integer) - ID of the Berth the Vessel should be processed at.
-                
-                
-                + start: `2022-05-12T07:23:00Z` (timestamp) - When the Vessel should start being processed.
-                
-                
-                + end: `2022-05-13T21:41:00Z` (timestamp) - When the Vessel is expected to end being processed.
-            operationId: DeleteaVessel'sSchedule
-            parameters:
-                - name: vessel_id
-                  in: path
-                  description: ID of the Vessel.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/VesselID'
+            operationId: deleteVesselSchedule
             responses:
                 '204':
                     description: ''
-                    headers: {}
-                    content: {}
                 '404':
-                    description: ''
-                    headers: {}
-                    content: {}
+                    $ref: '#/components/responses/NotFound'
     /berths:
         post:
             tags:
                 - Berths
             summary: Create a Berth
-            description: >-
-                A Berth object has the following attributes:
-                
-                
-                + open_time: `06:45` (time) - The time at which the Berth starts processing.
-                
-                
-                + close_time: `21:30` (time) - The time at which the Berth stops processing.
-                
-                
-                + unload_speed: `6.3` (float) - The amount of containers per time unit the Berth can process.
-                
-                
-                + dimension - Physical dimensions of the Berth.
-                    + length: `150` (integer) - The length of the Berth in metres.
-                    + width: `30` (integer) - The maximum length of Vessel in the Berth in metres.
-                    + depth: `50` (integer) - The depth of the Berth in metres.
-            operationId: CreateaBerth
-            parameters:
-                - name: berth_id
-                  in: query
-                  description: The id of the Berth.
-                  required: true
-                  style: form
-                  explode: true
-                  schema:
-                      $ref: '#/components/schemas/BerthID'
+            operationId: createBerth
             requestBody:
                 description: ''
                 content:
@@ -497,12 +253,12 @@ paths:
                     description: ''
                     headers:
                         Location:
-                            content:
-                                text/plain:
-                                    schema:
-                                        type: string
-                                        example: /berths/3
-                                    example: /berths/3
+                            schema:
+                                type: string
+                                pattern: '^\/berths\/[0-9]+$'
+                                # Maximum /berths/2147483647
+                                maxLength: 18
+                                example: /berths/3
                     content:
                         application/json:
                             schema:
@@ -516,40 +272,21 @@ paths:
                                     width: 30
                                     depth: 50
     /berths/{berth_id}:
+        parameters:
+            -   name: berth_id
+                in: path
+                description: The ID of the Berth.
+                required: true
+                schema:
+                    $ref: '#/components/schemas/BerthID'
         get:
             tags:
                 - Berths
             summary: Retrieve a Berth
-            description: >-
-                A Berth object has the following attributes:
-                
-                
-                + open_time: `06:45` (time) - The time at which the Berth starts processing.
-                
-                
-                + close_time: `21:30` (time) - The time at which the Berth stops processing.
-                
-                
-                + unload_speed: `6.3` (float) - The amount of containers per time unit the Berth can process.
-                
-                
-                + dimension - Physical dimensions of the Berth.
-                    + length: `150` (integer) - The length of the Berth in metres.
-                    + width: `30` (integer) - The maximum length of Vessel in the Berth in metres.
-                    + depth: `50` (integer) - The depth of the Berth in metres.
-            operationId: RetrieveaBerth
-            parameters:
-                - name: berth_id
-                  in: path
-                  description: The id of the Berth.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/BerthID'
+            operationId: retrieveBerth
             responses:
                 '200':
                     description: ''
-                    headers: {}
                     content:
                         application/json:
                             schema:
@@ -563,39 +300,12 @@ paths:
                                     width: 30
                                     depth: 50
                 '404':
-                    description: ''
-                    headers: {}
-                    content: {}
+                    $ref: '#/components/responses/NotFound'
         put:
             tags:
                 - Berths
             summary: Replace a Berth
-            description: >-
-                A Berth object has the following attributes:
-                
-                
-                + open_time: `06:45` (time) - The time at which the Berth starts processing.
-                
-                
-                + close_time: `21:30` (time) - The time at which the Berth stops processing.
-                
-                
-                + unload_speed: `6.3` (float) - The amount of containers per time unit the Berth can process.
-                
-                
-                + dimension - Physical dimensions of the Berth.
-                    + length: `150` (integer) - The length of the Berth in metres.
-                    + width: `30` (integer) - The maximum length of Vessel in the Berth in metres.
-                    + depth: `50` (integer) - The depth of the Berth in metres.
-            operationId: ReplaceaBerth
-            parameters:
-                - name: berth_id
-                  in: path
-                  description: The id of the Berth.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/BerthID'
+            operationId: replaceBerth
             requestBody:
                 description: ''
                 content:
@@ -614,7 +324,6 @@ paths:
             responses:
                 '200':
                     description: ''
-                    headers: {}
                     content:
                         application/json:
                             schema:
@@ -628,140 +337,65 @@ paths:
                                     width: 30
                                     depth: 50
                 '404':
-                    description: ''
-                    headers: {}
-                    content: {}
+                    $ref: '#/components/responses/NotFound'
         delete:
             tags:
                 - Berths
             summary: Delete a Berth
-            description: >-
-                A Berth object has the following attributes:
-                
-                
-                + open_time: `06:45` (time) - The time at which the Berth starts processing.
-                
-                
-                + close_time: `21:30` (time) - The time at which the Berth stops processing.
-                
-                
-                + unload_speed: `6.3` (float) - The amount of containers per time unit the Berth can process.
-                
-                
-                + dimension - Physical dimensions of the Berth.
-                    + length: `150` (integer) - The length of the Berth in metres.
-                    + width: `30` (integer) - The maximum length of Vessel in the Berth in metres.
-                    + depth: `50` (integer) - The depth of the Berth in metres.
-            operationId: DeleteaBerth
-            parameters:
-                - name: berth_id
-                  in: path
-                  description: The id of the Berth.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/BerthID'
+            operationId: deleteBerth
             responses:
                 '204':
                     description: ''
-                    headers: {}
-                    content: {}
                 '404':
-                    description: ''
-                    headers: {}
-                    content: {}
-    /berths/{berth_id}/schedules:
+                    $ref: '#/components/responses/NotFound'
+    /berths/{berth_id}/schedules{?from,to}:
+        parameters:
+            -   name: berth_id
+                in: path
+                description: The ID of the Berth.
+                required: true
+                schema:
+                    $ref: '#/components/schemas/BerthID'
         get:
             tags:
                 - Berths
             summary: Retrieve a Berth's Schedules
-            description: >-
-                A Berth object has the following attributes:
-                
-                
-                + open_time: `06:45` (time) - The time at which the Berth starts processing.
-                
-                
-                + close_time: `21:30` (time) - The time at which the Berth stops processing.
-                
-                
-                + unload_speed: `6.3` (float) - The amount of containers per time unit the Berth can process.
-                
-                
-                + dimension - Physical dimensions of the Berth.
-                    + length: `150` (integer) - The length of the Berth in metres.
-                    + width: `30` (integer) - The maximum length of Vessel in the Berth in metres.
-                    + depth: `50` (integer) - The depth of the Berth in metres.
-            operationId: RetrieveaBerth'sSchedules
+            operationId: retrieveBerthSchedules
             parameters:
-                - name: berth_id
-                  in: path
-                  description: The id of the Berth.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/BerthID'
-                - name: from
-                  in: query
-                  description: Time to start looking from
-                  style: form
-                  explode: true
-                  schema:
-                      type: string
-                      format: date-time
-                      # ISO 8601 RegEx excluding timezone
-                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                      example: 2022-05-11T14:24:00Z
-                - name: to
-                  in: query
-                  description: Time to end looking at
-                  style: form
-                  explode: true
-                  schema:
-                      type: string
-                      format: date-time
-                      # ISO 8601 RegEx excluding timezone
-                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                      example: 2022-05-12T14:24:00Z
+                -   name: from
+                    in: query
+                    description: Time to start looking from
+                    schema:
+                        $ref: '#/components/schemas/Timestamp'
+                -   name: to
+                    in: query
+                    description: Time to end looking at
+                    schema:
+                        $ref: '#/components/schemas/Timestamp'
             responses:
                 '200':
                     description: ''
-                    headers: {}
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/BerthSchedules'
                             example:
-                                - vessel: 1
-                                  type: manual
-                                  berth: 30
-                                  start: 2022-05-11T16:32:00Z
-                                  end: 2022-05-11T21:26:00Z
-                                - vessel: 2
-                                  type: automatic
-                                  berth: 30
-                                  start: 2022-05-14T09:21:00Z
-                                  end: 2022-05-15T13:53:00Z
+                                -   vessel: 1
+                                    type: manual
+                                    berth: 30
+                                    start: 2022-05-11T16:32:00Z
+                                    end: 2022-05-11T21:26:00Z
+                                -   vessel: 2
+                                    type: automatic
+                                    berth: 30
+                                    start: 2022-05-14T09:21:00Z
+                                    end: 2022-05-15T13:53:00Z
     /terminals:
         post:
             tags:
                 - Terminals
             summary: Create a Terminal
-            description: >-
-                A Terminal object has the following attributes:
-                
-                
-                + name: `Han & Co. Ltd.` (string) - The name of the Terminal.
-            operationId: CreateaTerminal
-            parameters:
-                - name: terminal_id
-                  in: query
-                  description: ID of the Terminal.
-                  required: true
-                  style: form
-                  explode: true
-                  schema:
-                      $ref: '#/components/schemas/TerminalID'
+            operationId: createTerminal
             requestBody:
                 description: ''
                 content:
@@ -776,12 +410,12 @@ paths:
                     description: ''
                     headers:
                         Location:
-                            content:
-                                text/plain:
-                                    schema:
-                                        type: string
-                                        example: /terminals/1
-                                    example: /terminals/1
+                            schema:
+                                type: string
+                                pattern: '^\/terminals\/[0-9]+$'
+                                # Maximum /terminals/2147483647
+                                maxLength: 21
+                                example: /terminals/1
                     content:
                         application/json:
                             schema:
@@ -789,28 +423,21 @@ paths:
                             example:
                                 name: Han & Co. Ltd.
     /terminals/{terminal_id}:
+        parameters:
+            -   name: terminal_id
+                in: path
+                description: ID of the Terminal.
+                required: true
+                schema:
+                    $ref: '#/components/schemas/TerminalID'
         get:
             tags:
                 - Terminals
             summary: Retrieve a Terminal
-            description: >-
-                A Terminal object has the following attributes:
-                
-                
-                + name: `Han & Co. Ltd.` (string) - The name of the Terminal.
-            operationId: RetrieveaTerminal
-            parameters:
-                - name: terminal_id
-                  in: path
-                  description: ID of the Terminal.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/TerminalID'
+            operationId: retrieveTerminal
             responses:
                 '200':
                     description: ''
-                    headers: {}
                     content:
                         application/json:
                             schema:
@@ -818,27 +445,12 @@ paths:
                             example:
                                 name: Han & Co. Ltd.
                 '404':
-                    description: ''
-                    headers: {}
-                    content: {}
+                    $ref: '#/components/responses/NotFound'
         put:
             tags:
                 - Terminals
             summary: Replace a Terminal
-            description: >-
-                A Terminal object has the following attributes:
-                
-                
-                + name: `Han & Co. Ltd.` (string) - The name of the Terminal.
-            operationId: ReplaceaTerminal
-            parameters:
-                - name: terminal_id
-                  in: path
-                  description: ID of the Terminal.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/TerminalID'
+            operationId: replaceTerminal
             requestBody:
                 description: ''
                 content:
@@ -851,7 +463,6 @@ paths:
             responses:
                 '200':
                     description: ''
-                    headers: {}
                     content:
                         application/json:
                             schema:
@@ -859,59 +470,33 @@ paths:
                             example:
                                 name: Han & Co. Ltd.
                 '404':
-                    description: ''
-                    headers: {}
-                    content: {}
+                    $ref: '#/components/responses/NotFound'
         delete:
             tags:
                 - Terminals
             summary: Delete a Terminal
-            description: >-
-                A Terminal object has the following attributes:
-                
-                
-                + name: `Han & Co. Ltd.` (string) - The name of the Terminal.
-            operationId: DeleteaTerminal
-            parameters:
-                - name: terminal_id
-                  in: path
-                  description: ID of the Terminal.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/TerminalID'
+            operationId: deleteTerminal
             responses:
                 '204':
                     description: ''
-                    headers: {}
-                    content: {}
                 '404':
-                    description: ''
-                    headers: {}
-                    content: {}
+                    $ref: '#/components/responses/NotFound'
     /terminal/{terminal_id}/berths:
+        parameters:
+            -   name: terminal_id
+                in: path
+                description: ID of the Terminal.
+                required: true
+                schema:
+                    $ref: '#/components/schemas/TerminalID'
         get:
             tags:
                 - Terminals
             summary: Retrieve a Terminal's Berths
-            description: >-
-                A Terminal object has the following attributes:
-                
-                
-                + name: `Han & Co. Ltd.` (string) - The name of the Terminal.
-            operationId: RetrieveaTerminal'sBerths
-            parameters:
-                - name: terminal_id
-                  in: path
-                  description: ID of the Terminal.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/TerminalID'
+            operationId: retrieveTerminalBerths
             responses:
                 '200':
                     description: ''
-                    headers: {}
                     content:
                         application/json:
                             schema:
@@ -934,158 +519,102 @@ paths:
                                         width: 20
                                         depth: 30
                 '404':
-                    description: ''
-                    headers: {}
-                    content: {}
+                    $ref: '#/components/responses/NotFound'
     /terminals/{terminal_id}/schedules:
+        parameters:
+            -   name: terminal_id
+                in: path
+                description: ID of the Terminal.
+                required: true
+                schema:
+                    $ref: '#/components/schemas/TerminalID'
         get:
             tags:
                 - Terminals
             summary: Retrieve a Terminal's Schedules
-            description: >-
-                A Terminal object has the following attributes:
-                
-                
-                + name: `Han & Co. Ltd.` (string) - The name of the Terminal.
-            operationId: RetrieveaTerminal'sSchedules
+            operationId: retrieveTerminalSchedules
             parameters:
-                - name: terminal_id
-                  in: path
-                  description: ID of the Terminal.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/TerminalID'
-                - name: from
-                  in: query
-                  description: Time to start looking from
-                  style: form
-                  explode: true
-                  schema:
-                      type: string
-                      format: date-time
-                      # ISO 8601 RegEx excluding timezone
-                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                      example: 2022-05-11T14:24:00Z
-                - name: to
-                  in: query
-                  description: Time to end looking at
-                  style: form
-                  explode: true
-                  schema:
-                      type: string
-                      format: date-time
-                      # ISO 8601 RegEx excluding timezone
-                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                      example: 2022-05-12T14:24:00Z
+                -   name: from
+                    in: query
+                    description: Time to start looking from
+                    schema:
+                        $ref: '#/components/schemas/Timestamp'
+                -   name: to
+                    in: query
+                    description: Time to end looking at
+                    schema:
+                        $ref: '#/components/schemas/Timestamp'
             responses:
                 '200':
                     description: ''
-                    headers: {}
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/TerminalSchedules'
     /terminals/{terminal_id}/schedules/optimise:
+        parameters:
+            -   name: terminal_id
+                in: path
+                description: ID of the Terminal.
+                required: true
+                schema:
+                    $ref: '#/components/schemas/TerminalID'
         post:
             tags:
                 - Terminals
             summary: Optimise a Terminal's Schedules
-            description: >-
-                A Terminal object has the following attributes:
-                
-                
-                + name: `Han & Co. Ltd.` (string) - The name of the Terminal.The response contains an array of all Schedules that were changed, grouped by Berth.
-            operationId: OptimiseaTerminal'sSchedules
+            operationId: optimiseTerminalSchedules
             parameters:
-                - name: terminal_id
-                  in: path
-                  description: ID of the Terminal.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/TerminalID'
-                - name: from
-                  in: query
-                  description: Time to start calculating from
-                  style: form
-                  explode: true
-                  schema:
-                      type: string
-                      format: date-time
-                      # ISO 8601 RegEx excluding timezone
-                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                      example: 2022-05-11T14:24:00Z
-                - name: to
-                  in: query
-                  description: Time to end calculating at
-                  style: form
-                  explode: true
-                  schema:
-                      type: string
-                      format: date-time
-                      # ISO 8601 RegEx excluding timezone
-                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                      example: 2022-05-12T14:24:00Z
+                -   name: from
+                    in: query
+                    description: Time to start calculating from
+                    schema:
+                        $ref: '#/components/schemas/Timestamp'
+                -   name: to
+                    in: query
+                    description: Time to end calculating at
+                    schema:
+                        $ref: '#/components/schemas/Timestamp'
             responses:
                 '200':
                     description: ''
-                    headers: {}
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/TerminalSchedules'
     /terminals/{terminal_id}/performance:
+        parameters:
+            -   name: terminal_id
+                in: path
+                description: ID of the Terminal.
+                required: true
+                schema:
+                    $ref: '#/components/schemas/TerminalID'
         get:
             tags:
                 - Terminals
-            summary: Calculate a Terminal's Perfomance
-            description: >-
-                A Terminal object has the following attributes:
-                
-                
-                + name: `Han & Co. Ltd.` (string) - The name of the Terminal.
-            operationId: CalculateaTerminal'sPerfomance
+            summary: Calculate a Terminal's Performance
+            operationId: calculateTerminalPerformance
             parameters:
-                - name: terminal_id
-                  in: path
-                  description: ID of the Terminal.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/TerminalID'
-                - name: from
-                  in: query
-                  description: Time to start calculating from
-                  style: form
-                  explode: true
-                  schema:
-                      type: string
-                      format: date-time
-                      # ISO 8601 RegEx excluding timezone
-                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                      example: 2022-05-11T14:24:00Z
-                - name: to
-                  in: query
-                  description: Time to end calculating at
-                  style: form
-                  explode: true
-                  schema:
-                      type: string
-                      format: date-time
-                      # ISO 8601 RegEx excluding timezone
-                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                      example: 2022-05-12T14:24:00Z
+                -   name: from
+                    in: query
+                    description: Time to start calculating from
+                    schema:
+                        $ref: '#/components/schemas/Timestamp'
+                -   name: to
+                    in: query
+                    description: Time to end calculating at
+                    schema:
+                        $ref: '#/components/schemas/Timestamp'
             responses:
                 '200':
                     description: ''
-                    headers: {}
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Performance'
                             example:
-                                cost: 263
+                                cost_per_hour: 263
                                 scheduled_vessels: 13
                                 unscheduled_vessels: 14
     /ports:
@@ -1093,12 +622,7 @@ paths:
             tags:
                 - Ports
             summary: Create a Port
-            description: >-
-                A Port object has the following attributes:
-                
-                
-                + name: `Han Shipping` (string) - The name of the Port.
-            operationId: CreateaPort
+            operationId: createPort
             requestBody:
                 description: ''
                 content:
@@ -1113,11 +637,12 @@ paths:
                     description: ''
                     headers:
                         Location:
-                            content:
-                                text/plain:
-                                    schema:
-                                        type: string
-                                        example: /ports/1
+                            schema:
+                                type: string
+                                pattern: '^\/ports\/[0-9]+$'
+                                # Maximum /ports/2147483647
+                                maxLength: 17
+                                example: /ports/1
                     content:
                         application/json:
                             schema:
@@ -1126,40 +651,31 @@ paths:
             tags:
                 - Ports
             summary: Retrieve all Ports
-            description: ''
-            operationId: RetrieveallPorts
-            parameters: []
+            operationId: retrieveAllPorts
+            parameters: [ ]
             responses:
                 '200':
                     description: ''
-                    headers: {}
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/PortMap'
     /ports/{port_id}:
+        parameters:
+            -   name: port_id
+                in: path
+                description: ID of the Port.
+                required: true
+                schema:
+                    $ref: '#/components/schemas/PortID'
         get:
             tags:
                 - Ports
             summary: Retrieve a Port
-            description: >-
-                A Port object has the following attributes:
-                
-                
-                + name: `Han Shipping` (string) - The name of the Port.
-            operationId: RetrieveaPort
-            parameters:
-                - name: port_id
-                  in: path
-                  description: ID of the Port.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/PortID'
+            operationId: retrievePort
             responses:
                 '200':
                     description: ''
-                    headers: {}
                     content:
                         application/json:
                             schema:
@@ -1167,27 +683,12 @@ paths:
                             example:
                                 name: Han Shipping
                 '404':
-                    description: ''
-                    headers: {}
-                    content: {}
+                    $ref: '#/components/responses/NotFound'
         put:
             tags:
                 - Ports
             summary: Replace a Port
-            description: >-
-                A Port object has the following attributes:
-                
-                
-                + name: `Han Shipping` (string) - The name of the Port.
-            operationId: ReplaceaPort
-            parameters:
-                - name: port_id
-                  in: path
-                  description: ID of the Port.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/PortID'
+            operationId: replacePort
             requestBody:
                 description: ''
                 content:
@@ -1200,7 +701,6 @@ paths:
             responses:
                 '200':
                     description: ''
-                    headers: {}
                     content:
                         application/json:
                             schema:
@@ -1208,59 +708,33 @@ paths:
                             example:
                                 name: Han Shipping
                 '404':
-                    description: ''
-                    headers: {}
-                    content: {}
+                    $ref: '#/components/responses/NotFound'
         delete:
             tags:
                 - Ports
             summary: Delete a Port
-            description: >-
-                A Port object has the following attributes:
-                
-                
-                + name: `Han Shipping` (string) - The name of the Port.
-            operationId: DeleteaPort
-            parameters:
-                - name: port_id
-                  in: path
-                  description: ID of the Port.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/PortID'
+            operationId: deletePort
             responses:
                 '204':
                     description: ''
-                    headers: {}
-                    content: {}
                 '404':
-                    description: ''
-                    headers: {}
-                    content: {}
+                    $ref: '#/components/responses/NotFound'
     /ports/{port_id}/terminals:
+        parameters:
+            -   name: port_id
+                in: path
+                description: ID of the Port.
+                required: true
+                schema:
+                    $ref: '#/components/schemas/PortID'
         get:
             tags:
                 - Ports
             summary: Retrieve a Port's Terminals
-            description: >-
-                A Port object has the following attributes:
-                
-                
-                + name: `Han Shipping` (string) - The name of the Port.
-            operationId: RetrieveaPort'sTerminals
-            parameters:
-                - name: port_id
-                  in: path
-                  description: ID of the Port.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/PortID'
+            operationId: retrievePortTerminals
             responses:
                 '200':
                     description: ''
-                    headers: {}
                     content:
                         application/json:
                             schema:
@@ -1271,126 +745,86 @@ paths:
                                 '2':
                                     name: Bui Buoys
                 '404':
-                    description: ''
-                    headers: {}
-                    content: {}
+                    $ref: '#/components/responses/NotFound'
     /ports/{port_id}/schedules:
+        parameters:
+            -   name: port_id
+                in: path
+                description: ID of the Port.
+                required: true
+                schema:
+                    $ref: '#/components/schemas/PortID'
         get:
             tags:
                 - Ports
             summary: Retrieve a Port's Schedules
-            description: >-
-                A Port object has the following attributes:
-                
-                
-                + name: `Han Shipping` (string) - The name of the Port.
-            operationId: RetrieveaPort'sSchedules
+            operationId: retrievePortSchedules
             parameters:
-                - name: port_id
-                  in: path
-                  description: ID of the Port.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/PortID'
-                - name: from
-                  in: query
-                  description: Time to start looking from
-                  style: form
-                  explode: true
-                  schema:
-                      type: string
-                      format: date-time
-                      # ISO 8601 RegEx excluding timezone
-                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                      example: 2022-05-11T14:24:00Z
-                - name: to
-                  in: query
-                  description: Time to end looking at
-                  style: form
-                  explode: true
-                  schema:
-                      type: string
-                      format: date-time
-                      # ISO 8601 RegEx excluding timezone
-                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                      example: 2022-05-12T14:24:00Z
+                -   name: from
+                    in: query
+                    description: Time to start looking from
+                    schema:
+                        $ref: '#/components/schemas/Timestamp'
+                -   name: to
+                    in: query
+                    description: Time to end looking at
+                    schema:
+                        $ref: '#/components/schemas/Timestamp'
             responses:
                 '200':
                     description: ''
-                    headers: {}
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/PortSchedules'
     /ports/{port_id}/performance:
+        parameters:
+            -   name: port_id
+                in: path
+                description: ID of the Port.
+                required: true
+                schema:
+                    $ref: '#/components/schemas/PortID'
         get:
             tags:
                 - Ports
-            summary: Calculate a Port's Perfomance
-            description: >-
-                A Port object has the following attributes:
-                
-                
-                + name: `Han Shipping` (string) - The name of the Port.
-            operationId: CalculateaPort'sPerfomance
+            summary: Calculate a Port's Performance
+            operationId: calculatePortPerformance
             parameters:
-                - name: port_id
-                  in: path
-                  description: ID of the Port.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/PortID'
-                - name: from
-                  in: query
-                  description: Time to start calculating from
-                  style: form
-                  explode: true
-                  schema:
-                      type: string
-                      format: date-time
-                      # ISO 8601 RegEx excluding timezone
-                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                      example: 2022-05-11T14:24:00Z
-                - name: to
-                  in: query
-                  description: Time to end calculating at
-                  style: form
-                  explode: true
-                  schema:
-                      type: string
-                      format: date-time
-                      # ISO 8601 RegEx excluding timezone
-                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                      example: 2022-05-12T14:24:00Z
+                -   name: from
+                    in: query
+                    description: Time to start calculating from
+                    schema:
+                        $ref: '#/components/schemas/Timestamp'
+                -   name: to
+                    in: query
+                    description: Time to end calculating at
+                    schema:
+                        $ref: '#/components/schemas/Timestamp'
             responses:
                 '200':
                     description: ''
-                    headers: {}
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Performance'
                             example:
-                                cost: 5152
+                                cost_per_hour: 5152
                                 scheduled_vessels: 27
                                 unscheduled_vessels: 14
     /changes/vessels/{vessel_id}:
+        parameters:
+            -   name: vessel_id
+                in: path
+                description: ID of the Vessel.
+                required: true
+                schema:
+                    $ref: '#/components/schemas/VesselID'
         post:
             tags:
                 - Changes
             summary: Create a Vessel's Change
-            description: Changes about a Vessel's information.
-            operationId: CreateaVessel'sChange
-            parameters:
-                - name: vessel_id
-                  in: path
-                  description: ID of the Vessel.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/VesselID'
+            operationId: createVesselChange
             requestBody:
                 description: ''
                 content:
@@ -1401,7 +835,7 @@ paths:
                             date: 2022-05-11T16:32:35Z
                             changes:
                                 name: New Vessel 1
-                                container_amount: 40
+                                containers: 40
                             reason: Additional cargo (#2524)
                 required: true
             responses:
@@ -1409,12 +843,12 @@ paths:
                     description: ''
                     headers:
                         Location:
-                            content:
-                                text/plain:
-                                    schema:
-                                        type: string
-                                        example: /changes/vessels/30/2022-05-11T16:32:35Z
-                                    example: /changes/vessels/30/2022-05-11T16:32:35Z
+                            schema:
+                                type: string
+                                pattern: '^\/changes\/vessels\/[0-9]+\/(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
+                                # Maximum /changes/vessels/2147483647/294276-DD-DDTHH:MM:SSZ
+                                maxLength: 50
+                                example: /changes/vessels/30/2022-05-11T16:32:35Z
                     content:
                         application/json:
                             schema:
@@ -1424,51 +858,30 @@ paths:
                                 date: 2022-05-11T16:32:35Z
                                 old:
                                     name: Vessel 1
-                                    container_amount: 30
+                                    containers: 30
                                 new:
                                     name: New Vessel 1
-                                    container_amount: 40
+                                    containers: 40
                                 reason: Additional cargo (#2524)
         get:
             tags:
                 - Changes
             summary: Retrieve a Vessel's Changes
-            description: Changes about a Vessel's information.
-            operationId: RetrieveaVessel'sChanges
+            operationId: retrieveVesselChanges
             parameters:
-                - name: vessel_id
-                  in: path
-                  description: ID of the Vessel.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/VesselID'
-                - name: from
-                  in: query
-                  description: Time to start looking from
-                  style: form
-                  explode: true
-                  schema:
-                      type: string
-                      format: date-time
-                      # ISO 8601 RegEx excluding timezone
-                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                      example: 2022-05-11T14:24:00Z
-                - name: to
-                  in: query
-                  description: Time to end looking at
-                  style: form
-                  explode: true
-                  schema:
-                      type: string
-                      format: date-time
-                      # ISO 8601 RegEx excluding timezone
-                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                      example: 2022-05-12T14:24:00Z
+                -   name: from
+                    in: query
+                    description: Time to start looking from
+                    schema:
+                        $ref: '#/components/schemas/Timestamp'
+                -   name: to
+                    in: query
+                    description: Time to end looking at
+                    schema:
+                        $ref: '#/components/schemas/Timestamp'
             responses:
                 '200':
                     description: ''
-                    headers: {}
                     content:
                         application/json:
                             schema:
@@ -1477,115 +890,69 @@ paths:
             tags:
                 - Changes
             summary: Delete a Vessel's Changes
-            description: Changes about a Vessel's information.
-            operationId: DeleteaVessel'sChanges
+            operationId: deleteVesselChanges
             parameters:
-                - name: vessel_id
-                  in: path
-                  description: ID of the Vessel.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/VesselID'
-                - name: from
-                  in: query
-                  description: Time to start deleting from
-                  style: form
-                  explode: true
-                  schema:
-                      type: string
-                      format: date-time
-                      # ISO 8601 RegEx excluding timezone
-                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                      example: 2022-05-11T14:24:00Z
-                - name: to
-                  in: query
-                  description: Time to end deleting at
-                  style: form
-                  explode: true
-                  schema:
-                      type: string
-                      format: date-time
-                      # ISO 8601 RegEx excluding timezone
-                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                      example: 2022-05-12T14:24:00Z
+                -   name: from
+                    in: query
+                    description: Time to start deleting from
+                    schema:
+                        $ref: '#/components/schemas/Timestamp'
+                -   name: to
+                    in: query
+                    description: Time to end deleting at
+                    schema:
+                        $ref: '#/components/schemas/Timestamp'
             responses:
                 '204':
                     description: ''
-                    headers: {}
-                    content: {}
                 '404':
-                    description: ''
-                    headers: {}
-                    content: {}
+                    $ref: '#/components/responses/NotFound'
     /changes/vessels:
         get:
             tags:
                 - Changes
             summary: Retrieve all Vessels' Changes
-            description: Changes about a Vessel's information.
-            operationId: RetrieveallVessels'Changes
+            operationId: retrieveAllVesselChanges
             parameters:
-                - name: from
-                  in: query
-                  description: Time to start looking from
-                  style: form
-                  explode: true
-                  schema:
-                      type: string
-                      format: date-time
-                      # ISO 8601 RegEx excluding timezone
-                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                      example: 2022-05-11T14:24:00Z
-                - name: to
-                  in: query
-                  description: Time to end looking at
-                  style: form
-                  explode: true
-                  schema:
-                      type: string
-                      format: date-time
-                      # ISO 8601 RegEx excluding timezone
-                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                      example: 2022-05-12T14:24:00Z
+                -   name: from
+                    in: query
+                    description: Time to start looking from
+                    schema:
+                        $ref: '#/components/schemas/Timestamp'
+                -   name: to
+                    in: query
+                    description: Time to end looking at
+                    schema:
+                        $ref: '#/components/schemas/Timestamp'
             responses:
                 '200':
                     description: ''
-                    headers: {}
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/VesselChangesMap'
     /changes/vessels/{vessel_id}/{date}:
+        parameters:
+            -   name: vessel_id
+                in: path
+                description: ID of the Vessel.
+                required: true
+                schema:
+                    $ref: '#/components/schemas/VesselID'
+            -   name: date
+                in: path
+                description: Time at which the change was made. Can be formatted without colons and dashes.
+                required: true
+                schema:
+                    $ref: '#/components/schemas/Timestamp'
         get:
             tags:
                 - Changes
             summary: Retrieve a Vessel's Change
-            description: Changes about a Vessel's information.
-            operationId: RetrieveaVessel'sChange
-            parameters:
-                - name: vessel_id
-                  in: path
-                  description: ID of the Vessel.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/VesselID'
-                - name: date
-                  in: path
-                  description: Time at which the change was made. Can be formatted without colons and dashes.
-                  required: true
-                  style: simple
-                  schema:
-                      type: string
-                      format: date-time
-                      # ISO 8601 RegEx excluding timezone
-                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                      example: 2022-05-11T16:32:35Z
+            operationId: retrieveVesselChange
             responses:
                 '200':
                     description: ''
-                    headers: {}
                     content:
                         application/json:
                             schema:
@@ -1594,51 +961,25 @@ paths:
             tags:
                 - Changes
             summary: Delete a Vessel's Change
-            description: Changes about a Vessel's information.
-            operationId: DeleteaVessel'sChange
-            parameters:
-                - name: vessel_id
-                  in: path
-                  description: ID of the Vessel.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/VesselID'
-                - name: date
-                  in: path
-                  description: Time at which the change was made. Can be formatted without colons and dashes.
-                  required: true
-                  style: simple
-                  schema:
-                      type: string
-                      format: date-time
-                      # ISO 8601 RegEx excluding timezone
-                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                      example: 2022-05-11T16:32:35Z
+            operationId: deleteVesselChange
             responses:
                 '204':
                     description: ''
-                    headers: {}
-                    content: {}
                 '404':
-                    description: ''
-                    headers: {}
-                    content: {}
+                    $ref: '#/components/responses/NotFound'
     /changes/schedules/{vessel_id}:
+        parameters:
+            -   name: vessel_id
+                in: path
+                description: ID of the Vessel which's Schedule should be changed.
+                required: true
+                schema:
+                    $ref: '#/components/schemas/VesselID'
         post:
             tags:
                 - Changes
             summary: Create a Schedule's Change
-            description: Changes about a Vessel's Schedule.
-            operationId: CreateaSchedule'sChange
-            parameters:
-                - name: vessel_id
-                  in: path
-                  description: ID of the Vessel which's Schedule should be changed.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/VesselID'
+            operationId: createScheduleChange
             requestBody:
                 description: ''
                 content:
@@ -1656,12 +997,12 @@ paths:
                     description: ''
                     headers:
                         Location:
-                            content:
-                                text/plain:
-                                    schema:
-                                        type: string
-                                        example: /changes/schedules/30/2022-05-11T16:32:35Z
-                                    example: /changes/schedules/30/2022-05-11T16:32:35Z
+                            schema:
+                                type: string
+                                pattern: '^\/changes\/schedules\/[0-9]+\/(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
+                                # Maximum /changes/schedules/2147483647/294276-DD-DDTHH:MM:SSZ
+                                maxLength: 52
+                                example: /changes/schedules/30/2022-05-11T16:32:35Z
                     content:
                         application/json:
                             schema:
@@ -1678,211 +1019,111 @@ paths:
             tags:
                 - Changes
             summary: Retrieve all Schedule's Changes
-            description: Changes about a Vessel's Schedule.
-            operationId: RetrieveallSchedule'sChanges1
+            operationId: retrieveAllScheduleChanges
             parameters:
-                - name: vessel_id
-                  in: path
-                  description: ID of the Vessel which's Schedule should be changed.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/VesselID'
-                - name: from
-                  in: query
-                  description: Time to start looking from
-                  style: form
-                  explode: true
-                  schema:
-                      type: string
-                      format: date-time
-                      # ISO 8601 RegEx excluding timezone
-                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                      example: 2022-05-11T14:24:00Z
-                - name: to
-                  in: query
-                  description: Time to end looking at
-                  style: form
-                  explode: true
-                  schema:
-                      type: string
-                      format: date-time
-                      # ISO 8601 RegEx excluding timezone
-                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                      example: 2022-05-12T14:24:00Z
+                -   name: from
+                    in: query
+                    description: Time to start looking from
+                    schema:
+                        $ref: '#/components/schemas/Timestamp'
+                -   name: to
+                    in: query
+                    description: Time to end looking at
+                    schema:
+                        $ref: '#/components/schemas/Timestamp'
             responses:
                 '200':
                     description: ''
-                    headers: {}
                     content:
                         application/json:
                             schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/ScheduleChange'
-                                uniqueItems: true
-                                description: ''
-                                example:
-                                    - vessel: 30
-                                      date: 2022-05-11T16:32:35Z
-                                      old:
-                                          type: manual
-                                      new:
-                                          type: automatic
-                                      reason: Turn on automatic scheduling
-                                    - vessel: 30
-                                      date: 2022-05-11T21:26:24Z
-                                      old:
-                                          berth: 20
-                                          start: 2022-05-15T16:32:00Z
-                                          end: 2022-05-15T21:26:00Z
-                                      new:
-                                          berth: 18
-                                          start: 2022-05-09T10:24:00Z
-                                          end: 2022-05-10T16:17:00Z
-                                      reason: Automatic scheduling job
+                                $ref: '#/components/schemas/ScheduleChanges'
                             example:
-                                - vessel: 30
-                                  date: 2022-05-11T16:32:35Z
-                                  old:
-                                      type: manual
-                                  new:
-                                      type: automatic
-                                  reason: Turn on automatic scheduling
-                                - vessel: 30
-                                  date: 2022-05-11T21:26:24Z
-                                  old:
-                                      berth: 20
-                                      start: 2022-05-15T16:32:00Z
-                                      end: 2022-05-15T21:26:00Z
-                                  new:
-                                      berth: 18
-                                      start: 2022-05-09T10:24:00Z
-                                      end: 2022-05-10T16:17:00Z
-                                  reason: Automatic scheduling job
+                                -   vessel: 30
+                                    date: 2022-05-11T16:32:35Z
+                                    old:
+                                        type: manual
+                                    new:
+                                        type: automatic
+                                    reason: Turn on automatic scheduling
+                                -   vessel: 30
+                                    date: 2022-05-11T21:26:24Z
+                                    old:
+                                        berth: 20
+                                        start: 2022-05-15T16:32:00Z
+                                        end: 2022-05-15T21:26:00Z
+                                    new:
+                                        berth: 18
+                                        start: 2022-05-09T10:24:00Z
+                                        end: 2022-05-10T16:17:00Z
+                                    reason: Automatic scheduling job
         delete:
             tags:
                 - Changes
             summary: Delete a Schedule's Changes
-            description: Changes about a Schedule's information.
-            operationId: DeleteaSchedule'sChanges
+            operationId: deleteScheduleChanges
             parameters:
-                -   name: vessel_id
-                    in: path
-                    description: ID of the Vessel.
-                    required: true
-                    style: simple
-                    schema:
-                        $ref: '#/components/schemas/VesselID'
                 -   name: from
                     in: query
                     description: Time to start deleting from
-                    style: form
-                    explode: true
                     schema:
-                        type: string
-                        format: date-time
-                        # ISO 8601 RegEx excluding timezone
-                        pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                        example: 2022-05-11T14:24:00Z
+                        $ref: '#/components/schemas/Timestamp'
                 -   name: to
                     in: query
                     description: Time to end deleting at
-                    style: form
-                    explode: true
                     schema:
-                        type: string
-                        format: date-time
-                        # ISO 8601 RegEx excluding timezone
-                        pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                        example: 2022-05-12T14:24:00Z
+                        $ref: '#/components/schemas/Timestamp'
             responses:
                 '204':
                     description: ''
-                    headers: { }
-                    content: { }
                 '404':
-                    description: ''
-                    headers: { }
-                    content: { }
+                    $ref: '#/components/responses/NotFound'
     /changes/schedules:
         get:
             tags:
                 - Changes
             summary: Retrieve all Schedules' Changes
-            description: Changes about a Vessel's Schedule.
-            operationId: RetrieveallSchedules'Changes
+            operationId: retrieveAllSchedulesChanges
             parameters:
-                - name: vessel_id
-                  in: query
-                  description: ID of the Vessel which's Schedule should be changed.
-                  required: true
-                  style: form
-                  explode: true
-                  schema:
-                      $ref: '#/components/schemas/VesselID'
-                - name: from
-                  in: query
-                  description: Time to start looking from
-                  style: form
-                  explode: true
-                  schema:
-                      type: string
-                      format: date-time
-                      # ISO 8601 RegEx excluding timezone
-                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                      example: 2022-05-11T14:24:00Z
-                - name: to
-                  in: query
-                  description: Time to end looking at
-                  style: form
-                  explode: true
-                  schema:
-                      type: string
-                      format: date-time
-                      # ISO 8601 RegEx excluding timezone
-                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                      example: 2022-05-12T14:24:00Z
+                -   name: from
+                    in: query
+                    description: Time to start looking from
+                    schema:
+                        $ref: '#/components/schemas/Timestamp'
+                -   name: to
+                    in: query
+                    description: Time to end looking at
+                    schema:
+                        $ref: '#/components/schemas/Timestamp'
             responses:
                 '200':
                     description: ''
-                    headers: {}
                     content:
                         application/json:
                             schema:
-                                type: object
-                                additionalProperties:
-                                    $ref: '#/components/schemas/ScheduleChange'
+                                $ref: '#/components/schemas/ScheduleChangesMap'
     /changes/schedules/{vessel_id}/{date}:
+        parameters:
+            -   name: vessel_id
+                in: path
+                description: ID of the Vessel which Schedule should be changed.
+                required: true
+                schema:
+                    $ref: '#/components/schemas/VesselID'
+            -   name: date
+                in: path
+                description: Time at which the change was made. Can be formatted without colons and dashes.
+                required: true
+                schema:
+                    $ref: '#/components/schemas/Timestamp'
         get:
             tags:
                 - Changes
             summary: Retrieve a Schedule's Change
-            description: Changes about a Vessel's Schedule.
-            operationId: RetrieveaSchedule'sChange
-            parameters:
-                - name: vessel_id
-                  in: path
-                  description: ID of the Vessel which's Schedule should be changed.
-                  required: true
-                  style: simple
-                  schema:
-                      $ref: '#/components/schemas/VesselID'
-                - name: date
-                  in: path
-                  description: Time at which the change was made. Can be formatted without colons and dashes.
-                  required: true
-                  style: simple
-                  schema:
-                      type: string
-                      format: date-time
-                      # ISO 8601 RegEx excluding timezone
-                      pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                      example: 2022-05-11T16:32:35Z
+            operationId: retrieveScheduleChange
             responses:
                 '200':
                     description: ''
-                    headers: {}
                     content:
                         application/json:
                             schema:
@@ -1899,40 +1140,38 @@ paths:
             tags:
                 - Changes
             summary: Delete a Schedule's Change
-            description: Changes about a Schedule's information.
-            operationId: DeleteaSchedule'sChange
-            parameters:
-                -   name: vessel_id
-                    in: path
-                    description: ID of the Vessel.
-                    required: true
-                    style: simple
-                    schema:
-                        $ref: '#/components/schemas/VesselID'
-                -   name: date
-                    in: path
-                    description: Time at which the change was made. Can be formatted without colons and dashes.
-                    required: true
-                    style: simple
-                    schema:
-                        type: string
-                        format: date-time
-                        # ISO 8601 RegEx excluding timezone
-                        pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                        example: 2022-05-11T16:32:35Z
+            operationId: deleteScheduleChange
             responses:
                 '204':
                     description: ''
-                    headers: { }
-                    content: { }
                 '404':
-                    description: ''
-                    headers: { }
-                    content: { }
+                    $ref: '#/components/responses/NotFound'
+security:
+    -   bearerAuth: [ ]
 components:
     schemas:
-        Schedule:
-            title: Schedule
+        Timestamp:
+            type: string
+            format: date-time
+            # ISO 8601 RegEx excluding timezone
+            pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
+            # Max value is 294276 AD, so 294276-DD-DDTHH:MM:SSZ is the max length
+            maxLength: 22
+            example: 2022-05-11T16:32:35Z
+        Time:
+            type: string
+            format: time
+            pattern: '^([0-1]?[0-9]|2[0-3]):?[0-5][0-9]$'
+        OptionalSchedule:
+            title: Optional Schedule
+            description: >-
+                A Schedule object has the following attributes:
+
+                + vessel: `1` (integer) - ID of the Vessel.
+                + type: `manual` (`manual` or `automatic`) - Whether the Vessel should be planned at the supplied Berth and timestamp or by the software, respectively.
+                + berth: `20` (integer) - ID of the Berth the Vessel should be unloaded at.
+                + start: `2022-05-12T07:23:00Z` (timestamp) - When the Vessel should start being unloaded.
+                + end: `2022-05-13T21:41:00Z` (timestamp) - When the Vessel is expected to end being unloaded.
             type: object
             properties:
                 vessel:
@@ -1943,15 +1182,35 @@ components:
                 berth:
                     $ref: '#/components/schemas/BerthID'
                 start:
-                    type: string
-                    format: date-time
-                    # ISO 8601 RegEx excluding timezone
-                    pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
+                    $ref: '#/components/schemas/Timestamp'
                 end:
+                    $ref: '#/components/schemas/Timestamp'
+            additionalProperties: false
+            example:
+                type: automatic
+        Schedule:
+            title: Schedule
+            description: >-
+                A Schedule object has the following attributes:
+
+                + vessel: `1` (integer) - ID of the Vessel.
+                + type: `manual` (`manual` or `automatic`) - Whether the Vessel should be planned at the supplied Berth and timestamp or by the software, respectively.
+                + berth: `20` (integer) - ID of the Berth the Vessel should be unloaded at.
+                + start: `2022-05-12T07:23:00Z` (timestamp) - When the Vessel should start being unloaded.
+                + end: `2022-05-13T21:41:00Z` (timestamp) - When the Vessel is expected to end being unloaded.
+            type: object
+            properties:
+                vessel:
+                    $ref: '#/components/schemas/VesselID'
+                type:
                     type: string
-                    format: date-time
-                    # ISO 8601 RegEx excluding timezone
-                    pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
+                    enum: [ automatic, manual ]
+                berth:
+                    $ref: '#/components/schemas/BerthID'
+                start:
+                    $ref: '#/components/schemas/Timestamp'
+                end:
+                    $ref: '#/components/schemas/Timestamp'
             additionalProperties: false
             required:
                 - vessel
@@ -1967,6 +1226,8 @@ components:
                 end: 2022-05-11T21:26:00Z
         BerthSchedules:
             title: Berth Schedules
+            description: >-
+                An array of Schedule objects.
             type: array
             items:
                 $ref: '#/components/schemas/Schedule'
@@ -1985,6 +1246,8 @@ components:
                     'end': '2022-05-15T13:53:00Z'
         TerminalSchedules:
             title: Terminal Schedules
+            description: >-
+                A map of Berth Schedules, keyed by Berth ID.
             type: object
             additionalProperties:
                 $ref: '#/components/schemas/BerthSchedules'
@@ -2002,6 +1265,8 @@ components:
                         'end': '2022-05-15T13:53:00Z'
         PortSchedules:
             title: Port Schedules
+            description: >-
+                A map of Terminal Schedules, keyed by Terminal ID.
             type: object
             additionalProperties:
                 $ref: '#/components/schemas/TerminalSchedules'
@@ -2020,13 +1285,19 @@ components:
                             'end': '2022-05-15T13:53:00Z'
         Performance:
             title: Performance
+            description: >-
+                A Performance object has the following attributes:
+
+                + cost: `5152.25` (decimal) - The total cost of all scheduled vessels.
+                + scheduled_vessels: `27` (integer) - The amount of vessels with a schedule.
+                + unscheduled_vessels: `14` (integer) - The amount of vessels without a schedule.
             type: object
             properties:
                 cost:
-                    type: integer
-                    format: int32
+                    type: number
+                    format: real
                     minimum: 0
-                    maximum: 2147483647
+                    maximum: 1E+37
                 scheduled_vessels:
                     type: integer
                     format: int32
@@ -2043,63 +1314,13 @@ components:
                 - scheduled_vessels
                 - unscheduled_vessels
             example:
-                cost: 5152
+                cost_per_hour: 5152.25
                 scheduled_vessels: 27
                 unscheduled_vessels: 14
-        OptionalDimension:
-            title: Optional Dimension
-            type: object
-            properties:
-                length:
-                    type: integer
-                    format: int32
-                    minimum: 0
-                    maximum: 2147483647
-                width:
-                    type: integer
-                    format: int32
-                    minimum: 0
-                    maximum: 2147483647
-                depth:
-                    type: integer
-                    format: int32
-                    minimum: 0
-                    maximum: 2147483647
-            additionalProperties: false
-            example:
-                length: 30
-                width: 10
-                depth: 30
-        Dimension:
-            title: Dimension
-            type: object
-            properties:
-                length:
-                    type: integer
-                    format: int32
-                    minimum: 0
-                    maximum: 2147483647
-                width:
-                    type: integer
-                    format: int32
-                    minimum: 0
-                    maximum: 2147483647
-                depth:
-                    type: integer
-                    format: int32
-                    minimum: 0
-                    maximum: 2147483647
-            additionalProperties: false
-            required:
-                - length
-                - width
-                - depth
-            example:
-                length: 30
-                width: 10
-                depth: 30
         VesselID:
             title: Vessel ID
+            description: >-
+                An ID of a Vessel. Vessel IDs are unique, and are generated by the database.
             type: integer
             format: int32
             minimum: 1
@@ -2107,6 +1328,18 @@ components:
             example: 1
         OptionalVessel:
             title: Vessel
+            description: >-
+                A Vessel object has the following attributes:
+                
+                + name: `BigBoatHan` (string) - The name of the Vessel.
+                + arrival: `2022-05-11T13:10:00Z` (timestamp) - When the Vessel is expected to arrive.
+                + deadline: `2022-05-12T09:54:00Z` (timestamp) - When the Vessel must be completely unloaded.
+                + containers: `5` (integer) - The amount of containers on the Vessel to be unloaded.
+                + cost_per_hour: `2.6` (decimal) - The cost per hour from arrival till fully unloaded.
+                + destination: `3` (integer) - The terminal where the Vessel should be unloaded.
+                + length: `30` (integer) - The length of the Vessel in metres.
+                + width: `10` (integer) - The width of the Vessel in metres.
+                + depth: `20` (integer) - The depth of the Vessel in metres.
             type: object
             properties:
                 name:
@@ -2115,33 +1348,54 @@ components:
                     pattern: '^(?:.|\s)+$'
                     maxLength: 64
                 arrival:
-                    type: string
-                    format: date-time
-                    # ISO 8601 RegEx excluding timezone
-                    pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
+                    $ref: '#/components/schemas/Timestamp'
                 deadline:
-                    type: string
-                    format: date-time
-                    # ISO 8601 RegEx excluding timezone
-                    pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                container_amount:
+                    $ref: '#/components/schemas/Timestamp'
+                containers:
                     type: integer
                     format: int32
                     minimum: 0
                     maximum: 2147483647
-                cost:
+                cost_per_hour:
                     type: number
                     format: real
-                destination_terminal:
+                    minimum: 0
+                    maximum: 1E+37
+                destination:
                     $ref: '#/components/schemas/TerminalID'
-                dimension:
-                    $ref: '#/components/schemas/OptionalDimension'
+                length:
+                    type: integer
+                    format: int32
+                    minimum: 0
+                    maximum: 2147483647
+                width:
+                    type: integer
+                    format: int32
+                    minimum: 0
+                    maximum: 2147483647
+                depth:
+                    type: integer
+                    format: int32
+                    minimum: 0
+                    maximum: 2147483647
             additionalProperties: false
             example:
                 name: New Vessel 1
-                container_amount: 40
+                containers: 40
         Vessel:
             title: Vessel
+            description: >-
+                A Vessel object has the following attributes:
+
+                + name: `BigBoatHan` (string) - The name of the Vessel.
+                + arrival: `2022-05-11T13:10:00Z` (timestamp) - When the Vessel is expected to arrive.
+                + deadline: `2022-05-12T09:54:00Z` (timestamp) - When the Vessel must be completely unloaded.
+                + containers: `5` (integer) - The amount of containers on the Vessel to be unloaded.
+                + cost_per_hour: `2.6` (decimal) - The cost per hour from arrival till fully unloaded.
+                + destination: `3` (integer) - The terminal where the Vessel should be unloaded.
+                + length: `30` (integer) - The length of the Vessel in metres.
+                + width: `10` (integer) - The width of the Vessel in metres.
+                + depth: `20` (integer) - The depth of the Vessel in metres.
             type: object
             properties:
                 name:
@@ -2150,48 +1404,62 @@ components:
                     pattern: '^(?:.|\s)+$'
                     maxLength: 64
                 arrival:
-                    type: string
-                    format: date-time
-                    # ISO 8601 RegEx excluding timezone
-                    pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
+                    $ref: '#/components/schemas/Timestamp'
                 deadline:
-                    type: string
-                    format: date-time
-                    # ISO 8601 RegEx excluding timezone
-                    pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                container_amount:
+                    $ref: '#/components/schemas/Timestamp'
+                containers:
                     type: integer
                     format: int32
                     minimum: 0
                     maximum: 2147483647
-                cost:
+                cost_per_hour:
                     type: number
-                destination_terminal:
+                    format: real
+                    minimum: 0
+                    maximum: 1E+37
+                destination:
                     $ref: '#/components/schemas/TerminalID'
-                dimension:
-                    $ref: '#/components/schemas/Dimension'
+                length:
+                    type: integer
+                    format: int32
+                    minimum: 0
+                    maximum: 2147483647
+                width:
+                    type: integer
+                    format: int32
+                    minimum: 0
+                    maximum: 2147483647
+                depth:
+                    type: integer
+                    format: int32
+                    minimum: 0
+                    maximum: 2147483647
             additionalProperties: false
             required:
                 - name
                 - arrival
                 - deadline
-                - container_amount
-                - cost
-                - destination_terminal
-                - dimension
+                - containers
+                - cost_per_hour
+                - destination
+                - length
+                - width
+                - depth
             example:
                 name: Vessel 1
                 arrival: 2022-05-11T13:56:00Z
                 deadline: 2022-05-12T18:13:00Z
-                container_amount: 30
-                cost: 2.6
-                destination_terminal: 4
+                containers: 30
+                cost_per_hour: 2.6
+                destination: 4
                 dimension:
                     length: 30
                     width: 10
                     depth: 30
         BerthID:
             title: Berth ID
+            description: >-
+                An ID of a Berth. Berth IDs are unique, and are generated by the database.
             type: integer
             format: int32
             minimum: 1
@@ -2199,29 +1467,49 @@ components:
             example: 1
         Berth:
             title: Berth
+            description: >-
+                A Berth object has the following attributes:
+
+                + open_time: `06:45` (time) - The time at which the Berth starts processing.
+                + close_time: `21:30` (time) - The time at which the Berth stops processing.
+                + unload_speed: `6.3` (decimal) - The amount of containers per time unit the Berth can process.
+                + length: `150` (integer) - The length of the Berth in metres.
+                + width: `30` (integer) - The maximum length of Vessel in the Berth in metres.
+                + depth: `50` (integer) - The depth of the Berth in metres.
             type: object
             properties:
                 open_time:
-                    type: string
-                    format: time
-                    pattern: '^([0-1]?[0-9]|2[0-3]):?[0-5][0-9]$'
+                    $ref: '#/components/schemas/Time'
                 close_time:
-                    type: string
-                    format: time
-                    pattern: '^([0-1]?[0-9]|2[0-3]):?[0-5][0-9]$'
+                    $ref: '#/components/schemas/Time'
                 unload_speed:
                     type: number
                     format: real
                     minimum: 0
                     maximum: 1E+37
-                dimension:
-                    $ref: '#/components/schemas/Dimension'
+                length:
+                    type: integer
+                    format: int32
+                    minimum: 0
+                    maximum: 2147483647
+                width:
+                    type: integer
+                    format: int32
+                    minimum: 0
+                    maximum: 2147483647
+                depth:
+                    type: integer
+                    format: int32
+                    minimum: 0
+                    maximum: 2147483647
             additionalProperties: false
             required:
                 - open_time
                 - close_time
                 - unload_speed
-                - dimension
+                - length
+                - width
+                - depth
             example:
                 open_time: 06:45
                 close_time: 21:30
@@ -2232,6 +1520,8 @@ components:
                     depth: 50
         BerthMap:
             title: Berth Map
+            description: >-
+                A map of Berth objects keyed by Berth ID.
             type: object
             additionalProperties:
                 $ref: '#/components/schemas/Berth'
@@ -2254,6 +1544,8 @@ components:
                         depth: 30
         TerminalID:
             title: Terminal ID
+            description: >-
+                An ID of a Terminal. Terminal IDs are unique, and are generated by the database.
             type: integer
             format: int32
             minimum: 1
@@ -2261,6 +1553,10 @@ components:
             example: 1
         Terminal:
             title: Terminal
+            description: >-
+                A Terminal object has the following attributes:
+
+                + name: `Han & Co. Ltd.` (string) - The name of the Terminal.
             type: object
             properties:
                 name:
@@ -2275,6 +1571,8 @@ components:
                 name: Han & Co. Ltd.
         TerminalMap:
             title: Terminal Map
+            description: >-
+                A map of Terminal objects keyed by Terminal ID.
             type: object
             additionalProperties:
                 $ref: '#/components/schemas/Terminal'
@@ -2285,6 +1583,8 @@ components:
                     name: Bui Buoys
         PortID:
             title: Port ID
+            description: >-
+                An ID of a Port. Port IDs are unique, and are generated by the database.
             type: integer
             format: int32
             minimum: 1
@@ -2292,6 +1592,10 @@ components:
             example: 1
         Port:
             title: Port
+            description: >-
+                A Port object has the following attributes:
+
+                + name: `Han Shipping` (string) - The name of the Port.
             type: object
             properties:
                 name:
@@ -2306,6 +1610,8 @@ components:
                 name: Han Shipping
         PortMap:
             title: Port Map
+            description: >-
+                A map of Port objects keyed by Port ID.
             type: object
             additionalProperties:
                 $ref: '#/components/schemas/Port'
@@ -2314,45 +1620,25 @@ components:
                     name: Han Shipping
                 '2':
                     name: Thai Transport
-        OptionalSchedule:
-            title: Optional Schedule
-            type: object
-            properties:
-                vessel:
-                    $ref: '#/components/schemas/VesselID'
-                type:
-                    type: string
-                    enum: [ automatic, manual ]
-                berth:
-                    $ref: '#/components/schemas/BerthID'
-                start:
-                    type: string
-                    format: date-time
-                    # ISO 8601 RegEx excluding timezone
-                    pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-                end:
-                    type: string
-                    format: date-time
-                    # ISO 8601 RegEx excluding timezone
-                    pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
-            additionalProperties: false
-            example:
-                type: automatic
         NewVesselChange:
             title: New Vessel Change
+            description: >-
+                A New Vessel Change object has the following attributes:
+
+                + date: `2022-05-11T16:32:35Z` (timestamp) - The date at which the change was made.
+                + changes: `{"name": "New Vessel 1", "containers": 40}` (JSON) - The changes to be made.
+                + reason: `Additional cargo (#2524)` (string) - The reason for the change.
             type: object
             properties:
                 date:
-                    type: string
-                    format: date-time
-                    # ISO 8601 RegEx excluding timezone
-                    pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
+                    $ref: '#/components/schemas/Timestamp'
                 changes:
                     $ref: '#/components/schemas/OptionalVessel'
                 reason:
                     type: string
                     # Capture everything of length 0 or longer
                     pattern: '^(?:.|\s)*$'
+                    maxLength: 1073741824
                     nullable: true
             additionalProperties: false
             required:
@@ -2363,19 +1649,24 @@ components:
                 date: 2022-05-11T16:32:35Z
                 changes:
                     name: New Vessel 1
-                    container_amount: 40
+                    containers: 40
                 reason: Additional cargo (#2524)
         VesselChange:
             title: Vessel Change
+            description: >-
+                A Vessel Change object has the following attributes:
+
+                + vessel: `1` (integer) - The ID of the Vessel.
+                + date: `2022-05-11T16:32:35Z` (timestamp) - The date at which the change was made.
+                + old: `{"name": "Vessel 1", "containers": 30}` (JSON) - The relevant properties before being changed.
+                + new: `{"name": "New Vessel 1", "containers": 40}` (JSON) - The relevant properties after being changed.
+                + reason: `Additional cargo (#2524)` (string) - The reason for the change.
             type: object
             properties:
                 vessel:
                     $ref: '#/components/schemas/VesselID'
                 date:
-                    type: string
-                    format: date-time
-                    # ISO 8601 RegEx excluding timezone
-                    pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
+                    $ref: '#/components/schemas/Timestamp'
                 old:
                     $ref: '#/components/schemas/OptionalVessel'
                 new:
@@ -2384,6 +1675,7 @@ components:
                     type: string
                     # Capture everything of length 0 or longer
                     pattern: '^(?:.|\s)*$'
+                    maxLength: 1073741824
                     nullable: true
             additionalProperties: false
             required:
@@ -2397,13 +1689,15 @@ components:
                 date: 2022-05-11T16:32:35Z
                 old:
                     name: Vessel 1
-                    container_amount: 30
+                    containers: 30
                 new:
                     name: New Vessel 1
-                    container_amount: 40
+                    containers: 40
                 reason: Additional cargo (#2524)
         VesselChanges:
             title: Vessel Changes
+            description: >-
+                An array of Vessel Change objects.
             type: array
             items:
                 $ref: '#/components/schemas/VesselChange'
@@ -2413,10 +1707,10 @@ components:
                     date: 2022-05-11T16:32:35Z
                     old:
                         name: Vessel 1
-                        container_amount: 30
+                        containers: 30
                     new:
                         name: New Vessel 1
-                        container_amount: 40
+                        containers: 40
                     reason: Additional cargo (#2524)
                 -   vessel: 30
                     date: 2022-05-11T21:26:24Z
@@ -2429,6 +1723,8 @@ components:
                     reason: Ship delayed (#3517)
         VesselChangesMap:
             title: Vessel Changes Map
+            description: >-
+                A map of Vessel Changes keyed by Vessel ID.
             type: object
             additionalProperties:
                 $ref: '#/components/schemas/VesselChanges'
@@ -2438,10 +1734,10 @@ components:
                         date: 2022-05-11T16:32:35Z
                         old:
                             name: Vessel 1
-                            container_amount: 30
+                            containers: 30
                         new:
                             name: New Vessel 1
-                            container_amount: 40
+                            containers: 40
                         reason: Additional cargo (#2524)
                     -   vessel: 30
                         date: 2022-05-11T21:26:24Z
@@ -2454,19 +1750,23 @@ components:
                         reason: Ship delayed (#3517)
         NewScheduleChange:
             title: New Schedule Change
+            description: >-
+                A New Schedule Change object has the following attributes:
+
+                + date: `2022-05-11T16:32:35Z` (timestamp) - The date at which the change was made.
+                + changes: `{"type": "automatic"}` (JSON) - The changes to be made.
+                + reason: `Turn on automatic scheduling` (string) - The reason for the change.
             type: object
             properties:
                 date:
-                    type: string
-                    format: date-time
-                    # ISO 8601 RegEx excluding timezone
-                    pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
+                    $ref: '#/components/schemas/Timestamp'
                 changes:
                     $ref: '#/components/schemas/OptionalSchedule'
                 reason:
                     type: string
                     # Capture everything of length 0 or longer
                     pattern: '^(?:.|\s)*$'
+                    maxLength: 1073741824
                     nullable: true
             additionalProperties: false
             required:
@@ -2480,15 +1780,20 @@ components:
                 reason: Turn on automatic scheduling
         ScheduleChange:
             title: Schedule Change
+            description: >-
+                A Vessel Change object has the following attributes:
+                
+                + vessel: `1` (integer) - The ID of the Schedule's Vessel.
+                + date: `2022-05-11T16:32:35Z` (timestamp) - The date at which the change was made.
+                + old: `{"type": "manual"}` (JSON) - The relevant properties before being changed.
+                + new: `{"type": "automatic"}` (JSON) - The relevant properties after being changed.
+                + reason: `Turn on automatic scheduling` (string) - The reason for the change.
             type: object
             properties:
                 vessel:
                     $ref: '#/components/schemas/VesselID'
                 date:
-                    type: string
-                    format: date-time
-                    # ISO 8601 RegEx excluding timezone
-                    pattern: '^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$'
+                    $ref: '#/components/schemas/Timestamp'
                 old:
                     $ref: '#/components/schemas/OptionalSchedule'
                 new:
@@ -2497,6 +1802,7 @@ components:
                     type: string
                     # Capture everything of length 0 or longer
                     pattern: '^(?:.|\s)*$'
+                    maxLength: 1073741824
                     nullable: true
             additionalProperties: false
             required:
@@ -2513,14 +1819,76 @@ components:
                 new:
                     type: automatic
                 reason: Turn on automatic scheduling
+        ScheduleChanges:
+            title: Schedule Changes
+            description: >-
+                An array of Schedule Change objects.
+            type: array
+            items:
+                $ref: '#/components/schemas/ScheduleChange'
+            maxItems: 2147483647
+            example:
+                -   vessel: 30
+                    date: 2022-05-11T16:32:35Z
+                    old:
+                        type: manual
+                    new:
+                        type: automatic
+                    reason: Turn on automatic scheduling
+                -   vessel: 30
+                    date: 2022-05-11T21:26:24Z
+                    old:
+                        berth: 20
+                        start: 2022-05-15T16:32:00Z
+                        end: 2022-05-15T21:26:00Z
+                    new:
+                        berth: 18
+                        start: 2022-05-09T10:24:00Z
+                        end: 2022-05-10T16:17:00Z
+                    reason: Automatic scheduling job
+        ScheduleChangesMap:
+            title: Schedule Changes Map
+            description: >-
+                A map of Schedule Changes keyed by a Schedule's Vessel ID.
+            type: object
+            additionalProperties:
+                $ref: '#/components/schemas/ScheduleChanges'
+            example:
+                '30':
+                    -   vessel: 30
+                        date: 2022-05-11T16:32:35Z
+                        old:
+                            type: manual
+                        new:
+                            type: automatic
+                        reason: Turn on automatic scheduling
+                    -   vessel: 30
+                        date: 2022-05-11T21:26:24Z
+                        old:
+                            berth: 20
+                            start: 2022-05-15T16:32:00Z
+                            end: 2022-05-15T21:26:00Z
+                        new:
+                            berth: 18
+                            start: 2022-05-09T10:24:00Z
+                            end: 2022-05-10T16:17:00Z
+                        reason: Automatic scheduling job
+    responses:
+        NotFound:
+            description: 404 not found
+    securitySchemes:
+        bearerAuth:
+            type: http
+            scheme: bearer
+            bearerFormat: JWT
 tags:
-    - name: Vessels
-      description: ''
-    - name: Berths
-      description: ''
-    - name: Terminals
-      description: ''
-    - name: Ports
-      description: ''
-    - name: Changes
-      description: ''
+    -   name: Vessels
+        description: ''
+    -   name: Berths
+        description: ''
+    -   name: Terminals
+        description: ''
+    -   name: Ports
+        description: ''
+    -   name: Changes
+        description: ''
