@@ -3,22 +3,20 @@ class VesselModal extends HTMLElement {
   schedule_type = "auto"
   terminals
   name
-  form_id
 
   constructor() {
     super();
     this.terminals = Requests.getData(`/ports/${Requests.portId}/terminals`)
     this.name = this.getAttribute('name')
-    this.form_id = this.name + '-modal-form'
   }
 
    set_schedule_type(type) {
     this.schedule_type = type
     // console.log("Changing to schedule type " + type)
     if (type==="disabled") {
-      document.getElementById(`${name}-schedule-edit`).setAttribute("hidden","")
+      this.getElement(`schedule-edit`).setAttribute("hidden","")
     } else {
-      document.getElementById(`${name}-schedule-edit`).removeAttribute("hidden")
+      this.getElement(`schedule-edit`).removeAttribute("hidden")
       for (let item of document.getElementsByClassName(`${this.name}-disabled-if-auto`)) {
         if (type === "manual") {
           item.removeAttribute("disabled")
@@ -48,100 +46,99 @@ class VesselModal extends HTMLElement {
         <h5 class="modal-title"><b>${this.name.charAt(0).toUpperCase() + this.name.substring(1)} vessel</b></h5>
         <button class="btn-close" data-bs-dismiss="modal" type="button"></button>
       </div>
-      <form id="${this.form_id}">
+      <form id="${this.name}-modal-form">
         <div class="modal-body">
-          <div class="mb-3"m
+          <div class="mb-3">
             <label class="form-label" for="form-name">Name:</label>
-            <input class="form-control form-control-sm" id="form-name" name="${this.name}-vessel-name" placeholder="Titanic" required
-                   type="text">
+            <input class="form-control form-control-sm" id="${this.name}-form-name" name="vessel-name" placeholder="Titanic" required type="text">
           </div>
 
           <div class="row mb-3">
             <div class="col">
               <label class="form-label" for="form-arrival">Arrival:</label>
-              <input class="form-control form-control-sm" id="form-arrival" name="${this.name}-vessel-arrival" required
+              <input class="form-control form-control-sm" id="${this.name}-form-arrival" name="datetime-arrival-vessel" required
                      type="datetime-local" value="${VesselModal.nowJsonString()}">
             </div>
             <div class="col">
-              <label class="form-label" for="form-deadline">Deadline:</label>
-              <input class="form-control form-control-sm" id="form-deadline" name="${this.name}-vessel-deadline" type="datetime-local">
+              <label class="form-label" for="${this.name}-form-deadline">Deadline:</label>
+              <input class="form-control form-control-sm" id="${this.name}-form-deadline" name="datetime-deadline-vessel" type="datetime-local">
             </div>
           </div>
 
           <div class="row mb-3">
             <div class="col">
               <label class="form-label" for="form-containers">Container amount:</label>
-              <input class="form-control form-control-sm" id="form-containers" min="-1" name="${this.name}-vessel-containers"
+              <input class="form-control form-control-sm" id="${this.name}-form-containers" min="-1" name="vessel-containers"
                      required type="number">
             </div>
             <div class="col">
               <label class="form-label" for="form-cost">Cost:</label>
-              <input class="form-control form-control-sm" id="form-cost" name="${this.name}-vessel-cost_per_hour" required type="number">
+              <input class="form-control form-control-sm" id="${this.name}-form-cost" name="vessel-cost_per_hour" required type="number">
             </div>
           </div>
 
           <div class="mb-3 row">
             <div class="col d-grid">
               <label class="form-label me-3" for="select-terminal"><b>Terminal:</b></label>
-              <select class="form-select form-select-sm" name="${this.name}-vessel-destination"> 
+              <select class="form-select form-select-sm" name="vessel-destination"> 
                 ${Object.keys(terminals).map(i => `<option value="${i}">${terminals[i]['name']}</option>`).join('\n')}
               </select>
               </div>
               <div class="col">
                 <label class="form-label" for="form-length">Length:</label>
-              <input class="form-control form-control-sm" id="form-length" name="${this.name}-vessel-length" required type="number" value="0">
+              <input class="form-control form-control-sm" id="${this.name}-form-length" name="vessel-length" required type="number" value="0">
             </div>
           </div>
 
           <div class="row mb-3">
             <div class="col">
               <label class="form-label" for="form-width">Width:</label>
-              <input class="form-control form-control-sm" id="form-width" name="${this.name}-vessel-width" required type="number" value="0">
+              <input class="form-control form-control-sm" id="${this.name}-form-width" name="vessel-width" required type="number" value="0">
             </div>
             <div class="col">
               <label class="form-label" for="form-depth">Depth:</label>
-              <input class="form-control form-control-sm" id="form-depth" name="${this.name}-vessel-depth" required type="number" value="0">
+              <input class="form-control form-control-sm" id="form-depth" name="vessel-depth" required type="number" value="0">
             </div>
           </div>
 
           <div class="mb-3 row mt-2">
             <label class="label me-3 col" for="label"><b>Schedule:</b></label>
             <div class="form-check form-check-inline col">
-              <input checked class="form-check-input" id="${this.name}-radio-auto" name="${this.name}-radio-schedule" type="radio">
+              <input checked class="form-check-input" id="${this.name}-radio-auto" name="schedule-type" value="automatic" type="radio">
               <label class="form-check-label" for="${this.name}-radio-auto">
                 Automatic
               </label>
             </div>
             <div class="form-check form-check-inline col">
-              <input class="form-check-input" id="${this.name}-radio-manual" name="${this.name}-radio-schedule" type="radio">
+              <input class="form-check-input" id="${this.name}-radio-manual" name="schedule-type" value="manual" type="radio">
               <label class="form-check-label" for="${this.name}-radio-manual">
                 Manual
               </label>
             </div>
             <div class="form-check form-check-inline col">
-              <input class="form-check-input" id="${this.name}-radio-disabled" name="${this.name}-radio-schedule" type="radio">
+              <input class="form-check-input" id="${this.name}-radio-disabled" name="schedule-type" value="disabled" type="radio">
               <label class="form-check-label" for="${this.name}-radio-disabled">
                 Disabled
               </label>
             </div>
           </div>
 
-          <div class="row mb-3" id="${name}-schedule-edit">
+          <div class="row mb-3" id="${this.name}-schedule-edit">
             <div class="col">
               <label class="form-label" for="form-berth">Berth:</label>
-              <input class="form-control form-control-sm ${this.name}-disabled-if-auto" disabled id="form-berth" name="${this.name}-schedule-berth" required
+              <input class="form-control form-control-sm ${this.name}-disabled-if-auto" disabled id="${this.name}-form-berth" name="schedule-berth" required
                      type="number">
             </div>
             <div class="col">
-              <label class="form-label" for="form-handel">Handel:</label>
-              <input class="form-control form-control-sm ${this.name}-disabled-if-auto" disabled id="form-handel" name="${this.name}-schedule-handel" required
+              <label class="form-label" for="form-handel">Handel time:</label>
+              <input class="form-control form-control-sm ${this.name}-disabled-if-auto" disabled id="${this.name}-form-handel" name="schedule-start" required
                      type="datetime-local">
             </div>
           </div>
         </div> 
         <div class="modal-footer" id="${this.name}-modal-footer-btn">
           <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
-          <button class="btn btn-primary" id="btn-save" type="submit">Save changes</button>
+          <button class="btn btn-primary" id="${this.name}-btn-save" type="submit">Save changes</button>
         </div>
         <div hidden id="${this.name}-modal-footer-loading">
           <div class="modal-footer d-flex justify-content-center">
@@ -156,17 +153,17 @@ class VesselModal extends HTMLElement {
 	`
     let radio_ids = ["auto", "manual", "disabled"]
     radio_ids.forEach(id => {
-      document.getElementById(`${this.name}-radio-${id}`).addEventListener("click", () => {
+      this.getElement(`radio-${id}`).addEventListener("click", () => {
         this.set_schedule_type(id)
       })
     })
 
-    const form = document.getElementById(this.form_id)
+    const form = this.getElement('modal-form')
     form.addEventListener('submit', e => {
       e.preventDefault()
 
       const serializedForm = {};
-      for (const prefix of ["vessel", "schedule", "radio"]){
+      for (const prefix of ["vessel", "schedule", "datetime"]){
         serializedForm[prefix] = {}
       }
 
@@ -174,19 +171,30 @@ class VesselModal extends HTMLElement {
       for (const [name, value] of formData) {
         if (value !== "") {
           let words = name.split("-")
-          let prefix = words[1]
-          let key = words[2]
-          serializedForm[prefix][key] = value;
+          let prefix = words[0]
+          let key = words[1]
+
+          // If it is a datetime, change to timezone-neutral
+          // Frankly awkward, let me know if you can do better!
+          if (prefix === "datetime") {
+            // for datetimes, the object they belong to is the last word, as the first is datetime
+            serializedForm[words[2]][key] = new Date(Date.parse(value)).toJSON()
+          } else {
+            serializedForm[prefix][key] = value;
+          }
         }
       }
 
       let vessel = serializedForm["vessel"]
       this.hideBtnFooter()
-      console.log(JSON.stringify(vessel))
+      console.log(JSON.stringify(serializedForm))
       Requests.postData("/vessels", vessel).then(response => {
         console.log("Vessel post response: ", response)
         this.showBtnFooter()
         let schedule = serializedForm["schedule"]
+        if (schedule["type"]!== "disabled") {
+          // TODO Miki post vessel
+        }
       }).catch(e => {
         this.showBtnFooter()
         console.log("Failed to post vessel: ", e)
@@ -195,20 +203,24 @@ class VesselModal extends HTMLElement {
   }
 
   hideBtnFooter() {
-    let buttons = document.getElementById(`${this.name}-modal-footer-btn`)
-    let loader = document.getElementById(`${this.name}-modal-footer-loading`)
+    let buttons = this.getElement(`modal-footer-btn`)
+    let loader = this.getElement(`modal-footer-loading`)
     buttons.setAttribute("hidden", "")
     loader.removeAttribute("hidden")
   }
   showBtnFooter() {
-    let buttons = document.getElementById(`${this.name}-modal-footer-btn`)
-    let loader = document.getElementById(`${this.name}-modal-footer-loading`)
+    let buttons = this.getElement(`modal-footer-btn`)
+    let loader = this.getElement(`modal-footer-loading`)
     loader.setAttribute("hidden", "")
     buttons.removeAttribute("hidden")
   }
 
+  getElement(id) {
+    return document.getElementById(this.name + '-' + id)
+  }
   static nowJsonString() {
     let tz_offset = new Date().getTimezoneOffset() * 60000 //offset in milliseconds
+    Date.now().toString()
     return new Date(Date.now() - tz_offset).toJSON().substring(0,16)
   }
 }
