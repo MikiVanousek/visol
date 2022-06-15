@@ -1,6 +1,5 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Run Tomcat Server" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 8.5.78" ALTERNATIVE_JRE_ENABLED="false">
-    <option name="UPDATING_POLICY" value="restart-server" />
     <deployment>
       <artifact name="visol:war exploded">
         <settings>
@@ -78,6 +77,11 @@
         <option name="VM_PARAMETERS" value="" />
         <option name="PROGRAM_PARAMETERS" value="" />
       </SHUTDOWN>
+      <EnvironmentVariables>
+        <option name="NAME" value="db_password" />
+        <option name="VALUE" value="KNOfayxCKdDbRUoM" />
+        <option name="IS_PREDEFINED" value="false" />
+      </EnvironmentVariables>
     </ConfigurationWrapper>
     <method v="2">
       <option name="Make" enabled="true" />

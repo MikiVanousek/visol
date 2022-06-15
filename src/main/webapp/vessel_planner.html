@@ -22,7 +22,12 @@
   </head>
   <body>
 
+    <!-- Button triggers modal -->
+    <button class="btn btn-sm btn-outline-dark m-1" type="button" data-bs-toggle="modal" data-bs-target="#create-modal">Add vessel</button>
+    <button class="btn btn-sm btn-outline-dark m-1" type="button" data-bs-toggle="modal" data-bs-target="#update-modal">Update vessel</button>
     <vessel-planner></vessel-planner>
 
+    <vessel-modal name="create"></vessel-modal>
+    <vessel-modal name="update"></vessel-modal>
   </body>
 </html>
