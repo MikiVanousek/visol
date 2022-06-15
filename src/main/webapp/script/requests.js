@@ -1,18 +1,26 @@
 class Requests {
-  static baseUrl = 'https://private-db987b-visolopenapi.apiary-mock.com'
+  static baseUrl = 'http://localhost:8080/visol/rest'
   static portId = 1
 
   static async postData(path, data = {}) {
     const res = await fetch(this.baseUrl + path, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(data)
-    });
+    }).catch(e => console.log(e));
     return res.json();
   }
 
   static async getData(path) {
-    const res = await fetch(this.baseUrl + path);
-    return res.json();
+    const res = await fetch(this.baseUrl + path, {
+      headers: {
+        'Accept': 'application/json'
+      },
+    });
+    console.log(res)
+    return res.json().catch(e => console.log(e));
   }
 }
 
