@@ -2,11 +2,10 @@
 <vessel>
     <id>1</id>
     <name>BigBoatHan</name>
-    <containerAmount>12</containerAmount>
-    <cost>3.2</cost>
-    <destinationTerminalId>1</destinationTerminalId>
-    <eta>2022-06-01 12:21:29.5272244</eta>
-    <deadline>2022-06-03 11:45:29.5292242</deadline>
+    <containers>12</containers>
+    <destination>1</destination>
+    <eta>2022-06-15 12:57:39.4427432</eta>
+    <deadline>2022-06-17 12:21:39.4427432</deadline>
     <width>20</width>
     <length>80</length>
     <depth>15</depth>

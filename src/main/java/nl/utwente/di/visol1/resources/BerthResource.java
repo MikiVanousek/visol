@@ -10,7 +10,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
-import javax.xml.bind.JAXBElement;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -34,11 +33,10 @@ public class BerthResource {
 
 
     @PUT
-    @Consumes(MediaType.APPLICATION_XML)
-    public void replaceBerth(JAXBElement<Berth> berth){
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void replaceBerth(Berth berth){
         BerthDao.replaceBerth(id, berth);
     }
-
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Berth getBerth() {

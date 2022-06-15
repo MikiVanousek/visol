@@ -42,9 +42,8 @@ public class PortDao extends GenericDao {
         }
         return res;
     }
-    public static void replacePort(int portId, JAXBElement<Port> portXML) {
+    public static void replacePort(int portId, Port port) {
         String query = "UPDATE port SET name = ? WHERE id = ?;";
-        Port port = portXML.getValue();
         executeUpdate(query, stmt -> {
             stmt.setString(1, port.getName());
             stmt.setInt(2, portId);
@@ -52,9 +51,8 @@ public class PortDao extends GenericDao {
     }
 
 
-    public static Port createPort(JAXBElement<Port> portXML){
+    public static Port createPort(Port port){
         String query = "INSERT INTO port (name) VALUES(?);";
-        Port port = portXML.getValue();
         executeUpdate(query, stmt -> stmt.setString(1, port.getName()));
         return port;
     }

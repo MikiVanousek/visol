@@ -2,7 +2,6 @@ package nl.utwente.di.visol1.resources;
 
 import nl.utwente.di.visol1.dao.ScheduleDao;
 import nl.utwente.di.visol1.dao.VesselDao;
-import nl.utwente.di.visol1.models.Berth;
 import nl.utwente.di.visol1.models.Schedule;
 import nl.utwente.di.visol1.models.Vessel;
 
@@ -11,9 +10,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
-import javax.xml.bind.JAXBElement;
-import java.sql.Timestamp;
-import java.util.List;
+
 
 public class VesselResource {
     @Context
@@ -33,8 +30,8 @@ public class VesselResource {
     }
 
     @PUT
-    @Consumes(MediaType.APPLICATION_XML)
-    public void replaceVessel(JAXBElement<Vessel> vessel){
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void replaceVessel(Vessel vessel){
         VesselDao.replaceVessel(id, vessel);
     }
 
@@ -59,8 +56,8 @@ public class VesselResource {
 
     @Path("/schedule")
     @PUT
-    @Consumes(MediaType.APPLICATION_XML)
-    public Schedule replaceSchedule(JAXBElement<Schedule> schedule){
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Schedule replaceSchedule(Schedule schedule){
         return ScheduleDao.replaceSchedule(id, schedule);
     }
 }

@@ -2,12 +2,7 @@ package nl.utwente.di.visol1.dao;
 
 import nl.utwente.di.visol1.models.*;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
-import javax.validation.constraints.AssertTrue;
-import javax.xml.bind.JAXBElement;
-import javax.xml.namespace.QName;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -63,17 +58,19 @@ public class DaoTest {
         }
 
         for(Berth berth : DummyData.BERTHS) {
+					Berth b = BerthDao.getBerth(berth.getId());
             assertEquals(berth, BerthDao.getBerth(berth.getId()));
             schedulesByBerth.addAll(ScheduleDao.getSchedulesByBerth(berth.getId(), MIN_TIME, MAX_TIME));
         }
 
         for(Vessel vessel : DummyData.VESSELS) {
+						Vessel v = VesselDao.getVessel(vessel.getId());
             assertEquals(vessel, VesselDao.getVessel(vessel.getId()));
             schedulesByVessel.add(ScheduleDao.getScheduleByVessel(vessel.getId()));
         }
 
         for(Schedule schedule : DummyData.SCHEDULES) {
-            assertEquals(schedule, ScheduleDao.getScheduleByVessel(schedule.getVesselId()));
+            assertEquals(schedule, ScheduleDao.getScheduleByVessel(schedule.getVessel()));
         }
 
         assertTrue(ports.containsAll(DummyData.PORTS) && DummyData.PORTS.containsAll(ports));
@@ -143,21 +140,21 @@ public class DaoTest {
     void replaceTest() {
 
         Port rport = new Port(1, "test");
-        Terminal rterminal = new Terminal(1, Time.valueOf("13:00:01"), Time.valueOf("23:00:00"), 2);
+        Terminal rterminal = new Terminal(1, 2, "TEST");
         Berth rberth = new Berth(1, 1, null, null, 14, 4, 1, 423);
         Schedule rschedule = new Schedule(1, 2, true, Timestamp.valueOf("2000-01-10 13:05:06"), Timestamp.valueOf("2000-01-11 23:05:06"));
-        Vessel rvessel = new Vessel(1, "sfda", 41, 2, Timestamp.valueOf("2000-01-05 23:05:06"),Timestamp.valueOf("2000-01-14 23:05:06"),35,23,46);
+        Vessel rvessel = new Vessel(1, "sfda", Timestamp.valueOf("2000-01-05 23:05:06"),Timestamp.valueOf("2000-01-14 23:05:06"),41,2,2,35,23,46);
 
-        PortDao.replacePort(rport.getId(),new JAXBElement<>(new QName("port"), Port.class, rport));
-        TerminalDao.replaceTerminal(rterminal.getId(), new JAXBElement<>(new QName("terminal"), Terminal.class, rterminal));
-        BerthDao.replaceBerth(rberth.getId(), new JAXBElement<>(new QName("berth"), Berth.class, rberth));
-        ScheduleDao.replaceSchedule(rschedule.getVesselId(), new JAXBElement<>(new QName("schedule"), Schedule.class, rschedule));
-        VesselDao.replaceVessel(rvessel.getId(), new JAXBElement<>(new QName("vessel"), Vessel.class, rvessel));
+        PortDao.replacePort(rport.getId(),rport);
+        TerminalDao.replaceTerminal(rterminal.getId(),rterminal);
+        BerthDao.replaceBerth(rberth.getId(), rberth);
+        ScheduleDao.replaceSchedule(rschedule.getVessel(), rschedule);
+        VesselDao.replaceVessel(rvessel.getId(), rvessel);
 
         assertEquals(rport, PortDao.getPort(rport.getId()));
         assertEquals(rterminal, TerminalDao.getTerminal(rterminal.getId()));
         assertEquals(rberth, BerthDao.getBerth(rberth.getId()));
-        assertEquals(rschedule, ScheduleDao.getScheduleByVessel(rschedule.getVesselId()));
+        assertEquals(rschedule, ScheduleDao.getScheduleByVessel(rschedule.getVessel()));
         assertEquals(rvessel, VesselDao.getVessel(rvessel.getId()));
     }
 }

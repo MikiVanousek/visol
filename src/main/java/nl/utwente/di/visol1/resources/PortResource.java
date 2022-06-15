@@ -12,7 +12,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
-import javax.xml.bind.JAXBElement;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
@@ -35,8 +34,8 @@ public class PortResource {
     }
 
     @PUT
-    @Consumes(MediaType.APPLICATION_XML)
-    public void replacePort(JAXBElement<Port> port){
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void replacePort(Port port){
         PortDao.replacePort(id, port);
     }
 
