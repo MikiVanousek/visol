@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<user>
+    <name>Han</name>
+    <email>han@hankong.com</email>
+    <passwordHash>Password123</passwordHash>
+    <role>authority</role>
+    <portId>1</portId>
+</user>
