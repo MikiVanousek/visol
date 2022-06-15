@@ -9,16 +9,17 @@ class VesselModal extends HTMLElement {
     super();
     this.terminals = Requests.getData(`/ports/${Requests.portId}/terminals`)
     this.name = this.getAttribute('name')
-    this.form_id = this.name + + '-modal-form'
+    this.form_id = this.name + '-modal-form'
   }
 
    set_schedule_type(type) {
     this.schedule_type = type
+    // console.log("Changing to schedule type " + type)
     if (type==="disabled") {
-      document.getElementById("schedule-edit").setAttribute("hidden","")
+      document.getElementById(`${name}-schedule-edit`).setAttribute("hidden","")
     } else {
-      document.getElementById("schedule-edit").removeAttribute("hidden")
-      for (let item of document.getElementsByClassName("disabled-if-auto")) {
+      document.getElementById(`${name}-schedule-edit`).removeAttribute("hidden")
+      for (let item of document.getElementsByClassName(`${this.name}-disabled-if-auto`)) {
         if (type === "manual") {
           item.removeAttribute("disabled")
         } else {
@@ -32,12 +33,15 @@ class VesselModal extends HTMLElement {
   connectedCallback() {
     this.terminals.then(t => {
       this.buildModal(t)
+    }).catch(e => {
+      console.log(e)
+      alert("Failed to get the terminals from the API")
     })
   }
   buildModal(terminals) {
     this.innerHTML = `
 <div class="modal fade" id="${this.name}-modal" tabindex="-1">
-  <div class="modal-dialog" >
+  <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title"><b>${this.name.charAt(0).toUpperCase() + this.name.substring(1)} vessel</b></h5>
@@ -45,7 +49,7 @@ class VesselModal extends HTMLElement {
       </div>
       <form id="${this.form_id}">
         <div class="modal-body">
-          <div class="mb-3">
+          <div class="mb-3"m
             <label class="form-label" for="form-name">Name:</label>
             <input class="form-control form-control-sm" id="form-name" name="vessel-name" placeholder="Titanic" required
                    type="text">
@@ -102,43 +106,43 @@ class VesselModal extends HTMLElement {
           <div class="mb-3 row mt-2">
             <label class="label me-3 col" for="label"><b>Schedule:</b></label>
             <div class="form-check form-check-inline col">
-              <input checked class="form-check-input" id="radio-auto" name="radio-auto" type="radio">
-              <label class="form-check-label" for="radio-auto">
+              <input checked class="form-check-input" id="${this.name}-radio-auto" name="${this.name}-radio-schedule" type="radio">
+              <label class="form-check-label" for="${this.name}-radio-auto">
                 Automatic
               </label>
             </div>
             <div class="form-check form-check-inline col">
-              <input class="form-check-input" id="radio-manual" name="radio-manual" type="radio">
-              <label class="form-check-label" for="radio-manual">
+              <input class="form-check-input" id="${this.name}-radio-manual" name="${this.name}-radio-schedule" type="radio">
+              <label class="form-check-label" for="${this.name}-radio-manual">
                 Manual
               </label>
             </div>
             <div class="form-check form-check-inline col">
-              <input class="form-check-input" id="radio-disabled" name="radio-disabled" type="radio">
-              <label class="form-check-label" for="radio-disabled">
+              <input class="form-check-input" id="${this.name}-radio-disabled" name="${this.name}-radio-schedule" type="radio">
+              <label class="form-check-label" for="${this.name}-radio-disabled">
                 Disabled
               </label>
             </div>
           </div>
 
-          <div class="row mb-3" id="schedule-edit">
+          <div class="row mb-3" id="${name}-schedule-edit">
             <div class="col">
               <label class="form-label" for="form-berth">Berth:</label>
-              <input class="form-control form-control-sm disabled-if-auto" disabled id="form-berth" name="schedule-berth" required
+              <input class="form-control form-control-sm ${this.name}-disabled-if-auto" disabled id="form-berth" name="schedule-berth" required
                      type="number">
             </div>
             <div class="col">
               <label class="form-label" for="form-handel">Handel:</label>
-              <input class="form-control form-control-sm disabled-if-auto" disabled id="form-handel" name="schedule-handel" required
+              <input class="form-control form-control-sm ${this.name}-disabled-if-auto" disabled id="form-handel" name="schedule-handel" required
                      type="datetime-local">
             </div>
           </div>
         </div> 
-        <div class="modal-footer" id="modal-footer-btn">
+        <div class="modal-footer" id="${this.name}-modal-footer-btn">
           <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
           <button class="btn btn-primary" id="btn-save" type="submit">Save changes</button>
         </div>
-        <div hidden id="modal-footer-loading">
+        <div hidden id="${this.name}-modal-footer-loading">
           <div class="modal-footer d-flex justify-content-center">
             <div class="spinner-grow text-primary" role="status">
               <span class="sr-only">Loading...</span>
@@ -151,7 +155,7 @@ class VesselModal extends HTMLElement {
 	`
     let radio_ids = ["auto", "manual", "disabled"]
     radio_ids.forEach(id => {
-      document.getElementById(`radio-${id}`).addEventListener("click", () => {
+      document.getElementById(`${this.name}-radio-${id}`).addEventListener("click", () => {
         this.set_schedule_type(id)
       })
     })
@@ -188,24 +192,21 @@ class VesselModal extends HTMLElement {
     })
   }
 
-  generateSelect(terminals) {
-  }
-
   hideBtnFooter() {
-    let buttons = document.getElementById("modal-footer-btn")
-    let loader = document.getElementById("modal-footer-loading")
+    let buttons = document.getElementById(`${this.name}-modal-footer-btn`)
+    let loader = document.getElementById(`${this.name}-modal-footer-loading`)
     buttons.setAttribute("hidden", "")
     loader.removeAttribute("hidden")
   }
   showBtnFooter() {
-    let buttons = document.getElementById("modal-footer-btn")
-    let loader = document.getElementById("modal-footer-loading")
+    let buttons = document.getElementById(`${this.name}-modal-footer-btn`)
+    let loader = document.getElementById(`${this.name}-modal-footer-loading`)
     loader.setAttribute("hidden", "")
     buttons.removeAttribute("hidden")
   }
 
   static nowJsonString() {
-    var tzoffset = new Date().getTimezoneOffset() * 60000 //offset in milliseconds
+    let tzoffset = new Date().getTimezoneOffset() * 60000 //offset in milliseconds
     return new Date(Date.now() - tzoffset).toJSON().substring(0,16)
   }
 }
