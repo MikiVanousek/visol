@@ -71,36 +71,36 @@ class VesselModal extends HTMLElement {
           <div class="row mb-3">
             <div class="col">
               <label class="form-label" for="form-containers">Container amount:</label>
-              <input class="form-control form-control-sm" id="form-containers" min="-1" name="${this.name}-vessel-container_amount"
+              <input class="form-control form-control-sm" id="form-containers" min="-1" name="${this.name}-vessel-containers"
                      required type="number">
             </div>
             <div class="col">
               <label class="form-label" for="form-cost">Cost:</label>
-              <input class="form-control form-control-sm" id="form-cost" name="${this.name}-vessel-cost" required type="number">
+              <input class="form-control form-control-sm" id="form-cost" name="${this.name}-vessel-cost_per_hour" required type="number">
             </div>
           </div>
 
           <div class="mb-3 row">
             <div class="col d-grid">
               <label class="form-label me-3" for="select-terminal"><b>Terminal:</b></label>
-              <select class="form-select form-select-sm" name="${this.name}-vessel-destination_terminal"> 
+              <select class="form-select form-select-sm" name="${this.name}-vessel-destination"> 
                 ${Object.keys(terminals).map(i => `<option value="${i}">${terminals[i]['name']}</option>`).join('\n')}
               </select>
               </div>
               <div class="col">
                 <label class="form-label" for="form-length">Length:</label>
-              <input class="form-control form-control-sm" id="form-length" name="${this.name}-dimension-length" required type="number" value="0">
+              <input class="form-control form-control-sm" id="form-length" name="${this.name}-vessel-length" required type="number" value="0">
             </div>
           </div>
 
           <div class="row mb-3">
             <div class="col">
               <label class="form-label" for="form-width">Width:</label>
-              <input class="form-control form-control-sm" id="form-width" name="${this.name}-dimension-width" required type="number" value="0">
+              <input class="form-control form-control-sm" id="form-width" name="${this.name}-vessel-width" required type="number" value="0">
             </div>
             <div class="col">
               <label class="form-label" for="form-depth">Depth:</label>
-              <input class="form-control form-control-sm" id="form-depth" name="${this.name}-dimension-depth" required type="number" value="0">
+              <input class="form-control form-control-sm" id="form-depth" name="${this.name}-vessel-depth" required type="number" value="0">
             </div>
           </div>
 
@@ -166,7 +166,7 @@ class VesselModal extends HTMLElement {
       e.preventDefault()
 
       const serializedForm = {};
-      for (const prefix of ["vessel", "schedule", "dimension", "radio"]){
+      for (const prefix of ["vessel", "schedule", "radio"]){
         serializedForm[prefix] = {}
       }
 
@@ -181,16 +181,15 @@ class VesselModal extends HTMLElement {
       }
 
       let vessel = serializedForm["vessel"]
-      vessel["dimension"] = serializedForm["dimension"]
       this.hideBtnFooter()
       console.log(JSON.stringify(vessel))
       Requests.postData("/vessels", vessel).then(response => {
-        console.log(JSON.stringify(vessel))
+        console.log("Vessel post response: ", response)
         this.showBtnFooter()
         let schedule = serializedForm["schedule"]
       }).catch(e => {
         this.showBtnFooter()
-        console.log(e)
+        console.log("Failed to post vessel: ", e)
       })
     })
   }
@@ -209,8 +208,8 @@ class VesselModal extends HTMLElement {
   }
 
   static nowJsonString() {
-    let tzoffset = new Date().getTimezoneOffset() * 60000 //offset in milliseconds
-    return new Date(Date.now() - tzoffset).toJSON().substring(0,16)
+    let tz_offset = new Date().getTimezoneOffset() * 60000 //offset in milliseconds
+    return new Date(Date.now() - tz_offset).toJSON().substring(0,16)
   }
 }
 
