@@ -29,15 +29,16 @@ class VesselModal extends HTMLElement {
     }
   }
 
-
   connectedCallback() {
     this.terminals.then(t => {
       this.buildModal(t)
     }).catch(e => {
       console.log(e)
-      alert("Failed to get the terminals from the API")
+      //alert("Failed to get the terminals from the API")
+      this.buildModal({})
     })
   }
+
   buildModal(terminals) {
     this.innerHTML = `
 <div class="modal fade" id="${this.name}-modal" tabindex="-1">
