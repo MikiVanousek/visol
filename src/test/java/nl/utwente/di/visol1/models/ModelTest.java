@@ -51,8 +51,7 @@ public class ModelTest {
 
             Terminal terminal = new Terminal();
             terminal.setId(1);
-            terminal.setOpen(new Time((7 * 60 + 30) * 60 * 1000));
-            terminal.setClose(Time.valueOf("21:00:00"));
+            terminal.setName("fat");
             terminal.setPort(port);
             marshaller.marshal(terminal, new File(directory, "terminal-1.xml"));
 
@@ -70,8 +69,8 @@ public class ModelTest {
             vessel.setId(1);
             vessel.setName("BigBoatHan");
             vessel.setContainers(12);
-            vessel.setDestinationTerminal(terminal);
-            vessel.setEta(Timestamp.valueOf(LocalDateTime.now().plusHours(1)));
+            vessel.setDestination(terminal.getId());
+            vessel.setArrival(Timestamp.valueOf(LocalDateTime.now().plusHours(1)));
             vessel.setDeadline(Timestamp.valueOf(LocalDateTime.now().plusDays(2).plusMinutes(24)));
             vessel.setWidth(20);
             vessel.setDepth(15);
@@ -79,11 +78,11 @@ public class ModelTest {
             marshaller.marshal(vessel, new File(directory, "vessel-1.xml"));
 
             Schedule schedule = new Schedule();
-            schedule.setVessel(vessel);
-            schedule.setBerth(berth);
+            schedule.setVessel(vessel.getId());
+            schedule.setBerth(berth.getId());
             schedule.setManual(true);
             schedule.setStart(Timestamp.valueOf(LocalDateTime.now().plusHours(1).plusMinutes(24)));
-            schedule.setFinish(Timestamp.valueOf(LocalDateTime.now().plusHours(2).plusMinutes(57)));
+            schedule.setExpectedEnd(Timestamp.valueOf(LocalDateTime.now().plusHours(2).plusMinutes(57)));
             marshaller.marshal(schedule, new File(directory, "schedule-1-1.xml"));
 
             User user = new User();

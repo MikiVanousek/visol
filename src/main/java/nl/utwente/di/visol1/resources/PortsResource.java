@@ -20,8 +20,9 @@ public class PortsResource {
     Request request;
 
     @POST
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Port createPort(JAXBElement<Port> port){
+    public Port createPort(Port port){
         return PortDao.createPort(port);
     }
 

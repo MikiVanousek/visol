@@ -1,10 +1,7 @@
 package nl.utwente.di.visol1.dao;
 
-import nl.utwente.di.visol1.models.Berth;
 import nl.utwente.di.visol1.models.Schedule;
-import nl.utwente.di.visol1.models.Vessel;
 
-import javax.xml.bind.JAXBElement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -16,8 +13,8 @@ import java.util.Map;
 public class ScheduleDao extends GenericDao {
     private final static String table = "schedule"; //needed??
 
-    public static Schedule getScheduleByVessel(int vesselId){
-        ResultSet rs = executeQuery("SELECT * FROM schedule WHERE vessel = ?", stmt -> stmt.setInt(1, vesselId));
+    public static Schedule getScheduleByVessel(int vessel){
+        ResultSet rs = executeQuery("SELECT * FROM schedule WHERE vessel = ?", stmt -> stmt.setInt(1, vessel));
         try {
             rs.next();
             //TODO: add promises for vessel and berth
@@ -26,7 +23,7 @@ public class ScheduleDao extends GenericDao {
                     rs.getInt("berth"),
                     rs.getBoolean("manual"),
                     rs.getTimestamp("start"),
-                    rs.getTimestamp("finish")
+                    rs.getTimestamp("expected_end")
             );
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -36,7 +33,7 @@ public class ScheduleDao extends GenericDao {
 
     public static List<Schedule> getSchedulesByBerth(int berthId, Timestamp from, Timestamp to) {
         List<Schedule> res = new ArrayList<>();
-        ResultSet rs = executeQuery("SELECT * FROM schedule s WHERE s.berth = ? AND ((s.start >= ? AND s.start <= ?) OR (s.finish >= ? AND s.finish <= ?))",
+        ResultSet rs = executeQuery("SELECT * FROM schedule s WHERE s.berth = ? AND ((s.start >= ? AND s.start <= ?) OR (s.expected_end >= ? AND s.expected_end <= ?))",
                 stmt -> {
                     stmt.setInt(1, berthId);
                     stmt.setTimestamp(2, from);
@@ -51,7 +48,7 @@ public class ScheduleDao extends GenericDao {
                         rs.getInt("berth"),
                         rs.getBoolean("manual"),
                         rs.getTimestamp("start"),
-                        rs.getTimestamp("finish")));
+                        rs.getTimestamp("expected_end")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -63,7 +60,7 @@ public class ScheduleDao extends GenericDao {
         Map<Integer, Map<Integer, List<Schedule>>> res = new HashMap<>();
         ResultSet rs = executeQuery("SELECT s.*, b.terminal FROM schedule s, berth b, terminal t " +
                 "WHERE s.berth = b.id AND b.terminal = t.id AND t.port = ?" +
-                "AND ((s.start >= ? AND s.start <= ?) OR (s.finish >= ? AND s.finish <= ?))", stmt -> {
+                "AND ((s.start >= ? AND s.start <= ?) OR (s.expected_end >= ? AND s.expected_end <= ?))", stmt -> {
             stmt.setInt(1, portId);
             stmt.setTimestamp(2, from);
             stmt.setTimestamp(3, to);
@@ -82,7 +79,7 @@ public class ScheduleDao extends GenericDao {
                         berth,
                         rs.getBoolean("manual"),
                         rs.getTimestamp("start"),
-                        rs.getTimestamp("finish")));
+                        rs.getTimestamp("expected_end")));
             }
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -94,7 +91,7 @@ public class ScheduleDao extends GenericDao {
         Map<Integer, List<Schedule>> res = new HashMap<>();
         ResultSet rs = executeQuery("SELECT s.* FROM schedule s, berth b " +
                 "WHERE s.berth = b.id AND b.terminal = ? " +
-                "AND ((s.start >= ? AND s.start <= ?) OR (s.finish >= ? AND s.finish <= ?))", stmt -> {
+                "AND ((s.start >= ? AND s.start <= ?) OR (s.expected_end >= ? AND s.expected_end <= ?))", stmt -> {
             stmt.setInt(1, terminalId);
             stmt.setTimestamp(2, from);
             stmt.setTimestamp(3, to);
@@ -111,7 +108,7 @@ public class ScheduleDao extends GenericDao {
                         berth,
                         rs.getBoolean("manual"),
                         rs.getTimestamp("start"),
-                        rs.getTimestamp("finish")));
+                        rs.getTimestamp("expected_end")));
             }
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -120,26 +117,25 @@ public class ScheduleDao extends GenericDao {
     }
 
     public static void deleteScheduleByVessel(int vesselId) {
-        executeUpdate("DELETE FROM vessel where id = ?", stmt -> stmt.setInt(1, vesselId));
+        executeUpdate("DELETE FROM schedule where vessel = ?", stmt -> stmt.setInt(1, vesselId));
     }
 
 
 
-    public static Schedule replaceSchedule(int vesselId, JAXBElement<Schedule> scheduleXML){
-        Schedule schedule = scheduleXML.getValue();
-        String query = "INSERT INTO schedule (vessel, berth, manual, start, finish) VALUES(?, ?, ?, ?, ?) " +
-                "ON CONFLICT (vessel) DO UPDATE SET berth = ?, manual = ?, start = ?, finish = ?";
+    public static Schedule replaceSchedule(int vesselId, Schedule schedule){
+        String query = "INSERT INTO schedule (vessel, berth, manual, start, expected_end) VALUES(?, ?, ?, ?, ?) " +
+                "ON CONFLICT (vessel) DO UPDATE SET berth = ?, manual = ?, start = ?, expected_end = ?";
 
         executeUpdate(query, stmt -> {
             stmt.setInt(1, vesselId);
-            stmt.setInt(2, schedule.getBerthId());
+            stmt.setInt(2, schedule.getBerth());
             stmt.setBoolean(3, schedule.isManual());
             stmt.setTimestamp(4, schedule.getStart());
-            stmt.setTimestamp(5, schedule.getFinish());
-            stmt.setInt(6, schedule.getBerthId());
+            stmt.setTimestamp(5, schedule.getExpectedEnd());
+            stmt.setInt(6, schedule.getBerth());
             stmt.setBoolean(7, schedule.isManual());
             stmt.setTimestamp(8, schedule.getStart());
-            stmt.setTimestamp(9, schedule.getFinish());
+            stmt.setTimestamp(9, schedule.getExpectedEnd());
         });
         return schedule;
     }

@@ -2,6 +2,7 @@ package nl.utwente.di.visol1.models;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Time;
 import java.util.Objects;
@@ -10,15 +11,17 @@ import java.util.Objects;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Berth {
     private int id;
+	@XmlElement(name = "terminal")
     private int terminalId;
     private Time open;
     private Time close;
+	@XmlElement(name = "unload_speed")
     private double unloadSpeed;
     private int width;
     private int depth;
     private int length;
 
-    public Berth(int id, int terminalId, Time open, Time close, double unloadSpeed, int width, int depth, int length) {
+    public Berth(int id, int terminalId, Time open, Time close, double unloadSpeed, int length, int width, int depth) {
         this.id = id;
         this.terminalId = terminalId;
         this.open = open;

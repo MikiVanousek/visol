@@ -1,5 +1,3 @@
-drop table if exists PortPermission;
-drop table if exists TerminalPermission;
 drop table if exists Employee;
 drop table if exists Schedule;
 drop table if exists Vessel;
@@ -9,18 +7,17 @@ drop table if exists Port;
 
 drop type if exists role;
 
-create type role as enum('planner', 'manager');
+create type role as enum('vessel planner', 'terminal manager', 'port authority', 'researcher');
 
 create table Port(
 id serial,
-name varchar(255),
+name varchar(64),
 primary key(id)
 );
 
 create table Terminal (
 id serial,
-open time(0),
-close time(0),
+name varchar(64),
 port int,
 foreign key(port) references Port(id) ON DELETE CASCADE,
 primary key(id)
@@ -28,28 +25,29 @@ primary key(id)
 
 create table Berth(
 id serial,
-unloadspeed float,
-length int,
-width int,
-depth int,
 terminal int,
 open time(0),
 close time(0),
+unload_speed float,
+length int,
+width int,
+depth int,
 foreign key(terminal) references Terminal(id) ON DELETE CASCADE,
 primary key(id)
 );
 
 create table Vessel (
 id serial,
-name varchar(255),
+name varchar(64),
+arrival timestamp,
+deadline timestamp,
+containers int,
+cost_per_hour float,
+destination int,
+length int,
 width int,
 depth int,
-length int,
-dest_terminal int,
-containers int,
-eta timestamp,
-deadline timestamp,
-foreign key(dest_terminal) references Terminal(id) ON DELETE CASCADE,
+foreign key(destination) references Terminal(id) ON DELETE CASCADE,
 primary key(id)
 );
 
@@ -58,32 +56,19 @@ vessel int,
 berth int,
 manual boolean,
 start timestamp,
-finish timestamp,
+expected_end timestamp,
 primary key(vessel),
 foreign key(vessel) references Vessel(id) ON DELETE CASCADE,
 foreign key(berth) references Berth(id) ON DELETE CASCADE
 );
 
-create table Employee(
-name varchar(255),
-email varchar(255),
-passwordHash varchar(255),
-primary key(email)
-);
-
-create table TerminalPermission(
-email varchar(255),
-terminal int,
+CREATE TABLE Employee(
+name varchar(64),
+email varchar(64),
+password char(64),
 role role,
-foreign key(terminal) references Terminal(id) ON DELETE CASCADE,
-primary key(email),
-foreign key(email) references Employee(email) ON DELETE CASCADE
-);
-
-create table PortPermission(
-email varchar(255),
 port int,
-foreign key(port) references Port(id) ON DELETE CASCADE,
+terminal int,
 primary key(email),
-foreign key(email) references Employee(email) ON DELETE CASCADE
-);
+foreign key(port) references Port(id) ON DELETE CASCADE,
+foreign key(terminal) references Terminal(id) ON DELETE CASCADE);

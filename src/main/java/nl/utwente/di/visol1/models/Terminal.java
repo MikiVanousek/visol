@@ -2,6 +2,7 @@ package nl.utwente.di.visol1.models;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Time;
 import java.util.Objects;
@@ -10,15 +11,16 @@ import java.util.Objects;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Terminal {
     private int id;
-    private Time open;
-    private Time close;
+
+
+    private String name;
+    @XmlElement(name = "port")
     private int portId;
 
-    public Terminal(int id, Time open, Time close, int portId) {
+    public Terminal(int id, int portId, String name) {
         this.id = id;
-        this.open = open;
-        this.close = close;
         this.portId = portId;
+        this.name = name;
     }
 
     public Terminal() {
@@ -31,22 +33,6 @@ public class Terminal {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public Time getOpen() {
-        return open;
-    }
-
-    public void setOpen(Time open) {
-        this.open = open;
-    }
-
-    public Time getClose() {
-        return close;
-    }
-
-    public void setClose(Time close) {
-        this.close = close;
     }
 
     public int getPortId() {
@@ -65,16 +51,25 @@ public class Terminal {
         this.portId = port.getId();
     }
 
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Terminal)) return false;
         Terminal terminal = (Terminal) o;
-        return id == terminal.id && portId == terminal.portId && Objects.equals(open, terminal.open) && Objects.equals(close, terminal.close);
+        return id == terminal.id && portId == terminal.portId && terminal.name.equals(name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, open, close, portId);
+        return Objects.hash(id, portId);
     }
 }

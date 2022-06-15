@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <berth>
     <id>1</id>
-    <unloadSpeed>4.2</unloadSpeed>
     <terminalId>1</terminalId>
     <open>08:00:00</open>
+    <unloadSpeed>4.2</unloadSpeed>
     <width>30</width>
     <depth>20</depth>
     <length>250</length>

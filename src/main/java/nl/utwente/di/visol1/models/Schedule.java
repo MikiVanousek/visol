@@ -2,6 +2,7 @@ package nl.utwente.di.visol1.models;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -9,90 +10,77 @@ import java.util.Objects;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Schedule {
-    private int vesselId;
-    private int berthId;
+    private int vessel;
+    private int berth;
     boolean manual;
     Timestamp start;
-    Timestamp finish;
+		@XmlElement(name = "expected_end")
+    Timestamp expectedEnd;
 
-    public Schedule(int vesselId, int berthId, boolean manual, Timestamp start, Timestamp finish) {
-        this.vesselId = vesselId;
-        this.berthId = berthId;
-        this.manual = manual;
-        this.start = start;
-        this.finish = finish;
-    }
 
-    public Schedule() {
-        // Empty constructor
-    }
+	public Schedule(int vessel, int berth, boolean manual, Timestamp start, Timestamp expectedEnd) {
+		this.vessel = vessel;
+		this.berth = berth;
+		this.manual = manual;
+		this.start = start;
+		this.expectedEnd = expectedEnd;
+	}
 
-    public int getVesselId() {
-        return vesselId;
-    }
+	public Schedule(){
+		//empty constructor
+	}
 
-    public void setVesselId(int vesselId) {
-        this.vesselId = vesselId;
-    }
+	public int getVessel() {
+		return vessel;
+	}
 
-    public Vessel getVessel() {
-        return null; // VesselDao.getById(vesselId);
-    }
+	public void setVessel(int vessel) {
+		this.vessel = vessel;
+	}
 
-    public void setVessel(Vessel vessel) {
-        this.vesselId = vessel.getId();
-    }
+	public int getBerth() {
+		return berth;
+	}
 
-    public int getBerthId() {
-        return berthId;
-    }
+	public void setBerth(int berth) {
+		this.berth = berth;
+	}
 
-    public void setBerthId(int berthId) {
-        this.berthId = berthId;
-    }
+	public boolean isManual() {
+		return manual;
+	}
 
-    public Berth getBerth() {
-        return null; // BerthDao.getById(berthId);
-    }
+	public void setManual(boolean manual) {
+		this.manual = manual;
+	}
 
-    public void setBerth(Berth berth) {
-        this.berthId = berth.getId();
-    }
+	public Timestamp getStart() {
+		return start;
+	}
 
-    public boolean isManual() {
-        return manual;
-    }
+	public void setStart(Timestamp start) {
+		this.start = start;
+	}
 
-    public void setManual(boolean manual) {
-        this.manual = manual;
-    }
+	public Timestamp getExpectedEnd() {
+		return expectedEnd;
+	}
 
-    public Timestamp getStart() {
-        return start;
-    }
+	public void setExpectedEnd(Timestamp expectedEnd) {
+		this.expectedEnd = expectedEnd;
+	}
 
-    public void setStart(Timestamp start) {
-        this.start = start;
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Schedule)) return false;
+		Schedule schedule = (Schedule) o;
+		return vessel == schedule.vessel && berth == schedule.berth && manual == schedule.manual && Objects.equals(start, schedule.start)
+		       && Objects.equals(expectedEnd, schedule.expectedEnd);
+	}
 
-    public Timestamp getFinish() {
-        return finish;
-    }
-
-    public void setFinish(Timestamp finish) {
-        this.finish = finish;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Schedule)) return false;
-        Schedule schedule = (Schedule) o;
-        return vesselId == schedule.vesselId && berthId == schedule.berthId && manual == schedule.manual && Objects.equals(start, schedule.start) && Objects.equals(finish, schedule.finish);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(vesselId, berthId, manual, start, finish);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(vessel, berth, manual, start, expectedEnd);
+	}
 }
