@@ -2,12 +2,14 @@ import Requests from "../requests.js"
 class VesselModal extends HTMLElement {
   schedule_type = "auto"
   terminals
+  name
   form_id
 
   constructor() {
     super();
-     this.terminals = Requests.getData(`/ports/${Requests.portId}/terminals`)
-     this.form_id = this.getAttribute('name') + '-modal-form'
+    this.terminals = Requests.getData(`/ports/${Requests.portId}/terminals`)
+    this.name = this.getAttribute('name')
+    this.form_id = this.name + + '-modal-form'
   }
 
    set_schedule_type(type) {
@@ -34,11 +36,11 @@ class VesselModal extends HTMLElement {
   }
   buildModal(terminals) {
     this.innerHTML = `
-<div class="modal fade" id="${this.getAttribute('name')}-modal" tabindex="-1">
+<div class="modal fade" id="${this.name}-modal" tabindex="-1">
   <div class="modal-dialog" >
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title"><b>Vessel information</b></h5>
+        <h5 class="modal-title"><b>${this.name.charAt(0).toUpperCase() + this.name.substring(1)} vessel</b></h5>
         <button class="btn-close" data-bs-dismiss="modal" type="button"></button>
       </div>
       <form id="${this.form_id}">
@@ -131,7 +133,7 @@ class VesselModal extends HTMLElement {
                      type="datetime-local">
             </div>
           </div>
-        </div>
+        </div> 
         <div class="modal-footer" id="modal-footer-btn">
           <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
           <button class="btn btn-primary" id="btn-save" type="submit">Save changes</button>
