@@ -1,3 +1,5 @@
+import FullButton from "../components/full-button.js";
+
 class PortAuthority extends HTMLElement {
   static terminalDropdownTag = "chooseTerminal";
 
@@ -9,7 +11,22 @@ class PortAuthority extends HTMLElement {
     this.innerHTML = `
 
     <nav-bar role="authority">
-        <drop-down name="${(PortAuthority.terminalDropdownTag)}" id="${(PortAuthority.terminalDropdownTag)}"></drop-down>
+        <drop-down 
+            name="${(PortAuthority.terminalDropdownTag)}" 
+            id="${(PortAuthority.terminalDropdownTag)}"
+            size="${FullButton.SIZE.large}">
+        </drop-down>
+        
+        <ul class="navbar-nav mb-lg-0">
+          <div>
+            <full-button 
+                icon="download" 
+                view="${FullButton.VIEW.secondary}" 
+                size="${FullButton.SIZE.large}">
+                Export
+            </full-button>
+          </div>
+        </ul>
     </nav-bar>
 
     <planner-schedule></planner-schedule>
@@ -27,7 +44,7 @@ class PortAuthority extends HTMLElement {
       banana: "Banana Terminal",
       trees: "Trees Terminal"
     };
-    dropDown.active = dropDown.data.banana;
+    dropDown.active = dropDown.data.fish;
     dropDown.callBack = this.changeTerminal
     dropDown.render();
   }

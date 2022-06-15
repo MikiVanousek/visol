@@ -36,12 +36,17 @@ class DropDown extends HTMLElement {
     return this.getAttribute("name")
   }
 
+  get dropSize() {
+    return this.hasAttribute("size")
+      ? this.getAttribute("size") : FullButton.SIZE.medium
+  }
+
   render() {
     if (this.data != null) {
       this.innerHTML = `
       <div class="dropdown">
         <div data-bs-toggle="dropdown" aria-expanded="false" id="${this.dropName}">
-          <full-button icon="caret-down" view="${FullButton.VIEW.secondary}">
+          <full-button icon="caret-down" view="${FullButton.VIEW.secondary}" size="${this.dropSize}">
             ${this.active}
           </full-button>
         </div>

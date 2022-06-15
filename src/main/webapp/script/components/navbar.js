@@ -15,12 +15,6 @@ class Navbar extends HTMLElement {
         </a>
         
         ${children}
-
-        <ul class="navbar-nav mb-lg-0">
-          <div>
-            <full-button icon="download" view="secondary">Export</full-button>
-          </div>
-        </ul>
         
       </div>
     </nav>`
