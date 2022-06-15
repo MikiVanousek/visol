@@ -1,0 +1,15 @@
+$field-size: 2.375rem
+
+.has-icon-beginning
+	.form-control
+		padding-left: $field-size
+
+		&-feedback
+			+absolute
+			+size($field-size)
+			display: block
+			line-height: $field-size
+			z-index: 2
+			text-align: center
+			pointer-events: none
+			color: #aaa

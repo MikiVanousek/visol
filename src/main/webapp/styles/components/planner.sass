@@ -1,0 +1,148 @@
+@use "sass:math"
+
+$day-date-bg: #3D3D3D
+$day-date-color: #FFF
+$day-date-width: 23px
+$day-hour-height: 24px
+$day-hour-width: 64px
+$day-height: $day-hour-height*24
+$timeline-width: $day-date-width+$day-hour-width
+$berth-header-height: 30px
+$closed-background: #000
+$current-color: #59CAA1
+
+.planner
+	+relative
+	+flex(flex-start, flex-start)
+	min-height: 73vh
+	overflow: scroll
+	margin: 0 auto $base-spacing
+	padding-top: $berth-header-height
+
+	&-header
+		+flex(center)
+		width: 100%
+
+		&-sub
+			+flex(center)
+			flex: 1
+
+			&-in
+				+flex(center)
+
+			&:first-child > &-in
+				margin-right: auto
+
+			&:last-child > &-in
+				margin-left: auto
+
+	&-current
+		$dot-size: 16px
+		+absolute(null null -$day-hour-width null)
+		+size(calc(100% + $day-hour-width) 3px)
+		background-color: $current-color
+		z-index: 1
+
+		&::before
+			+absolute(50% null null (math.div(-$dot-size,2) + 1px))
+			transform: translateY(-50%)
+			content: ''
+			+size($dot-size)
+			background-color: $current-color
+			border-radius: 50%
+
+
+	&-timeline
+		+flex(center, center, column)
+
+		&-day
+			+flex(center)
+			+size(100% $day-height)
+
+			&-date
+				+relative
+				+size($day-date-width 100%)
+				display: block
+				background-color: $day-date-bg
+				color: $day-date-color
+
+				&-text
+					+absolute(50% null null 50%)
+					color: #FFF
+					transform: translate(-50%, -50%) rotate(-90deg)
+					white-space: nowrap
+
+			&-hours
+				&-hour
+					+flex(center)
+					+size($day-hour-width $day-hour-height)
+					border: 1px solid #000
+					border-collapse: collapse
+					border-top: none
+					border-right: none
+
+					&:first-child
+						border-top: 1px solid #000
+
+	&-berths
+		+relative
+		+flex(flex-start, flex-start)
+
+		&-berth
+			+relative
+			+size(100%)
+			min-width: 150px
+
+			&-header
+				+sticky(-$berth-header-height null null null)
+				+size(100% $berth-header-height)
+				border: 1px solid #000
+				border-left: none
+				font-size: 18px
+				text-align: center
+				margin-top: -$berth-header-height + 1px
+				margin-bottom: -1px
+				background-color: #FFF
+				z-index: 1
+
+			&-ships
+				+relative
+				+size(100% $day-height*2)
+				background-color: $c-berth
+				border: 1px solid #000
+				border-top: none
+				border-left: none
+
+				&-closed
+					+absolute
+					+flex(center)
+					width: 100%
+					background-color: $closed-background
+					padding: 5px
+
+					&-name
+						font-size: 12px
+						font-weight: bold
+						text-transform: uppercase
+						color: #FFF
+						margin: 0
+
+				&-ship
+					+absolute
+					width: 100%
+					background-color: $c-primary
+					padding: 5px
+					cursor: pointer
+
+					&-name
+						color: #FFF
+						font-size: 14px
+						font-style: italic
+
+			&:first-child &-header
+				border-left: 1px solid #000
+
+			&:first-child &-ships
+				border-left: 1px solid #000
+
+
