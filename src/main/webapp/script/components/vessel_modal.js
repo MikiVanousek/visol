@@ -51,55 +51,55 @@ class VesselModal extends HTMLElement {
         <div class="modal-body">
           <div class="mb-3"m
             <label class="form-label" for="form-name">Name:</label>
-            <input class="form-control form-control-sm" id="form-name" name="vessel-name" placeholder="Titanic" required
+            <input class="form-control form-control-sm" id="form-name" name="${this.name}-vessel-name" placeholder="Titanic" required
                    type="text">
           </div>
 
           <div class="row mb-3">
             <div class="col">
               <label class="form-label" for="form-arrival">Arrival:</label>
-              <input class="form-control form-control-sm" id="form-arrival" name="vessel-arrival" required
+              <input class="form-control form-control-sm" id="form-arrival" name="${this.name}-vessel-arrival" required
                      type="datetime-local" value="${VesselModal.nowJsonString()}">
             </div>
             <div class="col">
               <label class="form-label" for="form-deadline">Deadline:</label>
-              <input class="form-control form-control-sm" id="form-deadline" name="vessel-deadline" type="datetime-local">
+              <input class="form-control form-control-sm" id="form-deadline" name="${this.name}-vessel-deadline" type="datetime-local">
             </div>
           </div>
 
           <div class="row mb-3">
             <div class="col">
               <label class="form-label" for="form-containers">Container amount:</label>
-              <input class="form-control form-control-sm" id="form-containers" min="-1" name="vessel-container_amount"
+              <input class="form-control form-control-sm" id="form-containers" min="-1" name="${this.name}-vessel-container_amount"
                      required type="number">
             </div>
             <div class="col">
               <label class="form-label" for="form-cost">Cost:</label>
-              <input class="form-control form-control-sm" id="form-cost" name="vessel-cost" required type="number">
+              <input class="form-control form-control-sm" id="form-cost" name="${this.name}-vessel-cost" required type="number">
             </div>
           </div>
 
           <div class="mb-3 row">
             <div class="col d-grid">
               <label class="form-label me-3" for="select-terminal"><b>Terminal:</b></label>
-              <select class="form-select form-select-sm" name="vessel-destination_terminal"> 
+              <select class="form-select form-select-sm" name="${this.name}-vessel-destination_terminal"> 
                 ${Object.keys(terminals).map(i => `<option value="${i}">${terminals[i]['name']}</option>`).join('\n')}
               </select>
               </div>
               <div class="col">
                 <label class="form-label" for="form-length">Length:</label>
-              <input class="form-control form-control-sm" id="form-length" name="dimension-length" required type="number" value="0">
+              <input class="form-control form-control-sm" id="form-length" name="${this.name}-dimension-length" required type="number" value="0">
             </div>
           </div>
 
           <div class="row mb-3">
             <div class="col">
               <label class="form-label" for="form-width">Width:</label>
-              <input class="form-control form-control-sm" id="form-width" name="dimension-width" required type="number" value="0">
+              <input class="form-control form-control-sm" id="form-width" name="${this.name}-dimension-width" required type="number" value="0">
             </div>
             <div class="col">
               <label class="form-label" for="form-depth">Depth:</label>
-              <input class="form-control form-control-sm" id="form-depth" name="dimension-depth" required type="number" value="0">
+              <input class="form-control form-control-sm" id="form-depth" name="${this.name}-dimension-depth" required type="number" value="0">
             </div>
           </div>
 
@@ -128,12 +128,12 @@ class VesselModal extends HTMLElement {
           <div class="row mb-3" id="${name}-schedule-edit">
             <div class="col">
               <label class="form-label" for="form-berth">Berth:</label>
-              <input class="form-control form-control-sm ${this.name}-disabled-if-auto" disabled id="form-berth" name="schedule-berth" required
+              <input class="form-control form-control-sm ${this.name}-disabled-if-auto" disabled id="form-berth" name="${this.name}-schedule-berth" required
                      type="number">
             </div>
             <div class="col">
               <label class="form-label" for="form-handel">Handel:</label>
-              <input class="form-control form-control-sm ${this.name}-disabled-if-auto" disabled id="form-handel" name="schedule-handel" required
+              <input class="form-control form-control-sm ${this.name}-disabled-if-auto" disabled id="form-handel" name="${this.name}-schedule-handel" required
                      type="datetime-local">
             </div>
           </div>
@@ -173,8 +173,8 @@ class VesselModal extends HTMLElement {
       for (const [name, value] of formData) {
         if (value !== "") {
           let words = name.split("-")
-          let prefix = words[0]
-          let key = words[1]
+          let prefix = words[1]
+          let key = words[2]
           serializedForm[prefix][key] = value;
         }
       }
@@ -182,12 +182,14 @@ class VesselModal extends HTMLElement {
       let vessel = serializedForm["vessel"]
       vessel["dimension"] = serializedForm["dimension"]
       this.hideBtnFooter()
-      console.log(serializedForm)
+      console.log(JSON.stringify(vessel))
       Requests.postData("/vessels", vessel).then(response => {
-        console.log(response)
+        console.log(JSON.stringify(vessel))
         this.showBtnFooter()
         let schedule = serializedForm["schedule"]
-        console.log(schedule)
+      }).catch(e => {
+        this.showBtnFooter()
+        console.log(e)
       })
     })
   }
