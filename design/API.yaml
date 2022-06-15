@@ -479,7 +479,7 @@ paths:
           description: ''
         '404':
           $ref: '#/components/responses/NotFound'
-  '/terminal/{terminal_id}/berths':
+  '/terminals/{terminal_id}/berths':
     parameters:
       - name: terminal_id
         in: path
