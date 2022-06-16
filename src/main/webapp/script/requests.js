@@ -1,26 +1,31 @@
 class Requests {
   static baseUrl = 'http://localhost:8080/visol/rest'
-  static portId = 1
+  static headers = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  }
 
   static async postData(path, data = {}) {
-    const res = await fetch(this.baseUrl + path, {
+    let res = await fetch(this.baseUrl + path, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
+      headers: Requests.headers,
       body: JSON.stringify(data)
-    }).catch(e => console.log(e));
-    return res.json();
+    });
+    if (res.status !== 200) {
+      throw new Error('GET request failed: ' + res.status)
+    }
+    return res.json()
   }
 
   static async getData(path) {
-    const res = await fetch(this.baseUrl + path, {
-      headers: {
-        'Accept': 'application/json'
-      },
+    console.log(path)
+    let res = await fetch(this.baseUrl + path, {
+      headers: Requests.headers,
     });
-    return res.json();
+    if (res.status !== 200) {
+      throw new Error('GET request failed: ' + res.status)
+    }
+    return res.json()
   }
 }
 

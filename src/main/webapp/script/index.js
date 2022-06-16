@@ -10,4 +10,3 @@ import "./components/drop-down.js"
 import "./pages/port-authority.js"
 import "./pages/landing-page.js"
 import "./pages/vessel_planner.js"
-

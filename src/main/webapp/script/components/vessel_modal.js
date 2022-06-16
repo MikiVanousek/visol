@@ -1,4 +1,5 @@
 import Requests from "../requests.js"
+import VisolApi from "../api.js";
 class VesselModal extends HTMLElement {
   schedule_type = "auto"
   terminals
@@ -6,7 +7,7 @@ class VesselModal extends HTMLElement {
 
   constructor() {
     super();
-    this.terminals = Requests.getData(`/ports/${Requests.portId}/terminals`)
+    this.terminals = VisolApi.getTerminals()
     this.name = this.getAttribute('name')
   }
 
@@ -31,8 +32,7 @@ class VesselModal extends HTMLElement {
     this.terminals.then(t => {
       this.buildModal(t)
     }).catch(e => {
-      console.log(e)
-      //alert("Failed to get the terminals from the API")
+      console.log('Failed to fetch terminals: ' + e.message)
       this.buildModal({})
     })
   }
@@ -150,7 +150,9 @@ class VesselModal extends HTMLElement {
       </form>
     </div>
   </div>
+</div>
 	`
+    // You can only attach the listeners after setting the innerHTML.
     this.attachListeners()
   }
 
@@ -173,7 +175,7 @@ class VesselModal extends HTMLElement {
       let vessel = serializedForm["vessel"]
       this.hideBtnFooter()
       console.log(JSON.stringify(serializedForm))
-      Requests.postData("/vessels", vessel).then(response => {
+      VisolApi.postVessel(vessel).then(response => {
         console.log("Vessel post response: ", response)
         this.showBtnFooter()
         let schedule = serializedForm["schedule"]
