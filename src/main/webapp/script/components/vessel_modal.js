@@ -151,6 +151,13 @@ class VesselModal extends HTMLElement {
     </div>
   </div>
 	`
+    this.attachListeners()
+  }
+
+  attachListeners() {
+    this.buttons = this.getElement(`modal-footer-btn`)
+    this.loader = this.getElement(`modal-footer-loading`)
+
     let radio_ids = ["auto", "manual", "disabled"]
     radio_ids.forEach(id => {
       this.getElement(`radio-${id}`).addEventListener("click", () => {
@@ -162,29 +169,7 @@ class VesselModal extends HTMLElement {
     form.addEventListener('submit', e => {
       e.preventDefault()
 
-      const serializedForm = {};
-      for (const prefix of ["vessel", "schedule", "datetime"]){
-        serializedForm[prefix] = {}
-      }
-
-      const formData = new FormData(form);
-      for (const [name, value] of formData) {
-        if (value !== "") {
-          let words = name.split("-")
-          let prefix = words[0]
-          let key = words[1]
-
-          // If it is a datetime, change to timezone-neutral
-          // Frankly awkward, let me know if you can do better!
-          if (prefix === "datetime") {
-            // for datetimes, the object they belong to is the last word, as the first is datetime
-            serializedForm[words[2]][key] = new Date(Date.parse(value)).toJSON()
-          } else {
-            serializedForm[prefix][key] = value;
-          }
-        }
-      }
-
+      let serializedForm = this.serializeForm(form)
       let vessel = serializedForm["vessel"]
       this.hideBtnFooter()
       console.log(JSON.stringify(serializedForm))
@@ -202,17 +187,40 @@ class VesselModal extends HTMLElement {
     })
   }
 
+  serializeForm(form) {
+    const serializedForm = {};
+    for (const prefix of ["vessel", "schedule", "datetime"]){
+      serializedForm[prefix] = {}
+    }
+
+    const formData = new FormData(form);
+    for (const [name, value] of formData) {
+      if (value !== "") {
+        let words = name.split("-")
+        let prefix = words[0]
+        let key = words[1]
+
+        // If it is a datetime, change to timezone-neutral
+        // Frankly awkward, let me know if you can do better!
+        if (prefix === "datetime") {
+          // for datetimes, the object they belong to is the last word, as the first is datetime
+          serializedForm[words[2]][key] = new Date(Date.parse(value)).toJSON()
+        } else {
+          serializedForm[prefix][key] = value;
+        }
+      }
+    }
+
+    return serializedForm;
+  }
+
   hideBtnFooter() {
-    let buttons = this.getElement(`modal-footer-btn`)
-    let loader = this.getElement(`modal-footer-loading`)
-    buttons.setAttribute("hidden", "")
-    loader.removeAttribute("hidden")
+    this.buttons.setAttribute("hidden", "")
+    this.loader.removeAttribute("hidden")
   }
   showBtnFooter() {
-    let buttons = this.getElement(`modal-footer-btn`)
-    let loader = this.getElement(`modal-footer-loading`)
-    loader.setAttribute("hidden", "")
-    buttons.removeAttribute("hidden")
+    this.loader.setAttribute("hidden", "")
+    this.buttons.removeAttribute("hidden")
   }
 
   getElement(id) {
