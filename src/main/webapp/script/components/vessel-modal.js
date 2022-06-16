@@ -1,13 +1,11 @@
-import Requests from "../requests.js"
 import VisolApi from "../api.js";
+
 class VesselModal extends HTMLElement {
   schedule_type = "auto"
-  terminals
   name
 
   constructor() {
     super();
-    this.terminals = VisolApi.getTerminals()
     this.name = this.getAttribute('name')
   }
 
@@ -29,15 +27,6 @@ class VesselModal extends HTMLElement {
   }
 
   connectedCallback() {
-    this.terminals.then(t => {
-      this.buildModal(t)
-    }).catch(e => {
-      console.log('Failed to fetch terminals: ' + e.message)
-      this.buildModal({})
-    })
-  }
-
-  buildModal(terminals) {
     this.innerHTML = `
 <div class="modal fade" id="${this.name}-modal" tabindex="-1">
   <div class="modal-dialog">
@@ -79,10 +68,7 @@ class VesselModal extends HTMLElement {
 
           <div class="mb-3 row">
             <div class="col d-grid">
-              <label class="form-label me-3" for="select-terminal"><b>Terminal:</b></label>
-              <select class="form-select form-select-sm" name="vessel-destination"> 
-                ${Object.keys(terminals).map(i => `<option value="${i}">${terminals[i]['name']}</option>`).join('\n')}
-              </select>
+              <select-terminal></select-terminal> 
               </div>
               <div class="col">
                 <label class="form-label" for="form-length">Length:</label>
