@@ -4,6 +4,9 @@ import java.sql.*;
 import java.util.function.Supplier;
 
 public abstract class GenericDao {
+		public static final Timestamp MIN_TIME = new Timestamp(0);
+		public static final Timestamp MAX_TIME = Timestamp.valueOf("3000-1-1 23:05:06");
+
     @FunctionalInterface
     interface PrepareStatement {
         void inject(PreparedStatement preparedStatement) throws SQLException;

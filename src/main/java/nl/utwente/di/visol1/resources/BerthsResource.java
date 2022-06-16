@@ -4,12 +4,12 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import nl.utwente.di.visol1.dao.BerthDao;
 import nl.utwente.di.visol1.models.*;
 
-import java.util.List;
 @Path("/berths")
 public class BerthsResource {
     @Context
@@ -19,16 +19,16 @@ public class BerthsResource {
 
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Berth createBerth(Berth berth){
-        return BerthDao.createBerth(berth);
-    }
-
-    @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Berth> getBerths() {
-        return null;
-        //TODO;
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createBerth(Berth berth) {
+	    Berth createdBerth = BerthDao.createBerth(berth);
+			if (createdBerth != null) {
+				return Response.status(Response.Status.OK)
+					.header("Location", "/berths/" + createdBerth.getId())
+					.entity(createdBerth).build();
+			} else {
+				return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+			}
     }
 
     @Path("{berth_id}")

@@ -30,7 +30,7 @@ public class DaoTest {
      */
     @Test
     void createGetTest() {
-        List<Port> ports = PortDao.getPorts();
+        List<Port> ports = new ArrayList<>(PortDao.getPorts().values());
         List<Terminal> terminalsByPort = new ArrayList<>();
         List<Berth> berthsByTerminal = new ArrayList<>();
         List<Schedule> schedulesByVessel = new ArrayList<>();
@@ -41,7 +41,7 @@ public class DaoTest {
 
         for(Port port : DummyData.PORTS) {
             assertEquals(port, PortDao.getPort(port.getId()));
-            terminalsByPort.addAll(TerminalDao.getTerminalsByPort(port.getId()));
+            terminalsByPort.addAll(TerminalDao.getTerminalsByPort(port.getId()).values());
             Map<Integer,Map<Integer, List<Schedule>>> schedules = ScheduleDao.getSchedulesByPort(port.getId(), MIN_TIME, MAX_TIME);
             for(int key : schedules.keySet()) {
                 for(int key2 : schedules.get(key).keySet()) {
@@ -54,7 +54,7 @@ public class DaoTest {
             assertEquals(terminal, TerminalDao.getTerminal(terminal.getId()));
             Map<Integer,List<Schedule>> schedules = ScheduleDao.getSchedulesByTerminal(terminal.getId(), MIN_TIME, MAX_TIME);
             for(int key : schedules.keySet()) schedulesByTerminal.addAll(schedules.get(key));
-            berthsByTerminal.addAll(BerthDao.getBerthsByTerminal(terminal.getId()));
+            berthsByTerminal.addAll(BerthDao.getBerthsByTerminal(terminal.getId()).values());
         }
 
         for(Berth berth : DummyData.BERTHS) {
@@ -98,11 +98,12 @@ public class DaoTest {
             for(int key : schedulesMap.keySet()) schedules2.addAll(schedulesMap.get(key));
         }
 
+
         vessels.remove(0);
         VesselDao.deleteVessel(1);
         List<Vessel> vessels2 = new ArrayList<>();
         for (int i = 0; i < terminals.size(); i++) {
-            vessels2.addAll(VesselDao.getVesselsByTerminal(i + 1));
+            vessels2.addAll(VesselDao.getVesselsByTerminal(i + 1).values());
         }
 
 
@@ -110,7 +111,7 @@ public class DaoTest {
         BerthDao.deleteBerth(1);
         List<Berth> berths2 = new ArrayList<>();
         for (int i = 0; i < terminals.size(); i++) {
-            berths2.addAll(BerthDao.getBerthsByTerminal(i + 1));
+            berths2.addAll(BerthDao.getBerthsByTerminal(i + 1).values());
         }
 
 
@@ -118,20 +119,20 @@ public class DaoTest {
         TerminalDao.deleteTerminal(1);
         List<Terminal> terminals2 = new ArrayList<>();
         for (int i = 0; i < ports.size(); i++) {
-            terminals2.addAll(TerminalDao.getTerminalsByPort(i + 1));
+            terminals2.addAll(TerminalDao.getTerminalsByPort(i + 1).values());
         }
 
 
         ports.remove(0);
         PortDao.deletePort(1);
-        List<Port> ports2 = PortDao.getPorts();
+        List<Port> ports2 = new ArrayList<>(PortDao.getPorts().values());
 
-        assertTrue(schedules2.containsAll(schedules));
-        assertTrue(schedules.containsAll(schedules2));
-        assertEquals(vessels, vessels2);
-        assertEquals(berths, berths2);
-        assertEquals(ports, ports2);
-        assertEquals(terminals, terminals2);
+	    assertTrue(schedules2.containsAll(schedules));
+	    assertTrue(schedules.containsAll(schedules2));
+	    assertTrue(vessels2.containsAll(vessels) && vessels.containsAll(vessels2));
+	    assertTrue(berths2.containsAll(berths) && berths.containsAll(berths2));
+	    assertTrue(ports2.containsAll(ports) && ports.containsAll(ports2));
+	    assertTrue(terminals2.containsAll(terminals) && terminals.containsAll(terminals2));
 
 
     }

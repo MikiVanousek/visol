@@ -1,6 +1,8 @@
 package nl.utwente.di.visol1.resources;
 
+import nl.utwente.di.visol1.dao.BerthDao;
 import nl.utwente.di.visol1.dao.TerminalDao;
+import nl.utwente.di.visol1.models.Berth;
 import nl.utwente.di.visol1.models.Terminal;
 
 import javax.ws.rs.Consumes;
@@ -11,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 @Path("/terminals")
@@ -22,9 +25,18 @@ public class TerminalsResource {
 
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Terminal createTerminal(Terminal terminal){
-        return TerminalDao.createTerminal(terminal);
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createTerminal(Terminal terminal){
+
+	    Terminal createdTerminal = TerminalDao.createTerminal(terminal);
+	    if (createdTerminal != null) {
+		    return Response.status(Response.Status.OK)
+			    .header("Location", "/terminals/" + createdTerminal.getId())
+			    .entity(createdTerminal).build();
+	    } else {
+		      return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+	    }
+
     }
 
     @Path("{terminal_id}")

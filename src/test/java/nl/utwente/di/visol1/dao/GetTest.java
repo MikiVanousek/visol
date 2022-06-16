@@ -8,6 +8,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.sql.Timestamp;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,7 +31,7 @@ public class GetTest {
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
             //Port get test
-            List<Port> portList = PortDao.getPorts();
+            List<Port> portList = new ArrayList<>(PortDao.getPorts().values());
             for(Port port : portList){
                 marshaller.marshal(port, System.out);
                 System.out.println();
@@ -40,7 +41,7 @@ public class GetTest {
             System.out.println();
 
             //Terminal get test
-            List<Terminal> terminalList = TerminalDao.getTerminalsByPort(1);
+            List<Terminal> terminalList = new ArrayList<>(TerminalDao.getTerminalsByPort(1).values());
             for (Terminal terminal : terminalList){
                 marshaller.marshal(terminal, System.out);
                 System.out.println();
@@ -54,7 +55,7 @@ public class GetTest {
             System.out.println();
 
             //Vessel get test
-            List<Vessel> vesselList = VesselDao.getVesselsByTerminal(1);
+            List<Vessel> vesselList = new ArrayList<>(VesselDao.getVesselsByTerminal(1).values());
             for (Vessel vessel : vesselList){
                 marshaller.marshal(vessel, System.out);
                 System.out.println();

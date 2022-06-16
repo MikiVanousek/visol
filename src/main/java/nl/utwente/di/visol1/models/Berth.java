@@ -4,17 +4,25 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.sql.Time;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Berth {
+	@XmlTransient
+	@JsonIgnore
     private int id;
 	@XmlElement(name = "terminal")
+	@JsonProperty("terminal")
     private int terminalId;
     private Time open;
-    private Time close;
+		private Time close;
+	@JsonProperty("unload_speed")
 	@XmlElement(name = "unload_speed")
     private double unloadSpeed;
     private int width;
@@ -50,14 +58,6 @@ public class Berth {
 
     public void setTerminalId(int terminalId) {
         this.terminalId = terminalId;
-    }
-
-    public Terminal getTerminal() {
-        return null; // TerminalDao.getById(terminalId);
-    }
-
-    public void setTerminal(Terminal terminal) {
-        this.terminalId = terminal.getId();
     }
 
     public Time getOpen() {

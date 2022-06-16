@@ -6,7 +6,9 @@ import javax.xml.bind.JAXBElement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TerminalDao extends GenericDao{
     private final static String table = "terminal"; //needed??
@@ -14,7 +16,7 @@ public class TerminalDao extends GenericDao{
     public static Terminal getTerminal(int terminalId) {
         ResultSet rs = executeQuery("SELECT * FROM terminal WHERE id = ?", stmt -> stmt.setInt(1, terminalId));
         try {
-            rs.next();
+	          if(!rs.next()) return null;
             return new Terminal(
                     rs.getInt("id"),
                     rs.getInt("port"),
@@ -25,13 +27,13 @@ public class TerminalDao extends GenericDao{
         }
     }
 
-    public static void deleteTerminal(int terminalId) {
-        executeUpdate("DELETE FROM terminal WHERE id = ?", stm -> stm.setInt(1, terminalId));
+    public static int deleteTerminal(int terminalId) {
+        return executeUpdate("DELETE FROM terminal WHERE id = ?", stm -> stm.setInt(1, terminalId));
     }
 
-    public static void replaceTerminal(int terminalId, Terminal terminal){
+    public static int replaceTerminal(int terminalId, Terminal terminal){
         String query = "UPDATE terminal SET port = ?, name = ? WHERE id = ?";
-        executeUpdate(query, stmt -> {
+        return executeUpdate(query, stmt -> {
             stmt.setInt(1, terminal.getPortId());
 	          stmt.setString(2, terminal.getName());
 	          stmt.setInt(3, terminalId);
@@ -39,16 +41,17 @@ public class TerminalDao extends GenericDao{
 
     }
 
-    public static List<Terminal> getTerminalsByPort(int portId) {
+    public static Map<Integer, Terminal> getTerminalsByPort(int portId) {
         ResultSet rs = executeQuery("SELECT * FROM terminal WHERE port = ?", stmt -> stmt.setInt(1, portId));
-        List<Terminal> res = new ArrayList<>();
+	    Map<Integer, Terminal> res = new HashMap<>();
         try {
-            while(rs.next()) {
-                res.add(new Terminal(
+	        if(!rs.next()) return null;
+            do {
+                res.put((rs.getInt("id")),(new Terminal(
                         rs.getInt("id"),
                         rs.getInt("port"),
-                        rs.getString("name")));
-            }
+                        rs.getString("name"))));
+            }while(rs.next());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -56,11 +59,20 @@ public class TerminalDao extends GenericDao{
     }
 
     public static Terminal createTerminal(Terminal terminal){
-        String query = "INSERT INTO terminal (port, name) VALUES(?, ?);";
-        executeUpdate(query, stmt -> {
+        String query = "INSERT INTO terminal (port, name) VALUES(?, ?) RETURNING *;";
+        ResultSet rs = executeQuery(query, stmt -> {
             stmt.setInt(1, terminal.getPortId());
 						stmt.setString(2, terminal.getName());
         });
-        return terminal;
+	    try {
+		    if(!rs.next()) return null;
+		    return new Terminal(
+			    rs.getInt("id"),
+			    rs.getInt("port"),
+			    rs.getString("name"));
+	    } catch (SQLException exception) {
+		    exception.printStackTrace();
+		    return null;
+	    }
     }
 }

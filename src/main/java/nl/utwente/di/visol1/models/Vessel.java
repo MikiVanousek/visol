@@ -4,18 +4,25 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.sql.Timestamp;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Vessel {
+	@XmlTransient
+	@JsonIgnore
     private int id;
     private String name;
     private int containers;
     private int destination;
     private Timestamp arrival;
     private Timestamp deadline;
+	@JsonProperty("cost_per_hour")
 	@XmlElement(name = "cost_per_hour")
 	  private double costPerHour;
     private int width;
