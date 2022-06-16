@@ -369,6 +369,28 @@ paths:
                 $ref: '#/components/schemas/BerthMap'
         '404':
           $ref: '#/components/responses/NotFound'
+  '/terminals/{terminal_id}/vessels':
+    parameters:
+      - name: terminal_id
+        in: path
+        description: ID of the Terminal.
+        required: true
+        schema:
+          $ref: '#/components/schemas/TerminalID'
+    get:
+      tags:
+        - Terminals
+      summary: Retrieve all Vessels whose destination is the Terminal
+      operationId: retrieveTerminalVessels
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VesselMap'
+        '404':
+          $ref: '#/components/responses/NotFound'
   '/terminals/{terminal_id}/schedules':
     parameters:
       - name: terminal_id
@@ -931,7 +953,7 @@ components:
       pattern: >-
         ^(-?[0-9]+)-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])Z$
       maxLength: 22
-      example: 2022-05-11T16:32:35.000Z
+      example: 2022-05-11T16:32:35Z
     Time:
       type: string
       format: time
@@ -1013,8 +1035,8 @@ components:
         vessel: 1
         type: manual
         berth: 30
-        start: 2022-05-11T16:32:00.000Z
-        end: 2022-05-11T21:26:00.000Z
+        start: 2022-05-11T16:32:00Z
+        end: 2022-05-11T21:26:00Z
     BerthSchedules:
       title: Berth Schedules
       description: An array of Schedule objects.
@@ -1254,14 +1276,41 @@ components:
         - depth
       example:
         name: Vessel 1
-        arrival: 2022-05-11T13:56:00.000Z
-        deadline: 2022-05-12T18:13:00.000Z
+        arrival: 2022-05-11T13:56:00Z
+        deadline: 2022-05-12T18:13:00Z
         containers: 30
         cost_per_hour: 2.6
         destination: 4
         length: 30
         width: 10
         depth: 30
+    VesselMap:
+      title: Vessel Map
+      description: A map of Vessel objects keyed by Vessel ID.
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/Vessel'
+      example:
+        '1':
+          name: Vessel 1
+          arrival: 2022-05-11T13:56:00Z
+          deadline: 2022-05-12T18:13:00Z
+          containers: 30
+          cost_per_hour: 2.6
+          destination: 4
+          length: 30
+          width: 10
+          depth: 30
+        '2':
+          name: The other vessel
+          arrival: 2022-05-24T16:37:00Z
+          deadline: 2022-05-25T23:28:00Z
+          containers: 40
+          cost_per_hour: 5.2
+          destination: 3
+          length: 45
+          width: 15
+          depth: 20
     BerthID:
       title: Berth ID
       description: >-
@@ -1375,17 +1424,23 @@ components:
         A Terminal object has the following attributes:
         
         
+        + port: `2` (integer) - The Port where the Terminal is located.
+        
         + name: `Han & Co. Ltd.` (string) - The name of the Terminal.
       type: object
       properties:
+        port:
+          $ref: '#/components/schemas/PortID'
         name:
           type: string
           pattern: '^(?:.|\s)+$'
           maxLength: 64
       additionalProperties: false
       required:
+        - port
         - name
       example:
+        port: 2
         name: Han & Co. Ltd.
     TerminalMap:
       title: Terminal Map
@@ -1395,8 +1450,10 @@ components:
         $ref: '#/components/schemas/Terminal'
       example:
         '1':
+          port: 2
           name: Han & Co. Ltd.
         '2':
+          port: 2
           name: Bui Buoys
     PortID:
       title: Port ID
@@ -1463,7 +1520,7 @@ components:
         - changes
         - reason
       example:
-        date: 2022-05-11T16:32:35.000Z
+        date: 2022-05-11T16:32:35Z
         changes:
           name: New Vessel 1
           containers: 40
@@ -1507,7 +1564,7 @@ components:
         - reason
       example:
         vessel: 30
-        date: 2022-05-11T16:32:35.000Z
+        date: 2022-05-11T16:32:35Z
         old:
           name: Vessel 1
           containers: 30
@@ -1524,7 +1581,7 @@ components:
       maxItems: 2147483647
       example:
         - vessel: 30
-          date: 2022-05-11T16:32:35.000Z
+          date: 2022-05-11T16:32:35Z
           old:
             name: Vessel 1
             containers: 30
@@ -1533,13 +1590,13 @@ components:
             containers: 40
           reason: 'Additional cargo (#2524)'
         - vessel: 30
-          date: 2022-05-11T21:26:24.000Z
+          date: 2022-05-11T21:26:24Z
           old:
-            arrival: 2022-05-11T13:56:00.000Z
-            deadline: 2022-05-12T18:13:00.000Z
+            arrival: 2022-05-11T13:56:00Z
+            deadline: 2022-05-12T18:13:00Z
           new:
-            arrival: 2022-05-18T13:56:00.000Z
-            deadline: 2022-05-19T18:13:00.000Z
+            arrival: 2022-05-18T13:56:00Z
+            deadline: 2022-05-19T18:13:00Z
           reason: 'Ship delayed (#3517)'
     VesselChangesMap:
       title: Vessel Changes Map
@@ -1550,7 +1607,7 @@ components:
       example:
         '30':
           - vessel: 30
-            date: 2022-05-11T16:32:35.000Z
+            date: 2022-05-11T16:32:35Z
             old:
               name: Vessel 1
               containers: 30
@@ -1559,13 +1616,13 @@ components:
               containers: 40
             reason: 'Additional cargo (#2524)'
           - vessel: 30
-            date: 2022-05-11T21:26:24.000Z
+            date: 2022-05-11T21:26:24Z
             old:
-              arrival: 2022-05-11T13:56:00.000Z
-              deadline: 2022-05-12T18:13:00.000Z
+              arrival: 2022-05-11T13:56:00Z
+              deadline: 2022-05-12T18:13:00Z
             new:
-              arrival: 2022-05-18T13:56:00.000Z
-              deadline: 2022-05-19T18:13:00.000Z
+              arrival: 2022-05-18T13:56:00Z
+              deadline: 2022-05-19T18:13:00Z
             reason: 'Ship delayed (#3517)'
     NewScheduleChange:
       title: New Schedule Change
@@ -1595,7 +1652,7 @@ components:
         - changes
         - reason
       example:
-        date: 2022-05-11T16:32:35.000Z
+        date: 2022-05-11T16:32:35Z
         changes:
           type: automatic
         reason: Turn on automatic scheduling
@@ -1638,7 +1695,7 @@ components:
         - reason
       example:
         vessel: 30
-        date: 2022-05-11T16:32:35.000Z
+        date: 2022-05-11T16:32:35Z
         old:
           type: manual
         new:
@@ -1653,22 +1710,22 @@ components:
       maxItems: 2147483647
       example:
         - vessel: 30
-          date: 2022-05-11T16:32:35.000Z
+          date: 2022-05-11T16:32:35Z
           old:
             type: manual
           new:
             type: automatic
           reason: Turn on automatic scheduling
         - vessel: 30
-          date: 2022-05-11T21:26:24.000Z
+          date: 2022-05-11T21:26:24Z
           old:
             berth: 20
-            start: 2022-05-15T16:32:00.000Z
-            end: 2022-05-15T21:26:00.000Z
+            start: 2022-05-15T16:32:00Z
+            end: 2022-05-15T21:26:00Z
           new:
             berth: 18
-            start: 2022-05-09T10:24:00.000Z
-            end: 2022-05-10T16:17:00.000Z
+            start: 2022-05-09T10:24:00Z
+            end: 2022-05-10T16:17:00Z
           reason: Automatic scheduling job
     ScheduleChangesMap:
       title: Schedule Changes Map
@@ -1679,22 +1736,22 @@ components:
       example:
         '30':
           - vessel: 30
-            date: 2022-05-11T16:32:35.000Z
+            date: 2022-05-11T16:32:35Z
             old:
               type: manual
             new:
               type: automatic
             reason: Turn on automatic scheduling
           - vessel: 30
-            date: 2022-05-11T21:26:24.000Z
+            date: 2022-05-11T21:26:24Z
             old:
               berth: 20
-              start: 2022-05-15T16:32:00.000Z
-              end: 2022-05-15T21:26:00.000Z
+              start: 2022-05-15T16:32:00Z
+              end: 2022-05-15T21:26:00Z
             new:
               berth: 18
-              start: 2022-05-09T10:24:00.000Z
-              end: 2022-05-10T16:17:00.000Z
+              start: 2022-05-09T10:24:00Z
+              end: 2022-05-10T16:17:00Z
             reason: Automatic scheduling job
   responses:
     NotFound:
