@@ -3,11 +3,16 @@ package nl.utwente.di.visol1.models;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Port {
+		@XmlTransient
+		@JsonIgnore
     private int id;
     private String name;
 

@@ -5,17 +5,17 @@ import nl.utwente.di.visol1.models.Vessel;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class VesselDao extends GenericDao{
     private final static String table = "vessel"; //needed??
 
     public static Vessel getVessel(int vesselId) {
         ResultSet rs = executeQuery("SELECT * FROM vessel WHERE id = ?", stmt -> stmt.setInt(1, vesselId));
-
         try {
-            //TODO: destinationTerminal promise
-            rs.next();
+            if(!rs.next()) return null;
             return new Vessel(
                     rs.getInt("id"),
                     rs.getString("name"),
@@ -32,14 +32,14 @@ public class VesselDao extends GenericDao{
             return null;
         }
     }
-    public static void deleteVessel(int vesselId) {
-        executeUpdate("DELETE FROM vessel WHERE id = ?", stmt -> stmt.setInt(1, vesselId));
+    public static int deleteVessel(int vesselId) {
+        return executeUpdate("DELETE FROM vessel WHERE id = ?", stmt -> stmt.setInt(1, vesselId));
     }
 
-    public static void replaceVessel(int vesselId, Vessel vessel) {
+    public static int replaceVessel(int vesselId, Vessel vessel) {
         String query = "UPDATE vessel SET name = ?, arrival = ?, deadline = ?, containers = ?, cost_per_hour = ?, destination = ?, length = ?, width = ?, depth = ? WHERE id = ?";
 
-        executeUpdate(query, stmt -> {
+        return executeUpdate(query, stmt -> {
             stmt.setString(1, vessel.getName());
 	        stmt.setTimestamp(2, vessel.getArrival());
 	        stmt.setTimestamp(3, vessel.getDeadline());
@@ -55,8 +55,8 @@ public class VesselDao extends GenericDao{
 
 
     public static Vessel createVessel(Vessel vessel){
-        String query = "INSERT INTO vessel (name, arrival, deadline, containers, cost_per_hour, destination, length, width, depth) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);";
-	      executeUpdate(query, stmt -> {
+        String query = "INSERT INTO vessel (name, arrival, deadline, containers, cost_per_hour, destination, length, width, depth) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *;";
+	      ResultSet rs = executeQuery(query, stmt -> {
 			    stmt.setString(1, vessel.getName());
 			    stmt.setTimestamp(2, vessel.getArrival());
 			    stmt.setTimestamp(3, vessel.getDeadline());
@@ -67,15 +67,32 @@ public class VesselDao extends GenericDao{
 			    stmt.setInt(8, vessel.getWidth());
 			    stmt.setInt(9, vessel.getDepth());
         });
-        return vessel;
+	    try {
+		    if(!rs.next()) return null;
+		    return new Vessel(
+			    rs.getInt("id"),
+			    rs.getString("name"),
+			    rs.getTimestamp("arrival"),
+			    rs.getTimestamp("deadline"),
+			    rs.getInt("containers"),
+			    rs.getDouble("cost_per_hour"),
+			    rs.getInt("destination"),
+			    rs.getInt("length"),
+			    rs.getInt("width"),
+			    rs.getInt("depth"));
+	    } catch (SQLException exception) {
+		    exception.printStackTrace();
+		    return null;
+	    }
     }
 
-    public static List<Vessel> getVesselsByTerminal(int terminalId){
-        List<Vessel> res = new ArrayList<>();
+    public static Map<Integer, Vessel> getVesselsByTerminal(int terminalId){
+	    Map<Integer, Vessel>res = new HashMap<>();
         ResultSet rs = executeQuery("SELECT * FROM vessel WHERE destination = ?", stmt -> stmt.setInt(1, terminalId));
         try {
-            while(rs.next()) {
-                res.add(new Vessel(
+	          if(!rs.next()) return null;
+            do{
+                res.put(rs.getInt("id"), new Vessel(
 		            rs.getInt("id"),
 		            rs.getString("name"),
 		            rs.getTimestamp("arrival"),
@@ -86,7 +103,7 @@ public class VesselDao extends GenericDao{
 		            rs.getInt("length"),
 		            rs.getInt("width"),
 		            rs.getInt("depth")));
-            }
+            } while(rs.next());
         } catch (SQLException e) {
             e.printStackTrace();
         }

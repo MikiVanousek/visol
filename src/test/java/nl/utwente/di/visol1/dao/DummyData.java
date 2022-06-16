@@ -21,19 +21,14 @@ public class DummyData {
         for(Schedule schedule : SCHEDULES) ScheduleDao.replaceSchedule(schedule.getVessel(), schedule);
     }
 
-
-
-
-
-
     public static final List<Port> PORTS = Arrays.asList(
         new Port(1, "one"),
         new Port(2, "two")
     );
 
     public static final List<Terminal> TERMINALS = Arrays.asList(
-        new Terminal(1, 1, "a"),
-        new Terminal(2, 1, "b"),
+        new Terminal(1, 1, "WestTerminal"),
+        new Terminal(2, 1, "SouthTerminal"),
         new Terminal(3, 2, "c"),
         new Terminal(4, 2, "d")
     );

@@ -16,8 +16,7 @@ public class ScheduleDao extends GenericDao {
     public static Schedule getScheduleByVessel(int vessel){
         ResultSet rs = executeQuery("SELECT * FROM schedule WHERE vessel = ?", stmt -> stmt.setInt(1, vessel));
         try {
-            rs.next();
-            //TODO: add promises for vessel and berth
+	         if(!rs.next()) return null;
             return new Schedule(
                     rs.getInt("vessel"),
                     rs.getInt("berth"),
@@ -42,14 +41,16 @@ public class ScheduleDao extends GenericDao {
                     stmt.setTimestamp(5, to);
                 });
         try {
-            while(rs.next()) {
+	        if(!rs.next()) return null;
+            do {
                 res.add(new Schedule(
                         rs.getInt("vessel"),
                         rs.getInt("berth"),
                         rs.getBoolean("manual"),
                         rs.getTimestamp("start"),
                         rs.getTimestamp("expected_end")));
-            }
+            }while(rs.next());
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -69,7 +70,8 @@ public class ScheduleDao extends GenericDao {
         });
 
         try {
-            while(rs.next()) {
+	        if(!rs.next()) return null;
+            do {
                 int terminal = rs.getInt("terminal");
                 int berth = rs.getInt("berth");
                 res.putIfAbsent(terminal, new HashMap<>());
@@ -80,7 +82,7 @@ public class ScheduleDao extends GenericDao {
                         rs.getBoolean("manual"),
                         rs.getTimestamp("start"),
                         rs.getTimestamp("expected_end")));
-            }
+            } while(rs.next());
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
@@ -100,7 +102,8 @@ public class ScheduleDao extends GenericDao {
         });
 
         try {
-            while(rs.next()) {
+	          if(!rs.next()) return null;
+            do {
                 int berth = rs.getInt("berth");
                 res.putIfAbsent(berth, new ArrayList<>());
                 res.get(berth).add(new Schedule(
@@ -109,24 +112,24 @@ public class ScheduleDao extends GenericDao {
                         rs.getBoolean("manual"),
                         rs.getTimestamp("start"),
                         rs.getTimestamp("expected_end")));
-            }
+            } while(rs.next());
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
         return res;
     }
 
-    public static void deleteScheduleByVessel(int vesselId) {
-        executeUpdate("DELETE FROM schedule where vessel = ?", stmt -> stmt.setInt(1, vesselId));
+    public static int deleteScheduleByVessel(int vesselId) {
+        return executeUpdate("DELETE FROM schedule where vessel = ?", stmt -> stmt.setInt(1, vesselId));
     }
 
 
 
     public static Schedule replaceSchedule(int vesselId, Schedule schedule){
         String query = "INSERT INTO schedule (vessel, berth, manual, start, expected_end) VALUES(?, ?, ?, ?, ?) " +
-                "ON CONFLICT (vessel) DO UPDATE SET berth = ?, manual = ?, start = ?, expected_end = ?";
+                "ON CONFLICT (vessel) DO UPDATE SET berth = ?, manual = ?, start = ?, expected_end = ? RETURNING *";
 
-        executeUpdate(query, stmt -> {
+        ResultSet rs = executeQuery(query, stmt -> {
             stmt.setInt(1, vesselId);
             stmt.setInt(2, schedule.getBerth());
             stmt.setBoolean(3, schedule.isManual());
@@ -137,6 +140,19 @@ public class ScheduleDao extends GenericDao {
             stmt.setTimestamp(8, schedule.getStart());
             stmt.setTimestamp(9, schedule.getExpectedEnd());
         });
-        return schedule;
+	    try {
+		    if(!rs.next()) return null;
+		    //TODO: add promises for vessel and berth
+		    return new Schedule(
+			    rs.getInt("vessel"),
+			    rs.getInt("berth"),
+			    rs.getBoolean("manual"),
+			    rs.getTimestamp("start"),
+			    rs.getTimestamp("expected_end")
+		    );
+	    } catch (SQLException exception) {
+		    exception.printStackTrace();
+		    return null;
+	    }
     }
 }

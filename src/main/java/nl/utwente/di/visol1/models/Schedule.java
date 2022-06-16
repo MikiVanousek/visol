@@ -7,6 +7,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Timestamp;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Schedule {
@@ -14,6 +16,7 @@ public class Schedule {
     private int berth;
     boolean manual;
     Timestamp start;
+	@JsonProperty("expected_end")
 		@XmlElement(name = "expected_end")
     Timestamp expectedEnd;
 

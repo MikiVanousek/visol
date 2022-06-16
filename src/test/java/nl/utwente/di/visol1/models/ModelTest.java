@@ -58,7 +58,7 @@ public class ModelTest {
             Berth berth = new Berth();
             berth.setId(1);
             berth.setUnloadSpeed(4.2);
-            berth.setTerminal(terminal);
+            berth.setTerminalId(terminal.getId());
             berth.setOpen(Time.valueOf("08:00:00"));
             berth.setWidth(30);
             berth.setDepth(20);

@@ -4,16 +4,23 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.sql.Time;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Terminal {
+	@XmlTransient
+	@JsonIgnore
     private int id;
 
 
     private String name;
+	@JsonProperty("port")
     @XmlElement(name = "port")
     private int portId;
 
