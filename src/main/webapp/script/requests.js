@@ -18,7 +18,6 @@ class Requests {
   }
 
   static async getData(path) {
-    console.log(path)
     let res = await fetch(this.baseUrl + path, {
       headers: Requests.headers,
     });
