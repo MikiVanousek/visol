@@ -16,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 
 import nl.utwente.di.visol1.type_adapters.TimestampAdapter;
+import nl.utwente.di.visol1.util.EncryptionUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -108,7 +109,9 @@ public class ModelTest {
 		User user = new User();
 		user.setName("Han");
 		user.setEmail("han@hankong.com");
-		user.setPasswordHash("Password123");
+		EncryptionUtil.EncryptedPassword password = EncryptionUtil.encryptPassword("Password123");
+		user.setPasswordHash(password.hash);
+		user.setSaltAndPepper(password.saltAndPepper);
 		user.setRole(Role.AUTHORITY);
 		user.setPort(port);
 		user.setTerminalId(null);
