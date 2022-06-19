@@ -45,6 +45,18 @@
 ![][Luka] Add a favicon \
 ![][Miki] Fix timezones Issues 
 
+### Friday
+![][Luka] Improve the API documentation and resolve some mistakes \
+![][Luka] Fix timestamp formatting \
+![][Luka] Implement encryption utilities
+
+### Sunday
+![][Luka] Write assignment 3 report
+
+## Week 9
+### Monday
+![][Luka] Fix a small bug in the unit tests
+
 [Han]: profile-pictures/Han.png "Han"
 [Hessel]: profile-pictures/Hessel.png "Hessel"
 [Krystof]: profile-pictures/Krystof.png "Krystof"
