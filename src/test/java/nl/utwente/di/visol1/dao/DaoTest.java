@@ -10,6 +10,7 @@ import nl.utwente.di.visol1.models.Port;
 import nl.utwente.di.visol1.models.Schedule;
 import nl.utwente.di.visol1.models.Terminal;
 import nl.utwente.di.visol1.models.Vessel;
+import nl.utwente.di.visol1.util.Configuration;
 import nl.utwente.di.visol1.util.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ public class DaoTest {
 
 	@BeforeEach
 	void setup() {
-		GenericDao.useTestSchema(true);
+		Configuration.useTestEnvironment(true);
 		GenericDao.truncateAllTables();
 		DummyData.createDummyData();
 	}

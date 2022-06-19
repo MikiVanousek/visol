@@ -236,3 +236,9 @@ jspm_packages/
 
 # Serverless Webpack directories
 .webpack/
+
+### Project Specific ###
+
+# Exclude the properties file to prevent accidental password sharing
+
+config.properties

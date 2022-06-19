@@ -1,148 +1,99 @@
 package nl.utwente.di.visol1.dao;
 
-import java.sql.*;
-import java.util.function.Supplier;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.stream.Stream;
+
+import nl.utwente.di.visol1.util.Configuration;
 
 public abstract class GenericDao {
-		public static final Timestamp MIN_TIME = new Timestamp(0);
-		public static final Timestamp MAX_TIME = Timestamp.valueOf("3000-1-1 23:05:06");
+	public static final Timestamp MIN_TIME = new Timestamp(0);
+	public static final Timestamp MAX_TIME = Timestamp.valueOf("3000-1-1 23:05:06");
+	private static Connection connection;
 
-    @FunctionalInterface
-    interface PrepareStatement {
-        void inject(PreparedStatement preparedStatement) throws SQLException;
-    }
+	protected GenericDao() {
 
-    //public or private?
-    private static final String HOST = "bronto.ewi.utwente.nl";
-    private static final String DB_NAME = "dab_di21222b_138";
-    private static String SCHEMA;
-    private static final Supplier<String> URL = () -> "jdbc:postgresql://" + HOST + ":5432/" + DB_NAME + "?currentSchema=" + SCHEMA;
-    private static final String USERNAME = DB_NAME;
-    private static final String PASSWORD = System.getenv("db_password");
+	}
 
-    private static Connection connection;
+	public static void truncateAllTables() {
+		Stream.of("schedule", "vessel", "berth", "terminal", "port").map(table -> "TRUNCATE TABLE " + table + " RESTART IDENTITY CASCADE")
+			.forEach(GenericDao::executeUpdate);
+	}
 
+	private static Connection getConnection() throws SQLException {
+		if (connection == null || connection.isClosed()) {
+			try {
+				Class.forName("org.postgresql.Driver");
+			} catch (ClassNotFoundException exception) {
+				throw new RuntimeException("Could not find the PostgreSQL driver", exception);
+			}
 
-    static {
-        useTestSchema(false);
-    }
+			connection = DriverManager.getConnection(
+				String.format(
+					"jdbc:postgresql://%s/%s?currentSchema=%s",
+					Configuration.Database.URL.get(),
+					Configuration.Database.NAME.get(),
+					Configuration.Database.SCHEMA.get()
+				),
+				Configuration.Database.USERNAME.get(),
+				Configuration.Database.PASSWORD.get()
+			);
+		}
+		return connection;
+	}
 
-    protected GenericDao() {
+	protected static ResultSet executeQuery(String query) {
+		try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
+			return statement.executeQuery(query);
+		} catch (SQLException exception) {
+			System.err.println("Exception executing query: " + query);
+			exception.printStackTrace();
+			return null;
+		}
+	}
 
-    }
+	protected static int executeUpdate(String query) {
+		try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
+			return statement.executeUpdate(query);
+		} catch (SQLException exception) {
+			System.err.println("Exception executing update: " + query);
+			exception.printStackTrace();
+			return -1;
+		}
+	}
 
-    public static void truncateAllTables() {
-        String[] tables = {"schedule", "vessel", "berth", "terminal", "port"};
-        for (String table : tables) {
-            executeUpdate("truncate table " + table + " restart identity cascade");
+	protected static ResultSet executeQuery(String query, StatementData statementData) {
+		try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
+			return statementData.prepare(statement).executeQuery();
+		} catch (SQLException exception) {
+			System.err.println("Exception executing prepared query: " + query);
+			exception.printStackTrace();
+			return null;
+		}
+	}
 
-        }
-    }
+	protected static int executeUpdate(String query, StatementData statementData) {
+		try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
+			return statementData.prepare(statement).executeUpdate();
+		} catch (SQLException exception) {
+			System.err.println("Exception executing prepared update: " + query);
+			exception.printStackTrace();
+			return -1;
+		}
+	}
 
-    public static void useTestSchema(boolean useTestSchema) {
-        SCHEMA = useTestSchema ? "visol_project_test" : "visol_project";
-    }
+	@FunctionalInterface
+	interface StatementData {
+		void inject(PreparedStatement preparedStatement) throws SQLException;
 
-    protected static ResultSet executeQuery(String query) {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException cnfe) {
-            System.err.println("Error loading driver: " + cnfe);
-        }
-
-        try {
-            connection = DriverManager.getConnection(URL.get(), USERNAME, PASSWORD);
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(query);
-            return rs;
-
-        } catch (SQLException sqle) {
-            System.err.println("Sql error: " + sqle);
-            return null;
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    protected static int executeUpdate(String query) {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException cnfe) {
-            System.err.println("Error loading driver: " + cnfe);
-        }
-
-        try {
-            connection = DriverManager.getConnection(URL.get(), USERNAME, PASSWORD);
-            Statement statement = connection.createStatement();
-            int res = statement.executeUpdate(query);
-            return res;
-
-        } catch (SQLException sqle) {
-            System.err.println("Sql error: " + sqle);
-            return -1;
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    protected static ResultSet executeQuery(String query, PrepareStatement prepare) {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException cnfe) {
-            System.err.println("Error loading driver: " + cnfe);
-        }
-
-        try {
-            connection = DriverManager.getConnection(URL.get(), USERNAME, PASSWORD);
-            PreparedStatement statement = connection.prepareStatement(query);
-            prepare.inject(statement);
-            ResultSet rs = statement.executeQuery();
-            return rs;
-
-
-        } catch (SQLException sqle) {
-            System.err.println("Sql error: " + sqle);
-            return null;
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    protected static int executeUpdate(String query, PrepareStatement prepare) {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException cnfe) {
-            System.err.println("Error loading driver: " + cnfe);
-        }
-
-        try {
-            connection = DriverManager.getConnection(URL.get(), USERNAME, PASSWORD);
-            PreparedStatement statement = connection.prepareStatement(query);
-            prepare.inject(statement);
-            int res = statement.executeUpdate();
-            return res;
-
-        } catch (SQLException sqle) {
-            System.err.println("Sql error: " + sqle);
-            return -1;
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+		default PreparedStatement prepare(PreparedStatement preparedStatement) throws SQLException {
+			inject(preparedStatement);
+			return preparedStatement;
+		}
+	}
 }

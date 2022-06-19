@@ -1,6 +1,7 @@
 package nl.utwente.di.visol1.dao;
 
 import nl.utwente.di.visol1.models.*;
+import nl.utwente.di.visol1.util.Configuration;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -24,7 +25,7 @@ public class GetTest {
     public static void main(String[] args) {
 
         try {
-            GenericDao.useTestSchema(true);
+	        Configuration.useTestEnvironment(true);
 
             JAXBContext context = JAXBContext.newInstance(Port.class, Terminal.class, Berth.class, Vessel.class, Schedule.class);
             Marshaller marshaller = context.createMarshaller();

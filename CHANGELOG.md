@@ -55,7 +55,8 @@
 
 ## Week 9
 ### Monday
-![][Luka] Fix a small bug in the unit tests
+![][Luka] Fix a small bug in the unit tests \
+![][Luka] Move configuration to configuration file
 
 [Han]: profile-pictures/Han.png "Han"
 [Hessel]: profile-pictures/Hessel.png "Hessel"

@@ -1,6 +1,7 @@
 package nl.utwente.di.visol1.dao;
 
 import nl.utwente.di.visol1.models.*;
+import nl.utwente.di.visol1.util.Configuration;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
@@ -85,7 +86,7 @@ public class DummyData {
     );
 
     public static void main(String[] args) {
-        GenericDao.useTestSchema(true);
+	    Configuration.useTestEnvironment(true);
         GenericDao.truncateAllTables();
         createDummyData();
     }
