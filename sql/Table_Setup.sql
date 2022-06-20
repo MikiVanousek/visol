@@ -29,13 +29,13 @@ CREATE TABLE terminal (
 
 CREATE TABLE berth (
 	id           serial CONSTRAINT berth_pk PRIMARY KEY,
-	terminal     int              NOT NULL,
-	open         time(0)          NOT NULL,
-	close        time(0)          NOT NULL,
-	unload_speed double precision NOT NULL,
-	length       int              NOT NULL,
-	width        int              NOT NULL,
-	depth        int              NOT NULL,
+	terminal     int     NOT NULL,
+	open         time(0) NOT NULL,
+	close        time(0) NOT NULL,
+	unload_speed float    NOT NULL,
+	length       int     NOT NULL,
+	width        int     NOT NULL,
+	depth        int     NOT NULL,
 	CONSTRAINT berth_terminal_id_fk FOREIGN KEY (terminal) REFERENCES terminal (id)
 		ON UPDATE CASCADE
 		ON DELETE CASCADE,
@@ -45,15 +45,15 @@ CREATE TABLE berth (
 
 CREATE TABLE vessel (
 	id            serial CONSTRAINT vessel_pk PRIMARY KEY,
-	name          varchar(64)      NOT NULL,
-	arrival       timestamp(0)     NOT NULL,
-	deadline      timestamp(0)     NOT NULL,
-	containers    int              NOT NULL,
-	cost_per_hour double precision NOT NULL,
-	destination   int              NOT NULL,
-	length        int              NOT NULL,
-	width         int              NOT NULL,
-	depth         int              NOT NULL,
+	name          varchar(64)  NOT NULL,
+	arrival       timestamp(0) NOT NULL,
+	deadline      timestamp(0) NOT NULL,
+	containers    int          NOT NULL,
+	cost_per_hour float         NOT NULL,
+	destination   int          NOT NULL,
+	length        int          NOT NULL,
+	width         int          NOT NULL,
+	depth         int          NOT NULL,
 	CONSTRAINT vessel_terminal_id_fk FOREIGN KEY (destination) REFERENCES terminal (id)
 		ON UPDATE CASCADE
 		ON DELETE CASCADE,
@@ -80,6 +80,30 @@ CREATE TABLE schedule (
 			(SELECT berth.terminal FROM berth WHERE berth.id = schedule.berth)
 		),
 	CONSTRAINT schedule_start_end_check CHECK (start < expected_end)
+);
+
+CREATE TABLE schedulechange (
+	vessel int,
+	date timestamp(0),
+	old jsonb NOT NULL,
+	new jsonb NOT NULL,
+	reason varchar(255),
+	PRIMARY KEY (vessel, date),
+	CONSTRAINT schedule_change_vessel_fk FOREIGN KEY (vessel) REFERENCES vessel (id)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE
+);
+
+CREATE TABLE vesselchange (
+	vessel int,
+	date timestamp(0),
+	old jsonb NOT NULL,
+	new jsonb NOT NULL,
+	reason varchar(255),
+	PRIMARY KEY (vessel, date),
+	CONSTRAINT vessel_change_vessel_fk FOREIGN KEY (vessel) REFERENCES vessel (id)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE
 );
 
 CREATE TABLE employee (

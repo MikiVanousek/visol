@@ -49,15 +49,6 @@ public class Terminal implements Comparable<Terminal> {
 		this.portId = portId;
 	}
 
-	public Port getPort() {
-		return null; // PortDAO.getPort(portId);
-	}
-
-	public void setPort(Port port) {
-		this.portId = port.getId();
-	}
-
-
 	public String getName() {
 		return name;
 	}

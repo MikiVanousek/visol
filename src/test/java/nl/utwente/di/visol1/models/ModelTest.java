@@ -52,7 +52,7 @@ public class ModelTest {
             Terminal terminal = new Terminal();
             terminal.setId(1);
             terminal.setName("fat");
-            terminal.setPort(port);
+            terminal.setPortId(port.getId());
             marshaller.marshal(terminal, new File(directory, "terminal-1.xml"));
 
             Berth berth = new Berth();
