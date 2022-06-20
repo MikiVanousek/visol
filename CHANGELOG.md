@@ -43,7 +43,9 @@
 ![][Luka] Make presentation for sprint review \
 ![][Luka] (Help) fix a few odd bugs here and there \
 ![][Luka] Add a favicon \
-![][Miki] Fix timezones Issues 
+![][Miki] Fix timezones Issues \
+![][Hessel] ![][Niels] Reflect API changes in backend \
+![][Hessel] ![][Niels] Finalise testing of current backend \
 
 ### Friday
 ![][Luka] Improve the API documentation and resolve some mistakes \
