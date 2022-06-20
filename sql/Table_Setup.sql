@@ -39,7 +39,6 @@ CREATE TABLE berth (
 	CONSTRAINT berth_terminal_id_fk FOREIGN KEY (terminal) REFERENCES terminal (id)
 		ON UPDATE CASCADE
 		ON DELETE CASCADE,
-	CONSTRAINT berth_open_close_check CHECK (open < close),
 	CONSTRAINT berth_unload_speed_check CHECK (unload_speed > 0),
 	CONSTRAINT berth_length_width_depth_check CHECK (length > 0 AND width > 0 AND depth > 0)
 );
@@ -81,6 +80,26 @@ CREATE TABLE schedule (
 			(SELECT berth.terminal FROM berth WHERE berth.id = schedule.berth)
 		),
 	CONSTRAINT schedule_start_end_check CHECK (start < expected_end)
+);
+
+CREATE TABLE schedule_change (
+	vessel int,
+	date timestamp(0),
+	old jsonb NOT NULL,
+	new jsonb NOT NULL,
+	reason varchar(255),
+	PRIMARY KEY (vessel, date),
+	CONSTRAINT schedule_change_vessel_fk FOREIGN KEY (vessel) REFERENCES vessel (id)
+);
+
+CREATE TABLE vessel_change (
+	vessel int,
+	date timestamp(0),
+	old jsonb NOT NULL,
+	new jsonb NOT NULL,
+	reason varchar(255),
+	PRIMARY KEY (vessel, date),
+	CONSTRAINT vessel_change_vessel_fk FOREIGN KEY (vessel) REFERENCES vessel (id)
 );
 
 CREATE TABLE employee (
