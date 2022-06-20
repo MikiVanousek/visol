@@ -15,7 +15,7 @@ class Requests {
     });
     if (res.status !== 200) {
       ErrorToast.get().show()
-      throw new Error('POST request failed: ' + res.status)
+      return res;
     }
     return res.json()
   }
@@ -26,7 +26,7 @@ class Requests {
     });
     if (res.status !== 200) {
       ErrorToast.get().show()
-      throw new Error('GET request failed: ' + res.status)
+      return res;
     }
     return res.json()
   }
