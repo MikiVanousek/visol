@@ -7,6 +7,7 @@ import "./components/planner-schedule.js"
 import "./components/unscheduled-vessels.js"
 import "./components/drop-down.js"
 import "./components/select-resource.js"
+import "./components/error-toast.js"
 
 import "./pages/port-authority.js"
 import "./pages/landing-page.js"

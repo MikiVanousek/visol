@@ -1,3 +1,5 @@
+import ErrorToast from "./components/error-toast.js"
+
 class Requests {
   static baseUrl = 'http://localhost:8080/visol/rest'
   static headers = {
@@ -12,7 +14,8 @@ class Requests {
       body: JSON.stringify(data)
     });
     if (res.status !== 200) {
-      throw new Error('GET request failed: ' + res.status)
+      ErrorToast.get().show()
+      throw new Error('POST request failed: ' + res.status)
     }
     return res.json()
   }
@@ -22,6 +25,7 @@ class Requests {
       headers: Requests.headers,
     });
     if (res.status !== 200) {
+      ErrorToast.get().show()
       throw new Error('GET request failed: ' + res.status)
     }
     return res.json()
