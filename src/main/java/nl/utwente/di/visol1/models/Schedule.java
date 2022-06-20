@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Schedule {
+public class Schedule implements Comparable<Schedule> {
     private int vessel;
     private int berth;
     boolean manual;
@@ -85,5 +85,10 @@ public class Schedule {
 	@Override
 	public int hashCode() {
 		return Objects.hash(vessel, berth, manual, start, expectedEnd);
+	}
+
+	@Override
+	public int compareTo(Schedule other) {
+		return Integer.compare(vessel, other.vessel);
 	}
 }

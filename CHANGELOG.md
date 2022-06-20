@@ -33,7 +33,7 @@
 ![][Krystof] Polishing figma design \
 ![][Miki] Form: default value and serialization \
 ![][Hessel] Finish unit test all create and get api methods \
-![][Hessel] Fix backend bugs until all tests finished succesfully \
+![][Hessel] Fix backend bugs until all tests finished succesfully
 
 ### Tuesday
 ![][Luka] Transform API documentation from API Blueprint to OpenAPI 3.0.0
@@ -43,7 +43,9 @@
 ![][Luka] Make presentation for sprint review \
 ![][Luka] (Help) fix a few odd bugs here and there \
 ![][Luka] Add a favicon \
-![][Miki] Fix timezones Issues 
+![][Miki] Fix timezones Issues \
+![][Hessel] ![][Niels] Reflect API changes in backend \
+![][Hessel] ![][Niels] Finalise testing of current backend
 
 ### Friday
 ![][Luka] Improve the API documentation and resolve some mistakes \

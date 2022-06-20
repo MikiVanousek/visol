@@ -16,16 +16,20 @@ public abstract class GenericDao {
 	public static final Timestamp MAX_TIME = Timestamp.valueOf("3000-1-1 23:05:06");
 	private static Connection connection;
 
-	protected GenericDao() {
-
-	}
+	protected GenericDao() {}
 
 	public static void truncateAllTables() {
-		Stream.of("schedule", "vessel", "berth", "terminal", "port").map(table -> "TRUNCATE TABLE " + table + " RESTART IDENTITY CASCADE")
-			.forEach(GenericDao::executeUpdate);
+		Stream.of("port", "berth", "terminal", "vessel", "schedule", "employee")
+			.map(table -> "TRUNCATE TABLE " + table + " RESTART IDENTITY CASCADE")
+			.forEach(s -> {
+				try (Update ignored = Update.simple(s)) {
+				} catch (SQLException exception) {
+					exception.printStackTrace();
+				}
+			});
 	}
 
-	private static Connection getConnection() throws SQLException {
+	protected static Connection getConnection() throws SQLException {
 		if (connection == null || connection.isClosed()) {
 			try {
 				Class.forName("org.postgresql.Driver");
@@ -47,53 +51,83 @@ public abstract class GenericDao {
 		return connection;
 	}
 
-	protected static ResultSet executeQuery(String query) {
-		try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
-			return statement.executeQuery(query);
-		} catch (SQLException exception) {
-			System.err.println("Exception executing query: " + query);
-			exception.printStackTrace();
-			return null;
-		}
-	}
-
-	protected static int executeUpdate(String query) {
-		try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
-			return statement.executeUpdate(query);
-		} catch (SQLException exception) {
-			System.err.println("Exception executing update: " + query);
-			exception.printStackTrace();
-			return -1;
-		}
-	}
-
-	protected static ResultSet executeQuery(String query, StatementData statementData) {
-		try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
-			return statementData.prepare(statement).executeQuery();
-		} catch (SQLException exception) {
-			System.err.println("Exception executing prepared query: " + query);
-			exception.printStackTrace();
-			return null;
-		}
-	}
-
-	protected static int executeUpdate(String query, StatementData statementData) {
-		try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
-			return statementData.prepare(statement).executeUpdate();
-		} catch (SQLException exception) {
-			System.err.println("Exception executing prepared update: " + query);
-			exception.printStackTrace();
-			return -1;
-		}
-	}
-
 	@FunctionalInterface
 	interface StatementData {
 		void inject(PreparedStatement preparedStatement) throws SQLException;
+	}
 
-		default PreparedStatement prepare(PreparedStatement preparedStatement) throws SQLException {
-			inject(preparedStatement);
-			return preparedStatement;
+	protected static class Query implements AutoCloseable {
+		private final Connection connection;
+		private final Statement statement;
+		private final ResultSet resultSet;
+
+		private Query(Connection connection, Statement statement, ResultSet resultSet) {
+			this.connection = connection;
+			this.statement = statement;
+			this.resultSet = resultSet;
+		}
+
+		protected static Query simple(String query) throws SQLException {
+			Connection connection = getConnection();
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(query);
+			return new Query(connection, statement, resultSet);
+		}
+
+		protected static Query prepared(String query, StatementData statementData) throws SQLException {
+			Connection connection = getConnection();
+			PreparedStatement statement = connection.prepareStatement(query);
+			statementData.inject(statement);
+			ResultSet resultSet = statement.executeQuery();
+			return new Query(connection, statement, resultSet);
+		}
+
+		public ResultSet getResultSet() {
+			return resultSet;
+		}
+
+		@Override
+		public void close() throws SQLException {
+			resultSet.close();
+			statement.close();
+			connection.close();
+		}
+	}
+
+	protected static class Update implements AutoCloseable {
+		private final Connection connection;
+		private final Statement statement;
+		private final int rowsChanged;
+
+		private Update(Connection connection, Statement statement, int rowsChanged) {
+			this.connection = connection;
+			this.statement = statement;
+			this.rowsChanged = rowsChanged;
+		}
+
+		protected static Update simple(String query) throws SQLException {
+			Connection connection = getConnection();
+			Statement statement = connection.createStatement();
+			int rowsChanged = statement.executeUpdate(query);
+			return new Update(connection, statement, rowsChanged);
+		}
+
+		protected static Update prepared(String query, StatementData statementData) throws SQLException {
+			Connection connection = getConnection();
+			PreparedStatement statement = connection.prepareStatement(query);
+			statementData.inject(statement);
+			int rowsChanged = statement.executeUpdate();
+			return new Update(connection, statement, rowsChanged);
+		}
+
+		public int getRowsChanged() {
+			return rowsChanged;
+		}
+
+		@Override
+		public void close() throws SQLException {
+			statement.close();
+			connection.close();
 		}
 	}
 }

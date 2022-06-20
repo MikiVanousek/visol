@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="LanguageInjectionConfiguration">
+    <injection language="PostgreSQL" injector-id="java">
+      <display-name>Query (nl.utwente.di.visol1.dao.GenericDao)</display-name>
+      <single-file value="false" />
+      <place><![CDATA[psiParameter().ofMethod(0, psiMethod().withName("prepared").withParameters("java.lang.String", "nl.utwente.di.visol1.dao.GenericDao.StatementData").definedInClass("nl.utwente.di.visol1.dao.GenericDao.Query"))]]></place>
+      <place><![CDATA[psiParameter().ofMethod(0, psiMethod().withName("simple").withParameters("java.lang.String").definedInClass("nl.utwente.di.visol1.dao.GenericDao.Query"))]]></place>
+    </injection>
+    <injection language="PostgreSQL" injector-id="java">
+      <display-name>Update (nl.utwente.di.visol1.dao.GenericDao)</display-name>
+      <single-file value="false" />
+      <place><![CDATA[psiParameter().ofMethod(0, psiMethod().withName("prepared").withParameters("java.lang.String", "nl.utwente.di.visol1.dao.GenericDao.StatementData").definedInClass("nl.utwente.di.visol1.dao.GenericDao.Update"))]]></place>
+      <place><![CDATA[psiParameter().ofMethod(0, psiMethod().withName("simple").withParameters("java.lang.String").definedInClass("nl.utwente.di.visol1.dao.GenericDao.Update"))]]></place>
+    </injection>
+  </component>
+</project>
