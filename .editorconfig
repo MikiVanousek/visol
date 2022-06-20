@@ -11,6 +11,6 @@ indent_size = 2
 [*.{html,js}]
 indent_style = space
 
-[*.java]
+[*.{java,sql}]
 indent_size = 4
 

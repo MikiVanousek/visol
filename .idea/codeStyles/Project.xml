@@ -141,6 +141,15 @@
     </OracleCodeStyleSettings>
     <PostgresCodeStyleSettings version="6">
       <option name="USE_GENERAL_STYLE" value="false" />
+      <option name="KEYWORD_CASE" value="2" />
+      <option name="IDENTIFIER_CASE" value="1" />
+      <option name="TYPE_CASE" value="1" />
+      <option name="CUSTOM_TYPE_CASE" value="1" />
+      <option name="ALIAS_CASE" value="1" />
+      <option name="BUILT_IN_CASE" value="1" />
+      <option name="QUOTED_IDENTIFIER_CASE" value="1" />
+      <option name="QUOTE_IDENTIFIER" value="1" />
+      <option name="QUERY_IN_ONE_STRING" value="0" />
       <option name="INSERT_EL_WRAP" value="0" />
       <option name="SET_EL_LINE" value="0" />
       <option name="SET_EL_WRAP" value="0" />
@@ -149,6 +158,9 @@
       <option name="TABLE_OPENING" value="1" />
       <option name="TABLE_CONTENT" value="2" />
       <option name="TABLE_CLOSING" value="3" />
+      <option name="CONSTRAINT_WRAP_1" value="false" />
+      <option name="CONSTRAINT_WRAP_4" value="true" />
+      <option name="VIEW_INDENT_QUERY" value="true" />
     </PostgresCodeStyleSettings>
     <Properties>
       <option name="SPACES_AROUND_KEY_VALUE_DELIMITER" value="true" />
@@ -166,6 +178,11 @@
       <option name="TABLE_CLOSING" value="3" />
     </SQLiteCodeStyleSettings>
     <SqlCodeStyleSettings version="6">
+      <option name="KEYWORD_CASE" value="2" />
+      <option name="IDENTIFIER_CASE" value="1" />
+      <option name="TYPE_CASE" value="2" />
+      <option name="CUSTOM_TYPE_CASE" value="1" />
+      <option name="BUILT_IN_CASE" value="2" />
       <option name="INSERT_EL_WRAP" value="0" />
       <option name="SET_EL_LINE" value="0" />
       <option name="SET_EL_WRAP" value="0" />
@@ -397,6 +414,7 @@
     </codeStyleSettings>
     <codeStyleSettings language="PostgreSQL">
       <indentOptions>
+        <option name="CONTINUATION_INDENT_SIZE" value="4" />
         <option name="USE_TAB_CHARACTER" value="true" />
         <option name="SMART_TABS" value="true" />
       </indentOptions>
