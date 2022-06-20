@@ -39,7 +39,6 @@ CREATE TABLE berth (
 	CONSTRAINT berth_terminal_id_fk FOREIGN KEY (terminal) REFERENCES terminal (id)
 		ON UPDATE CASCADE
 		ON DELETE CASCADE,
-	CONSTRAINT berth_open_close_check CHECK (open < close),
 	CONSTRAINT berth_unload_speed_check CHECK (unload_speed > 0),
 	CONSTRAINT berth_length_width_depth_check CHECK (length > 0 AND width > 0 AND depth > 0)
 );
