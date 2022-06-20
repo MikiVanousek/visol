@@ -32,7 +32,7 @@ CREATE TABLE berth (
 	terminal     int     NOT NULL,
 	open         time(0) NOT NULL,
 	close        time(0) NOT NULL,
-	unload_speed real    NOT NULL,
+	unload_speed float    NOT NULL,
 	length       int     NOT NULL,
 	width        int     NOT NULL,
 	depth        int     NOT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE vessel (
 	arrival       timestamp(0) NOT NULL,
 	deadline      timestamp(0) NOT NULL,
 	containers    int          NOT NULL,
-	cost_per_hour real         NOT NULL,
+	cost_per_hour float         NOT NULL,
 	destination   int          NOT NULL,
 	length        int          NOT NULL,
 	width         int          NOT NULL,
@@ -82,7 +82,7 @@ CREATE TABLE schedule (
 	CONSTRAINT schedule_start_end_check CHECK (start < expected_end)
 );
 
-CREATE TABLE schedule_change (
+CREATE TABLE schedulechange (
 	vessel int,
 	date timestamp(0),
 	old jsonb NOT NULL,
@@ -90,9 +90,11 @@ CREATE TABLE schedule_change (
 	reason varchar(255),
 	PRIMARY KEY (vessel, date),
 	CONSTRAINT schedule_change_vessel_fk FOREIGN KEY (vessel) REFERENCES vessel (id)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE
 );
 
-CREATE TABLE vessel_change (
+CREATE TABLE vesselchange (
 	vessel int,
 	date timestamp(0),
 	old jsonb NOT NULL,
@@ -100,6 +102,8 @@ CREATE TABLE vessel_change (
 	reason varchar(255),
 	PRIMARY KEY (vessel, date),
 	CONSTRAINT vessel_change_vessel_fk FOREIGN KEY (vessel) REFERENCES vessel (id)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE
 );
 
 CREATE TABLE employee (
