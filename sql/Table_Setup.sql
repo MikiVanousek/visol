@@ -29,13 +29,13 @@ CREATE TABLE terminal (
 
 CREATE TABLE berth (
 	id           serial CONSTRAINT berth_pk PRIMARY KEY,
-	terminal     int     NOT NULL,
-	open         time(0) NOT NULL,
-	close        time(0) NOT NULL,
-	unload_speed real    NOT NULL,
-	length       int     NOT NULL,
-	width        int     NOT NULL,
-	depth        int     NOT NULL,
+	terminal     int              NOT NULL,
+	open         time(0)          NOT NULL,
+	close        time(0)          NOT NULL,
+	unload_speed double precision NOT NULL,
+	length       int              NOT NULL,
+	width        int              NOT NULL,
+	depth        int              NOT NULL,
 	CONSTRAINT berth_terminal_id_fk FOREIGN KEY (terminal) REFERENCES terminal (id)
 		ON UPDATE CASCADE
 		ON DELETE CASCADE,
@@ -45,15 +45,15 @@ CREATE TABLE berth (
 
 CREATE TABLE vessel (
 	id            serial CONSTRAINT vessel_pk PRIMARY KEY,
-	name          varchar(64)  NOT NULL,
-	arrival       timestamp(0) NOT NULL,
-	deadline      timestamp(0) NOT NULL,
-	containers    int          NOT NULL,
-	cost_per_hour real         NOT NULL,
-	destination   int          NOT NULL,
-	length        int          NOT NULL,
-	width         int          NOT NULL,
-	depth         int          NOT NULL,
+	name          varchar(64)      NOT NULL,
+	arrival       timestamp(0)     NOT NULL,
+	deadline      timestamp(0)     NOT NULL,
+	containers    int              NOT NULL,
+	cost_per_hour double precision NOT NULL,
+	destination   int              NOT NULL,
+	length        int              NOT NULL,
+	width         int              NOT NULL,
+	depth         int              NOT NULL,
 	CONSTRAINT vessel_terminal_id_fk FOREIGN KEY (destination) REFERENCES terminal (id)
 		ON UPDATE CASCADE
 		ON DELETE CASCADE,
