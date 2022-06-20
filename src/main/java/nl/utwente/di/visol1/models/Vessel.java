@@ -13,38 +13,39 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Vessel {
+public class Vessel implements Comparable<Vessel> {
 	@XmlTransient
 	@JsonIgnore
-    private int id;
-    private String name;
-    private int containers;
-    private int destination;
-    private Timestamp arrival;
-    private Timestamp deadline;
+	private int id;
+	private String name;
+	private int containers;
+	private int destination;
+	private Timestamp arrival;
+	private Timestamp deadline;
 	@JsonProperty("cost_per_hour")
 	@XmlElement(name = "cost_per_hour")
-	  private double costPerHour;
-    private int width;
-    private int length;
-    private int depth;
+	private double costPerHour;
+	private int width;
+	private int length;
+	private int depth;
 
-    public Vessel(int id, String name, Timestamp arrival, Timestamp deadline, int containers, double costPerHour, int destination, int length, int width, int depth) {
-        this.id = id;
-        this.name = name;
-        this.containers = containers;
-        this.destination = destination;
-        this.arrival = arrival;
-        this.deadline = deadline;
-        this.width = width;
-        this.length = length;
-        this.depth = depth;
-				this.costPerHour = costPerHour;
-    }
+	public Vessel(int id, String name, Timestamp arrival, Timestamp deadline, int containers, double costPerHour, int destination, int length,
+	              int width, int depth) {
+		this.id = id;
+		this.name = name;
+		this.containers = containers;
+		this.destination = destination;
+		this.arrival = arrival;
+		this.deadline = deadline;
+		this.width = width;
+		this.length = length;
+		this.depth = depth;
+		this.costPerHour = costPerHour;
+	}
 
-    public Vessel() {
-        // Empty constructor
-    }
+	public Vessel() {
+		// Empty constructor
+	}
 
 	public int getId() {
 		return id;
@@ -140,5 +141,10 @@ public class Vessel {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id, name, containers, destination, arrival, deadline, costPerHour, width, length, depth);
+	}
+
+	@Override
+	public int compareTo(Vessel other) {
+		return Integer.compare(id, other.id);
 	}
 }

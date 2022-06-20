@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class User {
+public class User implements Comparable<User>{
 	private String name;
 	private String email;
 	@XmlElement(name = "password")
@@ -123,5 +123,10 @@ public class User {
 	@Override
 	public int hashCode() {
 		return Objects.hash(name, email, passwordHash, saltAndPepper, role, terminalId, portId);
+	}
+
+	@Override
+	public int compareTo(User other) {
+		return email.compareTo(other.email);
 	}
 }

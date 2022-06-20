@@ -10,47 +10,52 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Port {
-		@XmlTransient
-		@JsonIgnore
-    private int id;
-    private String name;
+public class Port implements Comparable<Port> {
+	@XmlTransient
+	@JsonIgnore
+	private int id;
+	private String name;
 
-    public Port(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+	public Port(int id, String name) {
+		this.id = id;
+		this.name = name;
+	}
 
-    public Port() {
-        // Empty constructor
-    }
+	public Port() {
+		// Empty constructor
+	}
 
-    public int getId() {
-        return id;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Port)) return false;
-        Port port = (Port) o;
-        return id == port.id && Objects.equals(name, port.name);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Port)) return false;
+		Port port = (Port) o;
+		return id == port.id && Objects.equals(name, port.name);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, name);
+	}
+
+	@Override
+	public int compareTo(Port other) {
+		return Integer.compare(id, other.id);
+	}
 }
