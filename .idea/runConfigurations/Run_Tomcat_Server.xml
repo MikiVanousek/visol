@@ -78,8 +78,8 @@
         <option name="PROGRAM_PARAMETERS" value="" />
       </SHUTDOWN>
       <EnvironmentVariables>
-        <option name="NAME" value="db_password" />
-        <option name="VALUE" value="KNOfayxCKdDbRUoM" />
+        <option name="NAME" value="visol.config.location" />
+        <option name="VALUE" value="C:\Users\Mahtaran\Documents\Project\School\University of Twente\Technical Computer Science\Data &amp; Information\Project\config.properties" />
         <option name="IS_PREDEFINED" value="false" />
       </EnvironmentVariables>
     </ConfigurationWrapper>

@@ -7,7 +7,7 @@ info:
   contact: { }
   version: 1.0.0
 servers:
-  - url: 'https://todo.get-this.info/'
+  - url: 'http://localhost:8080/visol'
     variables: { }
 paths:
   /vessels:

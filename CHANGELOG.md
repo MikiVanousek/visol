@@ -59,8 +59,9 @@
 ### Monday
 ![][Luka] Fix a small bug in the unit tests \
 ![][Luka] Move configuration to configuration file \
-![][Luka] Change the DAOs to use auto-closeable queries and updates \ 
+![][Luka] Change the DAOs to use auto-closeable queries and updates \
 ![][Niels] Add ScheduleChange and VesselChange to backend (very WIP) \
+![][Luka] Improve the configurability
 
 [Han]: profile-pictures/Han.png "Han"
 [Hessel]: profile-pictures/Hessel.png "Hessel"
