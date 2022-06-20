@@ -1,23 +1,32 @@
 package nl.utwente.di.visol1.util;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.Provider;
+import java.security.Provider.Service;
 import java.security.SecureRandom;
+import java.security.Security;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
 public class EncryptionUtil {
-	private static final String HASH_ALGORITHM = "SHA3-256";
-	private static final Charset UTF_8 = StandardCharsets.UTF_8;
-	private static final String OUTPUT_FORMAT = "%-20s: %s%n";
-
-	private static byte[] digest(byte[] input) {
-		try {
-			return MessageDigest.getInstance(EncryptionUtil.HASH_ALGORITHM).digest(input);
-		} catch (NoSuchAlgorithmException exception) {
-			throw new IllegalArgumentException(exception);
-		}
-	}
+	private static final String SECURE_RANDOM_ALGORITHM = "SHA1PRNG";
+	private static final String SECURE_RANDOM_PROVIDER = "SUN";
+	private static final String SECRET_KEY_FACTORY_ALGORITHM = "PBKDF2WithHmacSHA512";
+	private static final String SECRET_KEY_FACTORY_PROVIDER = "SunJCE";
+	private static final int SALT_SIZE = 32;
+	public static final int PBE_KEY_ITERATION_COUNT = 65536;
+	public static final int PBE_KEY_LENGTH = 512;
 
 	private static String bytesToHex(byte[] bytes) {
 		StringBuilder sb = new StringBuilder();
@@ -27,74 +36,93 @@ public class EncryptionUtil {
 		return sb.toString();
 	}
 
-	private static byte[] hexToBytes(String bytes) {
-		String[] hexes = bytes.split("(?<=\\G..)");
-		byte[] result = new byte[hexes.length];
-		for (int i = 0; i < hexes.length; i++) {
-			result[i] = (byte) Integer.parseInt(hexes[i], 16);
+	private static byte[] generateSalt() {
+		SecureRandom random;
+		try {
+			random = SecureRandom.getInstance(SECURE_RANDOM_ALGORITHM, SECURE_RANDOM_PROVIDER);
+		} catch (NoSuchAlgorithmException | NoSuchProviderException ignored) {
+			random = new SecureRandom();
 		}
-		return result;
-	}
-
-	private static byte[] generateSaltOrPepper() {
-		SecureRandom random = new SecureRandom();
-		byte[] bytes = new byte[16];
+		byte[] bytes = new byte[SALT_SIZE];
 		random.nextBytes(bytes);
 		return bytes;
 	}
 
-	private static byte[] hash(byte[] password, byte[] salt, byte[] pepper) {
-		byte[] input = new byte[password.length + salt.length + pepper.length];
-		System.arraycopy(password, 0, input, 0, password.length);
-		System.arraycopy(salt, 0, input, password.length, salt.length);
-		System.arraycopy(pepper, 0, input, password.length + salt.length, pepper.length);
-		return EncryptionUtil.digest(input);
+	public static SaltedKey generateKey(String password) {
+		byte[] salt = generateSalt();
+		byte[] hash = encrypt(password, salt);
+		return new SaltedKey(hash, salt);
 	}
 
-	public static EncryptedPassword encryptPassword(String password) {
-		byte[] passwordBytes = password.getBytes(UTF_8);
-		byte[] salt = generateSaltOrPepper();
-		byte[] pepper = generateSaltOrPepper();
-
-		byte[] saltAndPepper = new byte[salt.length + pepper.length];
-		System.arraycopy(salt, 0, saltAndPepper, 0, salt.length);
-		System.arraycopy(pepper, 0, saltAndPepper, salt.length, pepper.length);
-
-		byte[] hash = hash(passwordBytes, salt, pepper);
-		return new EncryptedPassword(bytesToHex(hash), bytesToHex(saltAndPepper));
-	}
-
-	public static String checkPassword(String password, String saltAndPepper) {
-		byte[] saltAndPepperBytes = hexToBytes(saltAndPepper);
-		byte[] passwordBytes = password.getBytes(UTF_8);
-
-		byte[] salt = new byte[saltAndPepperBytes.length / 2];
-		System.arraycopy(saltAndPepperBytes, 0, salt, 0, salt.length);
-
-		byte[] pepper = new byte[saltAndPepperBytes.length / 2];
-		System.arraycopy(saltAndPepperBytes, salt.length, pepper, 0, pepper.length);
-
-		byte[] hash = hash(passwordBytes, salt, pepper);
-		return bytesToHex(hash);
+	public static byte[] encrypt(String password, byte[] salt) {
+		try {
+			SecretKeyFactory factory = SecretKeyFactory.getInstance(SECRET_KEY_FACTORY_ALGORITHM, SECRET_KEY_FACTORY_PROVIDER);
+			// TODO determine how high we want the iteration count to be
+			KeySpec keySpecification = new PBEKeySpec(password.toCharArray(), salt, PBE_KEY_ITERATION_COUNT, PBE_KEY_LENGTH);
+			SecretKey secretKey = factory.generateSecret(keySpecification);
+			return secretKey.getEncoded();
+		} catch (NoSuchAlgorithmException | NoSuchProviderException exception) {
+			throw new RuntimeException("Could not find algorithms necessary to generate keys", exception);
+		} catch (InvalidKeySpecException exception) {
+			throw new RuntimeException("Could not generate key", exception);
+		}
 	}
 
 	public static void main(String[] args) {
-		String password = "password";
-		EncryptedPassword encryptedPassword = EncryptionUtil.encryptPassword(password);
-		System.out.printf(OUTPUT_FORMAT, "Hash", encryptedPassword.hash);
-		System.out.printf(OUTPUT_FORMAT, "Salt and pepper", encryptedPassword.saltAndPepper);
+		String OUTPUT_FORMAT = "%-20s: %s%n";
+		BiConsumer<String, byte[]> print = (s, b) -> System.out.printf(OUTPUT_FORMAT, s, bytesToHex(b));
 
-		String checkHash = EncryptionUtil.checkPassword(password, encryptedPassword.saltAndPepper);
-		System.out.printf(OUTPUT_FORMAT, "Check hash", checkHash);
+		String password = "password";
+		SaltedKey key = generateKey(password);
+		byte[] check = encrypt(password, key.salt);
+
+		print.accept("hash", key.hash);
+		print.accept("salt", key.salt);
+		print.accept("check", check);
+		System.out.printf(OUTPUT_FORMAT, "equals", Arrays.equals(key.hash, check));
 	}
 
-	public static class EncryptedPassword {
-		public final String hash;
-		public final String saltAndPepper;
+	public static void outputProviders() {
+		Map<String, Map<Provider, List<Service>>> servicesMap = new HashMap<>();
 
-		private EncryptedPassword(String hash, String saltAndPepper) {
+		Arrays.stream(Security.getProviders()).forEach(provider -> {
+//			System.out.printf("%s (%s): %s %n", provider.getName(), provider.getVersionStr(), provider.getInfo());
+			provider.getServices().forEach(service -> {
+//				System.out.printf("\t%s: %s in %s%n", service.getType(), service.getAlgorithm(), service.getClassName());
+				servicesMap.putIfAbsent(service.getType(), new HashMap<>());
+				servicesMap.get(service.getType()).putIfAbsent(provider, new ArrayList<>());
+				servicesMap.get(service.getType()).get(provider).add(service);
+			});
+		});
+
+//		System.out.println("\n\n");
+
+		/*servicesMap.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(entry -> {
+			System.out.printf("%s: %n", entry.getKey());
+			entry.getValue().entrySet().stream().sorted(Comparator.comparing(o -> o.getKey().getName())).forEach(entry2 -> {
+				System.out.printf(
+					"\t%s: %s%n",
+					entry2.getKey(),
+					entry2.getValue().stream().map(Service::getAlgorithm).collect(Collectors.joining(", "))
+				);
+			});
+		});*/
+
+		servicesMap.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(entry -> {
+			System.out.printf("%s: %n", entry.getKey());
+			entry.getValue().values().stream().flatMap(List::stream).sorted(Comparator.comparing(Service::getAlgorithm)).forEach(
+				service -> System.out.printf("\t%s from %s%n", service.getAlgorithm(), service.getProvider().getName())
+			);
+		});
+	}
+
+	public static class SaltedKey {
+		public final byte[] hash;
+		public final byte[] salt;
+
+		private SaltedKey(byte[] hash, byte[] salt) {
 			this.hash = hash;
-			this.saltAndPepper = saltAndPepper;
+			this.salt = salt;
 		}
 	}
 }
