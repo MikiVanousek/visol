@@ -1,76 +1,104 @@
-drop table if exists Employee;
-drop table if exists Schedule;
-drop table if exists Vessel;
-drop table if exists Berth;
-drop table if exists Terminal;
-drop table if exists Port;
+--- DELETE ---
 
-drop type if exists role;
+DROP TYPE IF EXISTS role;
 
-create type role as enum ('vessel planner', 'terminal manager', 'port authority', 'researcher');
+DROP TABLE IF EXISTS port;
+DROP TABLE IF EXISTS terminal;
+DROP TABLE IF EXISTS berth;
+DROP TABLE IF EXISTS vessel;
+DROP TABLE IF EXISTS schedule;
+DROP TABLE IF EXISTS employee;
 
-create table Port (
-	id   serial,
-	name varchar(64),
-	primary key (id)
+--- CREATE ---
+
+CREATE TYPE role AS enum ('vessel planner', 'terminal manager', 'port authority', 'researcher');
+
+CREATE TABLE port (
+	id   serial CONSTRAINT port_pk PRIMARY KEY,
+	name varchar(64) NOT NULL
 );
 
-create table Terminal (
-	id   serial,
-	name varchar(64),
-	port int,
-	foreign key (port) references Port (id) ON DELETE CASCADE,
-	primary key (id)
+CREATE TABLE terminal (
+	id   serial CONSTRAINT terminal_pk PRIMARY KEY,
+	name varchar(64) NOT NULL,
+	port int         NOT NULL,
+	CONSTRAINT terminal_port_id_fk FOREIGN KEY (port) REFERENCES port (id)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE
 );
 
-create table Berth (
-	id           serial,
-	terminal     int,
-	open         time(0),
-	close        time(0),
-	unload_speed float,
-	length       int,
-	width        int,
-	depth        int,
-	foreign key (terminal) references Terminal (id) ON DELETE CASCADE,
-	primary key (id)
+CREATE TABLE berth (
+	id           serial CONSTRAINT berth_pk PRIMARY KEY,
+	terminal     int     NOT NULL,
+	open         time(0) NOT NULL,
+	close        time(0) NOT NULL,
+	unload_speed real    NOT NULL,
+	length       int     NOT NULL,
+	width        int     NOT NULL,
+	depth        int     NOT NULL,
+	CONSTRAINT berth_terminal_id_fk FOREIGN KEY (terminal) REFERENCES terminal (id)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE,
+	CONSTRAINT berth_open_close_check CHECK (open < close),
+	CONSTRAINT berth_unload_speed_check CHECK (unload_speed > 0),
+	CONSTRAINT berth_length_width_depth_check CHECK (length > 0 AND width > 0 AND depth > 0)
 );
 
-create table Vessel (
-	id            serial,
-	name          varchar(64),
-	arrival       timestamp,
-	deadline      timestamp,
-	containers    int,
-	cost_per_hour float,
-	destination   int,
-	length        int,
-	width         int,
-	depth         int,
-	foreign key (destination) references Terminal (id) ON DELETE CASCADE,
-	primary key (id)
+CREATE TABLE vessel (
+	id            serial CONSTRAINT vessel_pk PRIMARY KEY,
+	name          varchar(64)  NOT NULL,
+	arrival       timestamp(0) NOT NULL,
+	deadline      timestamp(0) NOT NULL,
+	containers    int          NOT NULL,
+	cost_per_hour real         NOT NULL,
+	destination   int          NOT NULL,
+	length        int          NOT NULL,
+	width         int          NOT NULL,
+	depth         int          NOT NULL,
+	CONSTRAINT vessel_terminal_id_fk FOREIGN KEY (destination) REFERENCES terminal (id)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE,
+	CONSTRAINT vessel_arrival_deadline_check CHECK (arrival < deadline),
+	CONSTRAINT vessel_containers_check CHECK (containers > 0),
+	CONSTRAINT vessel_length_width_depth_check CHECK (length > 0 AND width > 0 AND depth > 0)
 );
 
-create table Schedule (
-	vessel       int,
-	berth        int,
-	manual       boolean,
-	start        timestamp,
-	expected_end timestamp,
-	primary key (vessel),
-	foreign key (vessel) references Vessel (id) ON DELETE CASCADE,
-	foreign key (berth) references Berth (id) ON DELETE CASCADE
+CREATE TABLE schedule (
+	vessel       int CONSTRAINT schedule_pk PRIMARY KEY,
+	berth        int          NOT NULL,
+	manual       boolean      NOT NULL,
+	start        timestamp(0) NOT NULL,
+	expected_end timestamp(0) NOT NULL,
+	CONSTRAINT schedule_vessel_id_fk FOREIGN KEY (vessel) REFERENCES vessel (id)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE,
+	CONSTRAINT schedule_berth_id_fk FOREIGN KEY (berth) REFERENCES berth (id)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE,
+	CONSTRAINT schedule_vessel_berth_check CHECK (
+			(SELECT vessel.destination FROM vessel WHERE vessel.id = schedule.vessel)
+			=
+			(SELECT berth.terminal FROM berth WHERE berth.id = schedule.berth)
+		),
+	CONSTRAINT schedule_start_end_check CHECK (start < expected_end)
 );
 
-CREATE TABLE Employee (
-	name            varchar(64),
-	email           varchar(64),
-	password        char(64),
-	salt_and_pepper char(64),
-	role            role,
-	port            int,
-	terminal        int,
-	primary key (email),
-	foreign key (port) references Port (id) ON DELETE CASCADE,
-	foreign key (terminal) references Terminal (id) ON DELETE CASCADE
+CREATE TABLE employee (
+	email    varchar(64) CONSTRAINT employee_pk PRIMARY KEY,
+	name     varchar(64) NOT NULL,
+	key_hash bytea       NOT NULL,
+	key_salt bytea       NOT NULL,
+	role     role        NOT NULL,
+	port     int,
+	terminal int,
+	CONSTRAINT employee_port_id_fk FOREIGN KEY (port) REFERENCES port (id)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE,
+	CONSTRAINT employee_terminal_id_fk FOREIGN KEY (terminal) REFERENCES terminal (id)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE,
+	CONSTRAINT employee_password_check_size CHECK (octet_length(key_hash) = 64), -- SHA-512 hash, 512 / 8 = 64
+	CONSTRAINT employee_salt_check_size CHECK (octet_length(key_salt) = 32)      -- generated salt, 32 bytes
 );
+
+
