@@ -29,9 +29,9 @@ public class VesselResource {
 
     @DELETE
     public Response deleteVessel(){
-			int i = VesselDao.deleteVessel(id);
+		int i = VesselDao.deleteVessel(id);
 	    if (i != 0){
-		    return Response.status(Response.Status.OK).build();
+		    return Response.status(Response.Status.NO_CONTENT).build();
 	    } else {
 		    return Response.status(Response.Status.NOT_FOUND).build();
 	    }
@@ -66,10 +66,10 @@ public class VesselResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSchedule() {
-	    Schedule res = ScheduleDao.getScheduleByVessel(id);
-	    if (res!= null) {
+	    Schedule schedule = ScheduleDao.getScheduleByVessel(id);
+	    if (schedule != null) {
 		    return Response.status(Response.Status.OK)
-			    .entity(res).build();
+			    .entity(schedule).build();
 	    } else {
 		    return Response.status(Response.Status.NOT_FOUND).build();
 	    }

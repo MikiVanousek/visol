@@ -79,7 +79,7 @@
       </SHUTDOWN>
       <EnvironmentVariables>
         <option name="NAME" value="visol.config.location" />
-        <option name="VALUE" value="C:\Users\Mahtaran\Documents\Project\School\University of Twente\Technical Computer Science\Data &amp; Information\Project\config.properties" />
+        <option name="VALUE" value="D:\Niels\School\WebApp\Project\config.properties" />
         <option name="IS_PREDEFINED" value="false" />
       </EnvironmentVariables>
     </ConfigurationWrapper>
