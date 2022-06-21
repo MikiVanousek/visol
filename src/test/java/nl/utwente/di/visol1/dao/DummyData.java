@@ -7,6 +7,7 @@ import java.util.List;
 import nl.utwente.di.visol1.models.Berth;
 import nl.utwente.di.visol1.models.Port;
 import nl.utwente.di.visol1.models.Schedule;
+import nl.utwente.di.visol1.models.ScheduleChange;
 import nl.utwente.di.visol1.models.Terminal;
 import nl.utwente.di.visol1.models.Vessel;
 import nl.utwente.di.visol1.util.Configuration;
@@ -70,6 +71,13 @@ public class DummyData {
 		new Schedule(15, 8, false, Timestamp.valueOf("2000-01-11 13:05:06"), Timestamp.valueOf("2000-01-11 23:05:06")),
 		new Schedule(16, 8, false, Timestamp.valueOf("2000-01-08 13:05:06"), Timestamp.valueOf("2000-01-08 23:05:06"))
 	);
+	public static final List<ScheduleChange> SCHEDULE_CHANGES = Arrays.asList(
+		new ScheduleChange(1, Timestamp.valueOf("2000-01-08 13:05:06"), "", 	"{\"a\": 2, \"b\": 3}", "testing1"),
+		new ScheduleChange(1, Timestamp.valueOf("2001-01-08 13:05:06"), "", 	"{\"b\": 2, \"d\": 3}", "testing12"),
+		new ScheduleChange(2, Timestamp.valueOf("2002-01-08 13:05:06"), "", 	"{\"aa\": 2, \"db\": 3}", "testing123"),
+		new ScheduleChange(3, Timestamp.valueOf("2003-01-08 13:05:06"), "", 	"{\"sa\": 2, \"sb\": 3}", "testing1234"),
+		new ScheduleChange(3, Timestamp.valueOf("2004-01-08 13:05:06"), "", 	"{\"abb\": 2, \"bbb\": 3}", "testing12345")
+	);
 
 	public static void createDummyData() {
 		System.out.println("creating ports");
@@ -82,6 +90,8 @@ public class DummyData {
 		for (Vessel vessel : VESSELS) VesselDao.createVessel(vessel);
 		System.out.println("creating schedules");
 		for (Schedule schedule : SCHEDULES) ScheduleDao.replaceSchedule(schedule.getVessel(), schedule);
+		System.out.println("creating schedule changes");
+		for (ScheduleChange schange : SCHEDULE_CHANGES) ScheduleChangeDao.createScheduleChange(schange);
 	}
 
 	public static void main(String[] args) {

@@ -8,6 +8,8 @@ DROP TABLE IF EXISTS berth;
 DROP TABLE IF EXISTS vessel;
 DROP TABLE IF EXISTS schedule;
 DROP TABLE IF EXISTS employee;
+DROP TABLE IF EXISTS schedulechange;
+DROP TABLE IF EXISTS vesselchange;
 
 --- CREATE ---
 
