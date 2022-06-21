@@ -7,7 +7,7 @@ info:
   contact: { }
   version: 1.0.0
 servers:
-  - url: 'http://localhost:8080/visol'
+  - url: 'http://localhost:8080/visol/rest'
     variables: { }
 paths:
   /vessels:
@@ -806,7 +806,7 @@ paths:
     parameters:
       - name: vessel_id
         in: path
-        description: ID of the Vessel which's Schedule should be changed.
+        description: ID of the Vessel whose Schedule should be changed.
         required: true
         schema:
           $ref: '#/components/schemas/VesselID'
@@ -958,39 +958,6 @@ components:
       type: string
       format: time
       pattern: '^([0-1]?[0-9]|2[0-3]):?[0-5][0-9]$'
-    OptionalSchedule:
-      title: Optional Schedule
-      description: >-
-        A Schedule object has the following attributes:
-
-
-        + vessel: `1` (integer) - ID of the Vessel.
-        
-        + type: `manual` (`manual` or `automatic`) - Whether the Vessel should be planned at the supplied Berth and timestamp or by the software, respectively.
-        
-        + berth: `20` (integer) - ID of the Berth the Vessel should be unloaded at.
-        
-        + start: `2022-05-12T07:23:00Z` (timestamp) - When the Vessel should start being unloaded.
-        
-        + end: `2022-05-13T21:41:00Z` (timestamp) - When the Vessel is expected to end being unloaded.
-      type: object
-      properties:
-        vessel:
-          $ref: '#/components/schemas/VesselID'
-        type:
-          type: string
-          enum:
-            - automatic
-            - manual
-        berth:
-          $ref: '#/components/schemas/BerthID'
-        start:
-          $ref: '#/components/schemas/Timestamp'
-        end:
-          $ref: '#/components/schemas/Timestamp'
-      additionalProperties: false
-      example:
-        type: automatic
     Schedule:
       title: Schedule
       description: >-
@@ -999,7 +966,7 @@ components:
 
         + vessel: `1` (integer) - ID of the Vessel.
         
-        + type: `manual` (`manual` or `automatic`) - Whether the Vessel should be planned at the supplied Berth and timestamp or by the software, respectively.
+        + manual: `false` (`boolean`) - True if the Vessel should be planned at the supplied Berth and timestamp or false if it should be planned by the software.
         
         + berth: `20` (integer) - ID of the Berth the Vessel should be unloaded at.
         
@@ -1014,11 +981,8 @@ components:
       properties:
         vessel:
           $ref: '#/components/schemas/VesselID'
-        type:
-          type: string
-          enum:
-            - automatic
-            - manual
+        manual:
+          type: boolean
         berth:
           $ref: '#/components/schemas/BerthID'
         start:
@@ -1028,12 +992,12 @@ components:
       additionalProperties: false
       required:
         - vessel
-        - type
+        - manual
         - berth
         - start
       example:
         vessel: 1
-        type: manual
+        manual: true
         berth: 30
         start: 2022-05-11T16:32:00Z
         end: 2022-05-11T21:26:00Z
@@ -1047,12 +1011,12 @@ components:
       uniqueItems: true
       example:
         - vessel: 1
-          type: manual
+          manual: true
           berth: 30
           start: '2022-05-11T16:32:00Z'
           end: '2022-05-11T21:26:00Z'
         - vessel: 2
-          type: automatic
+          manual: false
           berth: 30
           start: '2022-05-14T09:21:00Z'
           end: '2022-05-15T13:53:00Z'
@@ -1065,12 +1029,12 @@ components:
       example:
         '30':
           - vessel: 1
-            type: manual
+            manual: true
             berth: 30
             start: '2022-05-11T16:32:00Z'
             end: '2022-05-11T21:26:00Z'
           - vessel: 2
-            type: automatic
+            manual: false
             berth: 30
             start: '2022-05-14T09:21:00Z'
             end: '2022-05-15T13:53:00Z'
@@ -1084,12 +1048,12 @@ components:
         '1':
           '30':
             - vessel: 1
-              type: manual
+              manual: true
               berth: 30
               start: '2022-05-11T16:32:00Z'
               end: '2022-05-11T21:26:00Z'
             - vessel: 2
-              type: automatic
+              manual: false
               berth: 30
               start: '2022-05-14T09:21:00Z'
               end: '2022-05-15T13:53:00Z'
@@ -1499,16 +1463,16 @@ components:
 
 
         + date: `2022-05-11T16:32:35Z` (timestamp) - The date at which the change was made.
-        
-        + changes: `{"name": "New Vessel 1", "containers": 40}` (JSON) - The changes to be made.
-        
+
+        + new: `{"name":"New Vessel 1","arrival":"2022-05-11T13:56:00.000Z","deadline":"2022-05-12T18:13:00.000Z","containers":40,"cost_per_hour":2.6,"destination":4,"length":30,"width":10,"depth":30}` (JSON) - The Vessel after being changed.
+
         + reason: `Additional cargo (#2524)` (string) - The reason for the change.
       type: object
       properties:
         date:
           $ref: '#/components/schemas/Timestamp'
-        changes:
-          $ref: '#/components/schemas/OptionalVessel'
+        new:
+          $ref: '#/components/schemas/Vessel'
         reason:
           type: string
           pattern: '^(?:.|\s)*$'
@@ -1517,13 +1481,20 @@ components:
       additionalProperties: false
       required:
         - date
-        - changes
+        - new
         - reason
       example:
         date: 2022-05-11T16:32:35Z
-        changes:
+        new:
           name: New Vessel 1
+          arrival: 2022-05-11T13:56:00Z
+          deadline: 2022-05-12T18:13:00Z
           containers: 40
+          cost_per_hour: 2.6
+          destination: 4
+          length: 30
+          width: 10
+          depth: 30
         reason: 'Additional cargo (#2524)'
     VesselChange:
       title: Vessel Change
@@ -1532,13 +1503,13 @@ components:
 
 
         + vessel: `1` (integer) - The ID of the Vessel.
-        
+
         + date: `2022-05-11T16:32:35Z` (timestamp) - The date at which the change was made.
-        
-        + old: `{"name": "Vessel 1", "containers": 30}` (JSON) - The relevant properties before being changed.
-        
-        + new: `{"name": "New Vessel 1", "containers": 40}` (JSON) - The relevant properties after being changed.
-        
+
+        + old: `{"name":"Vessel 1","arrival":"2022-05-11T13:56:00.000Z","deadline":"2022-05-12T18:13:00.000Z","containers":30,"cost_per_hour":2.6,"destination":4,"length":30,"width":10,"depth":30}` (JSON) - The Vessel before being changed.
+
+        + new: `{"name":"New Vessel 1","arrival":"2022-05-11T13:56:00.000Z","deadline":"2022-05-12T18:13:00.000Z","containers":40,"cost_per_hour":2.6,"destination":4,"length":30,"width":10,"depth":30}` (JSON) - The Vessel after being changed.
+
         + reason: `Additional cargo (#2524)` (string) - The reason for the change.
       type: object
       properties:
@@ -1547,9 +1518,9 @@ components:
         date:
           $ref: '#/components/schemas/Timestamp'
         old:
-          $ref: '#/components/schemas/OptionalVessel'
+          $ref: '#/components/schemas/Vessel'
         new:
-          $ref: '#/components/schemas/OptionalVessel'
+          $ref: '#/components/schemas/Vessel'
         reason:
           type: string
           pattern: '^(?:.|\s)*$'
@@ -1567,10 +1538,24 @@ components:
         date: 2022-05-11T16:32:35Z
         old:
           name: Vessel 1
+          arrival: 2022-05-11T13:56:00Z
+          deadline: 2022-05-12T18:13:00Z
           containers: 30
+          cost_per_hour: 2.6
+          destination: 4
+          length: 30
+          width: 10
+          depth: 30
         new:
           name: New Vessel 1
+          arrival: 2022-05-11T13:56:00Z
+          deadline: 2022-05-12T18:13:00Z
           containers: 40
+          cost_per_hour: 2.6
+          destination: 4
+          length: 30
+          width: 10
+          depth: 30
         reason: 'Additional cargo (#2524)'
     VesselChanges:
       title: Vessel Changes
@@ -1584,19 +1569,47 @@ components:
           date: 2022-05-11T16:32:35Z
           old:
             name: Vessel 1
+            arrival: 2022-05-11T13:56:00Z
+            deadline: 2022-05-12T18:13:00Z
             containers: 30
+            cost_per_hour: 2.6
+            destination: 4
+            length: 30
+            width: 10
+            depth: 30
           new:
             name: New Vessel 1
+            arrival: 2022-05-11T13:56:00Z
+            deadline: 2022-05-12T18:13:00Z
             containers: 40
+            cost_per_hour: 2.6
+            destination: 4
+            length: 30
+            width: 10
+            depth: 30
           reason: 'Additional cargo (#2524)'
         - vessel: 30
           date: 2022-05-11T21:26:24Z
           old:
+            name: New Vessel 1
             arrival: 2022-05-11T13:56:00Z
             deadline: 2022-05-12T18:13:00Z
+            containers: 40
+            cost_per_hour: 2.6
+            destination: 4
+            length: 30
+            width: 10
+            depth: 30
           new:
+            name: New Vessel 1
             arrival: 2022-05-18T13:56:00Z
             deadline: 2022-05-19T18:13:00Z
+            containers: 40
+            cost_per_hour: 2.6
+            destination: 4
+            length: 30
+            width: 10
+            depth: 30
           reason: 'Ship delayed (#3517)'
     VesselChangesMap:
       title: Vessel Changes Map
@@ -1610,19 +1623,47 @@ components:
             date: 2022-05-11T16:32:35Z
             old:
               name: Vessel 1
+              arrival: 2022-05-11T13:56:00Z
+              deadline: 2022-05-12T18:13:00Z
               containers: 30
+              cost_per_hour: 2.6
+              destination: 4
+              length: 30
+              width: 10
+              depth: 30
             new:
               name: New Vessel 1
+              arrival: 2022-05-11T13:56:00Z
+              deadline: 2022-05-12T18:13:00Z
               containers: 40
+              cost_per_hour: 2.6
+              destination: 4
+              length: 30
+              width: 10
+              depth: 30
             reason: 'Additional cargo (#2524)'
           - vessel: 30
             date: 2022-05-11T21:26:24Z
             old:
+              name: New Vessel 1
               arrival: 2022-05-11T13:56:00Z
               deadline: 2022-05-12T18:13:00Z
+              containers: 40
+              cost_per_hour: 2.6
+              destination: 4
+              length: 30
+              width: 10
+              depth: 30
             new:
+              name: New Vessel 1
               arrival: 2022-05-18T13:56:00Z
               deadline: 2022-05-19T18:13:00Z
+              containers: 40
+              cost_per_hour: 2.6
+              destination: 4
+              length: 30
+              width: 10
+              depth: 30
             reason: 'Ship delayed (#3517)'
     NewScheduleChange:
       title: New Schedule Change
@@ -1632,15 +1673,15 @@ components:
 
         + date: `2022-05-11T16:32:35Z` (timestamp) - The date at which the change was made.
         
-        + changes: `{"type": "automatic"}` (JSON) - The changes to be made.
+        + new: `{"vessel":30,"manual":false,"berth":20,"start":"2022-05-15T16:32:00.000Z","end":"2022-05-15T21:26:00.000Z"}` (JSON) - The Schedule after being changed.
         
         + reason: `Turn on automatic scheduling` (string) - The reason for the change.
       type: object
       properties:
         date:
           $ref: '#/components/schemas/Timestamp'
-        changes:
-          $ref: '#/components/schemas/OptionalSchedule'
+        new:
+          $ref: '#/components/schemas/Schedule'
         reason:
           type: string
           pattern: '^(?:.|\s)*$'
@@ -1649,12 +1690,16 @@ components:
       additionalProperties: false
       required:
         - date
-        - changes
+        - new
         - reason
       example:
         date: 2022-05-11T16:32:35Z
-        changes:
-          type: automatic
+        new:
+          vessel: 30
+          manual: false
+          berth: 20
+          start: 2022-05-15T16:32:00Z
+          end: 2022-05-15T21:26:00Z
         reason: Turn on automatic scheduling
     ScheduleChange:
       title: Schedule Change
@@ -1666,9 +1711,9 @@ components:
 
         + date: `2022-05-11T16:32:35Z` (timestamp) - The date at which the change was made.
 
-        + old: `{"type": "manual"}` (JSON) - The relevant properties before being changed. 
+        + old: `{"vessel":30,"manual":true,"berth":20,"start":"2022-05-15T16:32:00.000Z","end":"2022-05-15T21:26:00.000Z"}` (JSON) - The Schedule before being changed.
 
-        + new: `{"type": "automatic"}` (JSON) - The relevant properties after being changed.
+        + new: `{"vessel":30,"manual":false,"berth":20,"start":"2022-05-15T16:32:00.000Z","end":"2022-05-15T21:26:00.000Z"}` (JSON) - The Schedule after being changed.
 
         + reason: `Turn on automatic scheduling` (string) - The reason for the change.
       type: object
@@ -1678,9 +1723,9 @@ components:
         date:
           $ref: '#/components/schemas/Timestamp'
         old:
-          $ref: '#/components/schemas/OptionalSchedule'
+          $ref: '#/components/schemas/Schedule'
         new:
-          $ref: '#/components/schemas/OptionalSchedule'
+          $ref: '#/components/schemas/Schedule'
         reason:
           type: string
           pattern: '^(?:.|\s)*$'
@@ -1697,9 +1742,17 @@ components:
         vessel: 30
         date: 2022-05-11T16:32:35Z
         old:
-          type: manual
+          vessel: 30
+          manual: true
+          berth: 20
+          start: 2022-05-15T16:32:00Z
+          end: 2022-05-15T21:26:00Z
         new:
-          type: automatic
+          vessel: 30
+          manual: false
+          berth: 20
+          start: 2022-05-15T16:32:00Z
+          end: 2022-05-15T21:26:00Z
         reason: Turn on automatic scheduling
     ScheduleChanges:
       title: Schedule Changes
@@ -1712,17 +1765,29 @@ components:
         - vessel: 30
           date: 2022-05-11T16:32:35Z
           old:
-            type: manual
-          new:
-            type: automatic
-          reason: Turn on automatic scheduling
-        - vessel: 30
-          date: 2022-05-11T21:26:24Z
-          old:
+            vessel: 30
+            manual: true
             berth: 20
             start: 2022-05-15T16:32:00Z
             end: 2022-05-15T21:26:00Z
           new:
+            vessel: 30
+            manual: false
+            berth: 20
+            start: 2022-05-15T16:32:00Z
+            end: 2022-05-15T21:26:00Z
+          reason: Turn on automatic scheduling
+        - vessel: 30
+          date: 2022-05-11T21:26:24Z
+          old:
+            vessel: 30
+            manual: false
+            berth: 20
+            start: 2022-05-15T16:32:00Z
+            end: 2022-05-15T21:26:00Z
+          new:
+            vessel: 30
+            manual: false
             berth: 18
             start: 2022-05-09T10:24:00Z
             end: 2022-05-10T16:17:00Z
@@ -1738,17 +1803,29 @@ components:
           - vessel: 30
             date: 2022-05-11T16:32:35Z
             old:
-              type: manual
-            new:
-              type: automatic
-            reason: Turn on automatic scheduling
-          - vessel: 30
-            date: 2022-05-11T21:26:24Z
-            old:
+              vessel: 30
+              manual: true
               berth: 20
               start: 2022-05-15T16:32:00Z
               end: 2022-05-15T21:26:00Z
             new:
+              vessel: 30
+              manual: false
+              berth: 20
+              start: 2022-05-15T16:32:00Z
+              end: 2022-05-15T21:26:00Z
+            reason: Turn on automatic scheduling
+          - vessel: 30
+            date: 2022-05-11T21:26:24Z
+            old:
+              vessel: 30
+              manual: false
+              berth: 20
+              start: 2022-05-15T16:32:00Z
+              end: 2022-05-15T21:26:00Z
+            new:
+              vessel: 30
+              manual: false
               berth: 18
               start: 2022-05-09T10:24:00Z
               end: 2022-05-10T16:17:00Z

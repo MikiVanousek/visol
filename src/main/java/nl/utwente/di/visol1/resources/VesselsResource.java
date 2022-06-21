@@ -31,8 +31,8 @@ public class VesselsResource {
     public Response createVessel(Vessel vessel){
 	    Vessel createdVessel = VesselDao.createVessel(vessel);
 	    if (createdVessel != null) {
-		    return Response.status(Response.Status.OK)
-			    .header("Location", "/vessels/" + createdVessel.getId())
+		    return Response.status(Response.Status.CREATED)
+			    .header("Location", "/rest/vessels/" + createdVessel.getId())
 			    .entity(createdVessel).build();
 	    } else {
 		    return Response.status(Response.Status.NOT_ACCEPTABLE).build();

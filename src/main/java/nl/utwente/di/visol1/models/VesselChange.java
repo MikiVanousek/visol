@@ -4,6 +4,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Objects;
 
@@ -25,6 +26,28 @@ public class VesselChange {
 
 	public VesselChange(){
 		//Empty Constructor
+	}
+
+	public VesselChange(int vessel, Timestamp date, String oldVessel, String newVessel, String reason) {
+		this.vessel = vessel;
+		this.date = date;
+		this.oldVessel = oldVessel;
+		this.newVessel = newVessel;
+		this.reason = reason;
+	}
+
+	public VesselChange(int vessel, Timestamp date, String oldVessel, byte[] newVessel, String reason) {
+		this.vessel = vessel;
+		this.date = date;
+		this.oldVessel = oldVessel;
+		Vessel newVesselObject = new Vessel();
+		try {
+			newVesselObject = new ObjectMapper().readValue(newVessel, Vessel.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		this.newVessel = newVesselObject.toString();
+		this.reason = reason;
 	}
 
 	public int getVessel() {
