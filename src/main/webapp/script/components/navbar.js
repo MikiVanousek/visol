@@ -6,20 +6,16 @@ class Navbar extends HTMLElement {
   connectedCallback() {
     let children = this.innerHTML;
     this.innerHTML = `
-
     <nav class="navbar navbar-expand-lg sticky-top">
       <div class="container-fluid">
         <a class="navbar-brand" href="./index.html">
-          <div>ViSOL</div>
-          ${this.hasAttribute('role') ? `<div class="navbar-brand-role">${this.getAttribute('role')}</div>` : ''}
+          <img src="./assets/logo${this.hasAttribute('role') ? '-' + this.getAttribute('role') : ''}.svg" alt="logo" class="navbar-brand-logo">
         </a>
-        
+         
         ${children}
         
       </div>
     </nav>`
-
-
   }
 }
 
