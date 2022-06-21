@@ -56,6 +56,8 @@ public class VesselChangeResource {
 
 	@DELETE
 	public Response deleteVesselChanges(@QueryParam("from") Timestamp from, @QueryParam("to") Timestamp to){
+		if (from == null) from = GenericDao.MIN_TIME;
+		if(to == null) to = GenericDao.MAX_TIME;
 		int i = VesselChangeDao.deleteVesselChanges(id, from, to);
 		if (i != 0){
 			return Response.status(Response.Status.NO_CONTENT).build();

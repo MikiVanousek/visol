@@ -9,6 +9,7 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -32,6 +33,14 @@ public class ScheduleChange {
 		this.date = date;
 		this.oldSchedule = oldSchedule;
 		this.newSchedule = newSchedule;
+		this.reason = reason;
+	}
+
+	public ScheduleChange(int vessel, Timestamp date, String oldSchedule, JSONPObject newSchedule, String reason) {
+		this.vessel = vessel;
+		this.date = date;
+		this.oldSchedule = oldSchedule;
+		this.newSchedule = newSchedule.toString();
 		this.reason = reason;
 	}
 

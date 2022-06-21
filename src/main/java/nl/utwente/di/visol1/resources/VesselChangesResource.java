@@ -33,7 +33,7 @@ public class VesselChangesResource {
 	}
 
 	@Path("{vessel_id}")
-	public VesselChangeResource getVessel(@PathParam("vessel_id") String id) {
+	public VesselChangeResource getVesselChange(@PathParam("vessel_id") String id) {
 		return new VesselChangeResource(uriInfo, request, id);
 	}
 }

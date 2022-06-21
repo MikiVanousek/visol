@@ -17,7 +17,7 @@ import nl.utwente.di.visol1.dao.GenericDao;
 import nl.utwente.di.visol1.dao.ScheduleChangeDao;
 import nl.utwente.di.visol1.models.ScheduleChange;
 
-@Path("/changes/vessels")
+@Path("/changes/schedules")
 public class ScheduleChangesResource {
 	@Context
 	UriInfo uriInfo;
@@ -33,7 +33,7 @@ public class ScheduleChangesResource {
 	}
 
 	@Path("{vessel_id}")
-	public ScheduleChangeResource getVessel(@PathParam("vessel_id") String id) {
+	public ScheduleChangeResource getScheduleChange(@PathParam("vessel_id") String id) {
 		return new ScheduleChangeResource(uriInfo, request, id);
 	}
 }
