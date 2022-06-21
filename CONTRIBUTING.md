@@ -1,5 +1,19 @@
 # Contributing Guidelines
 
+## Set up testing environment
+
+1. Copy `config.properties.example` to `config.properties`
+2. Change the values provided inside
+3. Copy the absolute path to your `config.properties` file and set the `visol.config.location` environment variable in the `Run Tomcat Server` to that absolute path
+
+Alternatively, you can manually set the following environment variables:
+- `visol.config.database.url`
+- `visol.config.database.name`
+- `visol.config.database.production_schema`
+- `visol.config.database.test_schema`
+- `visol.config.database.username`
+- `visol.config.database.password`
+
 ## Committing
 
 Use an appropriate [gitmoji](https://gitmoji.dev/) as the first character in your commit. [This InteliJ extension](https://intellij.patou.dev/) can

@@ -80,15 +80,10 @@ public class DummyData {
 	);
 
 	public static void createDummyData() {
-		System.out.println("creating ports");
 		for (Port port : PORTS) PortDao.createPort(port);
-		System.out.println("creating terminals");
 		for (Terminal terminal : TERMINALS) TerminalDao.createTerminal(terminal);
-		System.out.println("creating berths");
 		for (Berth berth : BERTHS) BerthDao.createBerth(berth);
-		System.out.println("creating vessels");
 		for (Vessel vessel : VESSELS) VesselDao.createVessel(vessel);
-		System.out.println("creating schedules");
 		for (Schedule schedule : SCHEDULES) ScheduleDao.replaceSchedule(schedule.getVessel(), schedule);
 		System.out.println("creating schedule changes");
 		for (ScheduleChange schange : SCHEDULE_CHANGES) ScheduleChangeDao.createScheduleChange(schange);
@@ -99,6 +94,4 @@ public class DummyData {
 		GenericDao.truncateAllTables();
 		createDummyData();
 	}
-
-
 }
