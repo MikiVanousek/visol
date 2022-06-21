@@ -1,0 +1,56 @@
+.card
+	+flex(flex-start, flex-start)
+	+relative()
+	flex-wrap: wrap
+	transition: transform $animation-length
+	transform: scale(1)
+	width: 100%
+	height: 100%
+	margin: 0 $base-spacing * 1.8
+	padding: $base-spacing * 2
+	opacity: 0.8
+	backdrop-filter: blur(5px)
+	z-index: 2
+	border: none !important
+	cursor: pointer
+
+	&:hover
+		transform: scale(0.97)
+
+	&-info
+		+flex(center, center)
+
+		&-in
+			padding-left: $base-spacing * 2
+
+		&-heading
+			font-weight: 600
+			font-size: 12px
+			margin: 0
+			padding: 0
+
+		&-description
+			font-size: 10px
+
+	&-footer
+		align-self: flex-end
+
+	&.view-automatic
+		background-color: rgba($c-secondary, 0.5)
+		color: $c-primary
+
+	&.view-manual
+		background-color: rgba($c-secondary, 0.5)
+		color: $c-primary
+
+	&.view-unscheduled
+		+flex(center, flex-start)
+		min-width: 200px
+		max-width: 300px
+		width: 15vw
+		background-color: rgba($c-secondary, 0.5)
+		color: $c-primary
+		height: 80%
+
+
+
