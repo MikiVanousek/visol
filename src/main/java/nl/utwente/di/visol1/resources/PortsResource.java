@@ -28,8 +28,8 @@ public class PortsResource {
     public Response createPort(Port port){
 	    Port createdPort = PortDao.createPort(port);
 	    if (createdPort != null) {
-		    return Response.status(Response.Status.OK)
-			    .header("Location", "/ports/" + createdPort.getId())
+		    return Response.status(Response.Status.CREATED)
+			    .header("Location", "/rest/ports/" + createdPort.getId())
 			    .entity(createdPort).build();
 	    } else {
 		    return Response.status(Response.Status.NOT_ACCEPTABLE).build();
