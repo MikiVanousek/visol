@@ -7,7 +7,7 @@ info:
   contact: { }
   version: 1.0.0
 servers:
-  - url: 'http://localhost:8080/visol'
+  - url: 'http://localhost:8080/visol/rest'
     variables: { }
 paths:
   /vessels:
@@ -806,7 +806,7 @@ paths:
     parameters:
       - name: vessel_id
         in: path
-        description: ID of the Vessel which's Schedule should be changed.
+        description: ID of the Vessel whose Schedule should be changed.
         required: true
         schema:
           $ref: '#/components/schemas/VesselID'

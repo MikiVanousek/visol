@@ -23,8 +23,8 @@ public class BerthsResource {
     public Response createBerth(Berth berth) {
 	    Berth createdBerth = BerthDao.createBerth(berth);
 			if (createdBerth != null) {
-				return Response.status(Response.Status.OK)
-					.header("Location", "/berths/" + createdBerth.getId())
+				return Response.status(Response.Status.CREATED)
+					.header("Location", "/rest/berths/" + createdBerth.getId())
 					.entity(createdBerth).build();
 			} else {
 				return Response.status(Response.Status.NOT_ACCEPTABLE).build();
