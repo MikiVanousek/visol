@@ -1,23 +1,14 @@
 import FullButton from '../components/full-button.js';
-import VesselCard from '../components/vessel-card.js';
+import VesselCard from'../components/vessel-card.js';
 
-class PortAuthority extends HTMLElement {
-  static terminalDropdownTag = 'chooseTerminal';
-
+class VesselPlanner extends HTMLElement {
   constructor() {
     super();
   }
 
   connectedCallback() {
     this.innerHTML = `
-
-    <nav-bar role="authority">
-        <drop-down 
-            name="${(PortAuthority.terminalDropdownTag)}" 
-            id="${(PortAuthority.terminalDropdownTag)}"
-            size="${FullButton.SIZE.large}">
-        </drop-down>
-        
+    <nav-bar role="planner">
         <ul class="navbar-nav mb-lg-0">
           <div>
             <full-button 
@@ -29,7 +20,7 @@ class PortAuthority extends HTMLElement {
           </div>
         </ul>
     </nav-bar>
-
+  
     <planner-schedule></planner-schedule>
 
     <unscheduled-vessels>
@@ -45,36 +36,25 @@ class PortAuthority extends HTMLElement {
             name="Ever Golden"
             view="${VesselCard.VIEW.unscheduled}"
         ></vessel-card> 
+
         <vessel-card
             name="COSCO Shipping Taurus"
             view="${VesselCard.VIEW.unscheduled}"
         ></vessel-card> 
+
         <vessel-card
             name="CMA CGM Antoine De Saint Exupery"
             view="${VesselCard.VIEW.unscheduled}"
         ></vessel-card> 
-    </unscheduled-vessels>`;
+       
+        <vessel-modal name="update"></vessel-modal>
 
-    this.addData();
-  }
-
-  addData() {
-    const dropDown = document.getElementById(PortAuthority.terminalDropdownTag);
-    dropDown.data = {
-      car: 'Car Terminal',
-      fish: 'Fish Terminal',
-      banana: 'Banana Terminal',
-      trees: 'Trees Terminal',
-    };
-    dropDown.active = dropDown.data.fish;
-    dropDown.callBack = this.changeTerminal;
-    dropDown.render();
-  }
-
-  changeTerminal(newVal) {
-    console.log(newVal);
+    </unscheduled-vessels>
+    <!-- Button triggers modal -->
+      
+    `;
   }
 }
 
 
-customElements.define('port-authority', PortAuthority);
+customElements.define('vessel-planner', VesselPlanner);

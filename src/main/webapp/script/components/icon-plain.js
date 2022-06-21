@@ -1,23 +1,22 @@
 class IconPlain extends HTMLElement {
   static VIEW = {
-    default: "default",
-    button: "button"
-  }
+    default: 'default',
+    button: 'button',
+  };
 
   constructor() {
     super();
   }
 
   connectedCallback() {
-    const view = this.hasAttribute("view")
-      ? this.getAttribute("view") : IconPlain.VIEW.default
+    const view = this.hasAttribute('view') ?
+      this.getAttribute('view') : IconPlain.VIEW.default;
     this.innerHTML =
-      `<span class="fa fa-${this.getAttribute("name")} 
+      `<span class="fa fa-${this.getAttribute('name')} 
             view-${view}"></span>`;
   }
-
 }
 
-customElements.define("icon-plain", IconPlain)
+customElements.define('icon-plain', IconPlain);
 
 export default IconPlain;

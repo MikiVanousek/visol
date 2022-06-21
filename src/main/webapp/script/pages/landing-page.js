@@ -1,11 +1,10 @@
 class LandingPage extends HTMLElement {
-
   constructor() {
     super();
   }
 
   connectedCallback() {
-    const children = this.innerHTML
+    const children = this.innerHTML;
     this.innerHTML = `<nav-bar></nav-bar>
 
     <div class="d-flex flex-column justify-content-center align-items-center">
@@ -28,4 +27,4 @@ class LandingPage extends HTMLElement {
 }
 
 
-customElements.define("landing-page", LandingPage)
+customElements.define('landing-page', LandingPage);

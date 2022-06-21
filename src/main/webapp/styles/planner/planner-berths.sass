@@ -1,0 +1,63 @@
+.planner
+	&-berths
+		+size(auto 100%)
+		+relative
+		+flex(flex-start, flex-start)
+		padding-top: $berth-header-height
+
+		&-dividers
+			+size(100% calc(100% - #{$berth-header-height}))
+			+absolute($berth-header-height null null 0)
+			z-index: 2
+
+			&-item
+				+relative
+				+size(100% $day-view-divider-height)
+				display: block
+				&::before
+					content: ""
+					+absolute(null null -2px 0)
+					+size(100% 1px)
+					background-color: $c-stroke
+				&:last-child
+					visibility: hidden
+
+
+		&-berth
+			+relative
+			+size(100%)
+			min-width: $berth-width
+
+			&-header
+				+sticky(0 null null null)
+				+size(100% $berth-header-height)
+				border: 1px solid $c-stroke
+				border-left: none
+				border-top: none
+				font-size: 18px
+				text-align: center
+				margin-top: -$berth-header-height
+				background-color: $c-background
+				z-index: 4
+
+				&-info
+					+flex()
+					+size(100%)
+					padding: $base-spacing*2
+
+					&-name
+						font-size: 14px
+						font-weight: 600
+						margin-left: $base-spacing*2
+
+			&-ships
+				+relative
+				+size(100%)
+				background-color: $c-background
+				border-right: 1px solid $c-stroke
+				z-index: 1
+
+			&:last-child &-header
+				border-right: none
+			&:last-child &-ships
+				border-right: none
