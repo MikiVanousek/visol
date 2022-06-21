@@ -90,19 +90,19 @@ class VesselModal extends HTMLElement {
           <div class="mb-3 row mt-2">
             <label class="label me-3 col" for="label"><b>Schedule:</b></label>
             <div class="form-check form-check-inline col">
-              <input checked class="form-check-input" id="${this.name}-radio-auto" name="schedule-type" value="automatic" type="radio">
+              <input checked class="form-check-input" id="${this.name}-radio-auto" name="schedule-manual" value="false" type="radio">
               <label class="form-check-label" for="${this.name}-radio-auto">
                 Automatic
               </label>
             </div>
             <div class="form-check form-check-inline col">
-              <input class="form-check-input" id="${this.name}-radio-manual" name="schedule-type" value="manual" type="radio">
+              <input class="form-check-input" id="${this.name}-radio-manual" name="schedule-manual" value="true" type="radio">
               <label class="form-check-label" for="${this.name}-radio-manual">
                 Manual
               </label>
             </div>
             <div class="form-check form-check-inline col">
-              <input class="form-check-input" id="${this.name}-radio-disabled" name="schedule-type" value="disabled" type="radio">
+              <input class="form-check-input" id="${this.name}-radio-disabled" name="schedule-manual" value="true" type="radio">
               <label class="form-check-label" for="${this.name}-radio-disabled">
                 Disabled
               </label>
@@ -160,17 +160,25 @@ class VesselModal extends HTMLElement {
       let serializedForm = this.serializeForm(form)
       let vessel = serializedForm["vessel"]
       this.hideBtnFooter()
-      console.log(JSON.stringify(serializedForm))
       VisolApi.postVessel(vessel).then(response => {
-        console.log("Vessel post response: ", response)
-        this.showBtnFooter()
         let schedule = serializedForm["schedule"]
-        if (schedule["type"]!== "disabled") {
-          // TODO Miki post vessel
+        if (this.schedule_type !== "disabled") {
+          // Extract the id from the url location of the vessel resource.
+          let vessel_id = response.headers.get('Location').split('/').slice(-1)[0]
+          VisolApi.putSchedule(vessel_id, schedule).then(response => {
+            console.log('Schedule created successfully.')
+            console.log(response)
+            this.showBtnFooter()
+          }).catch(e => {
+            this.showBtnFooter()
+            console.log("Failed to create schedule: ", e)
+          })
+        } else {
+          this.showBtnFooter()
         }
       }).catch(e => {
         this.showBtnFooter()
-        console.log("Failed to post vessel: ", e)
+        console.log("Failed to create vessel: ", e)
       })
     })
   }
@@ -192,7 +200,7 @@ class VesselModal extends HTMLElement {
         // Frankly awkward, let me know if you can do better!
         if (prefix === "datetime") {
           // for datetimes, the object they belong to is the last word, as the first is datetime
-          serializedForm[words[2]][key] = new Date(Date.parse(value)).toJSON()
+          serializedForm[words[2]][key] = VisolApi.formatLocalDateTime(value)
         } else {
           serializedForm[prefix][key] = value;
         }

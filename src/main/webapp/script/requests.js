@@ -13,22 +13,35 @@ class Requests {
       headers: Requests.headers,
       body: JSON.stringify(data)
     });
-    if (res.status !== 200) {
-      ErrorToast.get().show()
-      return res;
+    if (!res.ok) {
+      ErrorToast.show()
+      throw new Error(res.statusText)
     }
-    return res.json()
+    return res;
   }
 
   static async getData(path) {
     let res = await fetch(this.baseUrl + path, {
       headers: Requests.headers,
     });
-    if (res.status !== 200) {
-      ErrorToast.get().show()
-      return res;
+    if (!res.ok) {
+      ErrorToast.show()
+      throw new Error(res.statusText)
     }
     return res.json()
+  }
+  static async putData(path, data) {
+    let res = await fetch(this.baseUrl + path, {
+      method: 'PUT',
+      headers: Requests.headers,
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) {
+      ErrorToast.show()
+      throw new Error(res.statusText)
+
+    }
+    return res.json();
   }
 }
 

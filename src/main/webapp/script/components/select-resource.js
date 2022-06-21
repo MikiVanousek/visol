@@ -21,8 +21,8 @@ class SelectResource extends HTMLElement {
 
   buildSelect(resource) {
     return `
-    <label class="form-label me-3" for="select-terminal"><b>${this.name.charAt(0).toUpperCase() + this.name.slice(1)}:</b></label>
-    <select class="form-select form-select-sm" name="vessel-destination"> 
+    <label class="form-label me-3" for="${name}-select-terminal"><b>${this.name.charAt(0).toUpperCase() + this.name.slice(1)}:</b></label>
+    <select class="form-select form-select-sm" id="${name}-select-terminal" name="vessel-destination"> 
       ${Object.keys(resource).map(i => `<option value="${i}">${resource[i][this.displayAttribute]}</option>`).join('\n')}
     </select>
     `
