@@ -8420,11 +8420,8 @@ readers do not read off random characters that represent icons */
   padding: 18px 30px !important;
   margin-bottom: 24px;
 }
-.navbar-brand-role {
-  color: darkgrey;
-  font-size: 0.8rem;
-  font-weight: 500;
-  text-transform: uppercase;
+.navbar-brand-logo {
+  width: 8ch;
 }
 
 .has-icon-beginning .form-control {
