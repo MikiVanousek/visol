@@ -27,6 +27,14 @@ public class VesselChange {
 		//Empty Constructor
 	}
 
+	public VesselChange(int vessel, Timestamp date, String oldVessel, String newVessel, String reason) {
+		this.vessel = vessel;
+		this.date = date;
+		this.oldVessel = oldVessel;
+		this.newVessel = newVessel;
+		this.reason = reason;
+	}
+
 	public int getVessel() {
 		return vessel;
 	}
