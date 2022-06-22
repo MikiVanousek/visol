@@ -18,17 +18,18 @@ class VesselCard extends HTMLElement {
     // const id = this.getAttribute('id');
 
     this.innerHTML = `
-    <div class="card view-${view}"
+    <div class="vessel-card view-${view}"
         data-bs-toggle="modal" 
         data-bs-target="#update-modal"
         >
-        <div class="card-info">
+        
+        <div class="vessel-card-info">
           <icon-circle
             name="ship"
             view=${IconCircle.VIEW.primary}>
           </icon-circle>
-          <div class="card-info-in">
-            <h6 class="card-info-heading">${name}</h6>
+          <div class="vessel-card-info-in">
+            <h6 class="vessel-card-info-heading">${name}</h6>
             ${(this.hasAttribute('arrival') ||
               this.hasAttribute('departure')) ? this.getDescription() : ''}
           </div>
@@ -46,14 +47,14 @@ class VesselCard extends HTMLElement {
   }
 
   getDescription() {
-    return `<div class="card-info-description">
+    return `<div class="vessel-card-info-description">
     ${this.getAttribute('arrival') + ' - ' + this.getAttribute('departure') +
      ' • ' + this.capitalizeFirstLetter(this.getAttribute('view'))}
     </div>`;
   }
 
   getFooter() {
-    return `<div class="card-footer bg-transparent border-0">
+    return `<div class="vessel-card-footer bg-transparent border-0">
               <icon-plain
                   name="hand-paper"
                   view=${IconCircle.VIEW.primary}

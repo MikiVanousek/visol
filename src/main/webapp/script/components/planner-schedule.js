@@ -88,7 +88,7 @@ class PlannerSchedule extends HTMLElement {
                         view="${VesselCard.VIEW.automatic}"
                         arrival="8:00"
                         departure="14:00"
-                        style="top: 100px"
+                        style="top: 100px; height: 700px"
                     ></vessel-card>
                 </div>
               </div>
