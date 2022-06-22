@@ -1,26 +1,26 @@
-import VisolApi from "../api.js";
+import VisolApi from '../api.js';
 
 class VesselModal extends HTMLElement {
-  schedule_type = "auto"
-  name
+  schedule_type = 'auto';
+  name;
 
   constructor() {
     super();
-    this.name = this.getAttribute('name')
+    this.name = this.getAttribute('name');
   }
 
-   set_schedule_type(type) {
-    this.schedule_type = type
+  set_schedule_type(type) {
+    this.schedule_type = type;
     // console.log("Changing to schedule type " + type)
-    if (type==="disabled") {
-      this.getElement(`schedule-edit`).setAttribute("hidden","")
+    if (type==='disabled') {
+      this.getElement(`schedule-edit`).setAttribute('hidden', '');
     } else {
-      this.getElement(`schedule-edit`).removeAttribute("hidden")
-      for (let item of document.getElementsByClassName(`${this.name}-disabled-if-auto`)) {
-        if (type === "manual") {
-          item.removeAttribute("disabled")
+      this.getElement(`schedule-edit`).removeAttribute('hidden');
+      for (const item of document.getElementsByClassName(`${this.name}-disabled-if-auto`)) {
+        if (type === 'manual') {
+          item.removeAttribute('disabled');
         } else {
-          item.setAttribute("disabled", "")
+          item.setAttribute('disabled', '');
         }
       }
     }
@@ -137,70 +137,70 @@ class VesselModal extends HTMLElement {
     </div>
   </div>
 </div>
-	`
+	`;
     // You can only attach the listeners after setting the innerHTML.
-    this.attachListeners()
+    this.attachListeners();
   }
 
   attachListeners() {
-    this.buttons = this.getElement(`modal-footer-btn`)
-    this.loader = this.getElement(`modal-footer-loading`)
+    this.buttons = this.getElement(`modal-footer-btn`);
+    this.loader = this.getElement(`modal-footer-loading`);
 
-    let radio_ids = ["auto", "manual", "disabled"]
-    radio_ids.forEach(id => {
-      this.getElement(`radio-${id}`).addEventListener("click", () => {
-        this.set_schedule_type(id)
-      })
-    })
+    const radio_ids = ['auto', 'manual', 'disabled'];
+    radio_ids.forEach((id) => {
+      this.getElement(`radio-${id}`).addEventListener('click', () => {
+        this.set_schedule_type(id);
+      });
+    });
 
-    const form = this.getElement('modal-form')
-    form.addEventListener('submit', e => {
-      e.preventDefault()
+    const form = this.getElement('modal-form');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
 
-      let serializedForm = this.serializeForm(form)
-      let vessel = serializedForm["vessel"]
-      this.hideBtnFooter()
-      VisolApi.postVessel(vessel).then(response => {
-        let schedule = serializedForm["schedule"]
-        if (this.schedule_type !== "disabled") {
+      const serializedForm = this.serializeForm(form);
+      const vessel = serializedForm['vessel'];
+      this.hideBtnFooter();
+      VisolApi.postVessel(vessel).then((response) => {
+        const schedule = serializedForm['schedule'];
+        if (this.schedule_type !== 'disabled') {
           // Extract the id from the url location of the vessel resource.
-          let vessel_id = response.headers.get('Location').split('/').slice(-1)[0]
-          VisolApi.putSchedule(vessel_id, schedule).then(response => {
-            console.log('Schedule created successfully.')
-            console.log(response)
-            this.showBtnFooter()
-          }).catch(e => {
-            this.showBtnFooter()
-            console.log("Failed to create schedule: ", e)
-          })
+          const vessel_id = response.headers.get('Location').split('/').slice(-1)[0];
+          VisolApi.putSchedule(vessel_id, schedule).then((response) => {
+            console.log('Schedule created successfully.');
+            console.log(response);
+            this.showBtnFooter();
+          }).catch((e) => {
+            this.showBtnFooter();
+            console.log('Failed to create schedule: ', e);
+          });
         } else {
-          this.showBtnFooter()
+          this.showBtnFooter();
         }
-      }).catch(e => {
-        this.showBtnFooter()
-        console.log("Failed to create vessel: ", e)
-      })
-    })
+      }).catch((e) => {
+        this.showBtnFooter();
+        console.log('Failed to create vessel: ', e);
+      });
+    });
   }
 
   serializeForm(form) {
     const serializedForm = {};
-    for (const prefix of ["vessel", "schedule", "datetime"]){
-      serializedForm[prefix] = {}
+    for (const prefix of ['vessel', 'schedule', 'datetime']) {
+      serializedForm[prefix] = {};
     }
 
     const formData = new FormData(form);
     for (const [name, value] of formData) {
-      if (value !== "") {
-        let words = name.split("-")
-        let prefix = words[0]
-        let key = words[1]
+      if (value !== '') {
+        const words = name.split('-');
+        const prefix = words[0];
+        const key = words[1];
 
         // If it is a datetime, change to timezone-neutral
         // Frankly awkward, let me know if you can do better!
-        if (prefix === "datetime") {
+        if (prefix === 'datetime') {
           // for datetimes, the object they belong to is the last word, as the first is datetime
-          serializedForm[words[2]][key] = VisolApi.formatLocalDateTime(value)
+          serializedForm[words[2]][key] = VisolApi.formatLocalDateTime(value);
         } else {
           serializedForm[prefix][key] = value;
         }
@@ -211,21 +211,21 @@ class VesselModal extends HTMLElement {
   }
 
   hideBtnFooter() {
-    this.buttons.setAttribute("hidden", "")
-    this.loader.removeAttribute("hidden")
+    this.buttons.setAttribute('hidden', '');
+    this.loader.removeAttribute('hidden');
   }
   showBtnFooter() {
-    this.loader.setAttribute("hidden", "")
-    this.buttons.removeAttribute("hidden")
+    this.loader.setAttribute('hidden', '');
+    this.buttons.removeAttribute('hidden');
   }
 
   getElement(id) {
-    return document.getElementById(this.name + '-' + id)
+    return document.getElementById(this.name + '-' + id);
   }
   static nowJsonString() {
-    let tz_offset = new Date().getTimezoneOffset() * 60000 //offset in milliseconds
-    Date.now().toString()
-    return new Date(Date.now() - tz_offset).toJSON().substring(0,16)
+    const tz_offset = new Date().getTimezoneOffset() * 60000; // offset in milliseconds
+    Date.now().toString();
+    return new Date(Date.now() - tz_offset).toJSON().substring(0, 16);
   }
 }
 
