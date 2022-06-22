@@ -49,7 +49,7 @@ CREATE TABLE vessel (
 	id            serial CONSTRAINT vessel_pk PRIMARY KEY,
 	name          varchar(64)  NOT NULL,
 	arrival       timestamp(0) NOT NULL,
-	deadline      timestamp(0) NOT NULL,
+	deadline      timestamp(0),
 	containers    int          NOT NULL,
 	cost_per_hour float         NOT NULL,
 	destination   int          NOT NULL,
@@ -87,7 +87,7 @@ CREATE TABLE schedule (
 CREATE TABLE schedulechange (
 	vessel int,
 	date timestamp(0),
-	old jsonb NOT NULL,
+	old jsonb,
 	new jsonb NOT NULL,
 	reason varchar(255),
 	PRIMARY KEY (vessel, date),
@@ -99,7 +99,7 @@ CREATE TABLE schedulechange (
 CREATE TABLE vesselchange (
 	vessel int,
 	date timestamp(0),
-	old jsonb NOT NULL,
+	old jsonb,
 	new jsonb NOT NULL,
 	reason varchar(255),
 	PRIMARY KEY (vessel, date),
