@@ -10,6 +10,7 @@ import nl.utwente.di.visol1.models.Schedule;
 import nl.utwente.di.visol1.models.ScheduleChange;
 import nl.utwente.di.visol1.models.Terminal;
 import nl.utwente.di.visol1.models.Vessel;
+import nl.utwente.di.visol1.models.VesselChange;
 import nl.utwente.di.visol1.util.Configuration;
 
 public class DummyData {
@@ -72,11 +73,18 @@ public class DummyData {
 		new Schedule(16, 8, false, Timestamp.valueOf("2000-01-08 13:05:06"), Timestamp.valueOf("2000-01-08 23:05:06"))
 	);
 	public static final List<ScheduleChange> SCHEDULE_CHANGES = Arrays.asList(
-		new ScheduleChange(1, Timestamp.valueOf("2000-01-08 13:05:06"), "", 	"{\"a\": 2, \"b\": 3}", "testing1"),
-		new ScheduleChange(1, Timestamp.valueOf("2001-01-08 13:05:06"), "", 	"{\"b\": 2, \"d\": 3}", "testing12"),
-		new ScheduleChange(2, Timestamp.valueOf("2002-01-08 13:05:06"), "", 	"{\"aa\": 2, \"db\": 3}", "testing123"),
-		new ScheduleChange(3, Timestamp.valueOf("2003-01-08 13:05:06"), "", 	"{\"sa\": 2, \"sb\": 3}", "testing1234"),
-		new ScheduleChange(3, Timestamp.valueOf("2004-01-08 13:05:06"), "", 	"{\"abb\": 2, \"bbb\": 3}", "testing12345")
+		new ScheduleChange(1, Timestamp.valueOf("2000-01-08 13:05:06"), "", 	"{\"vessel\":1,\"manual\":\"false\",\"berth\":1,\"start\":\"2022-05-10T16:32:35Z\",\"expected_end\":\"2022-05-11T16:32:35Z\"}", "testing1"),
+		new ScheduleChange(1, Timestamp.valueOf("2001-01-08 13:05:06"), "", 	"{\"vessel\":1,\"manual\":\"false\",\"berth\":1,\"start\":\"2022-05-10T16:32:35Z\",\"expected_end\":\"2022-05-11T16:32:35Z\"}", "testing12"),
+		new ScheduleChange(2, Timestamp.valueOf("2002-01-08 13:05:06"), "", 	"{\"vessel\":2,\"manual\":\"false\",\"berth\":1,\"start\":\"2022-05-10T16:32:35Z\",\"expected_end\":\"2022-05-11T16:32:35Z\"}", "testing123"),
+		new ScheduleChange(3, Timestamp.valueOf("2003-01-08 13:05:06"), "", 	"{\"vessel\":3,\"manual\":\"false\",\"berth\":1,\"start\":\"2022-05-10T16:32:35Z\",\"expected_end\":\"2022-05-11T16:32:35Z\"}", "testing1234"),
+		new ScheduleChange(3, Timestamp.valueOf("2004-01-08 13:05:06"), "", 	"{\"vessel\":3,\"manual\":\"false\",\"berth\":1,\"start\":\"2022-05-10T16:32:35Z\",\"expected_end\":\"2022-05-11T16:32:35Z\"}", "testing12345")
+	);
+
+	public static final List<VesselChange> VESSEL_CHANGES = Arrays.asList(new VesselChange(1, Timestamp.valueOf("2000-01-08 13:05:06"), "", 	VESSELS.get(1).toString(), "testing1"),
+	                                                                      new VesselChange(2, Timestamp.valueOf("2001-01-08 13:05:06"), "", 	VESSELS.get(2).toString(), "testing12"),
+	                                                                      new VesselChange(2, Timestamp.valueOf("2002-01-08 13:05:06"), "", 	VESSELS.get(2).toString(), "testing123"),
+	                                                                      new VesselChange(3, Timestamp.valueOf("2003-01-08 13:05:06"), "", 	VESSELS.get(3).toString(), "testing1234"),
+	                                                                      new VesselChange(3, Timestamp.valueOf("2004-01-08 13:05:06"), "", 	VESSELS.get(3).toString(), "testing12345")
 	);
 
 	public static void createDummyData() {
@@ -85,8 +93,8 @@ public class DummyData {
 		for (Berth berth : BERTHS) BerthDao.createBerth(berth);
 		for (Vessel vessel : VESSELS) VesselDao.createVessel(vessel);
 		for (Schedule schedule : SCHEDULES) ScheduleDao.replaceSchedule(schedule.getVessel(), schedule);
-		System.out.println("creating schedule changes");
 		for (ScheduleChange schange : SCHEDULE_CHANGES) ScheduleChangeDao.createScheduleChange(schange);
+		for (VesselChange vchange : VESSEL_CHANGES) VesselChangeDao.createVesselChange(vchange);
 	}
 
 	public static void main(String[] args) {

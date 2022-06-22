@@ -4,12 +4,12 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -18,10 +18,10 @@ public class ScheduleChange {
 	private Timestamp date;
 	@JsonProperty("old")
 	@XmlElement(name = "old")
-	private String oldSchedule;
+	private Schedule oldSchedule;
 	@JsonProperty("new")
 	@XmlElement(name = "new")
-	private String newSchedule;
+	private Schedule newSchedule;
 	private String reason;
 
 	public ScheduleChange(){
@@ -29,18 +29,19 @@ public class ScheduleChange {
 	}
 
 	public ScheduleChange(int vessel, Timestamp date, String oldSchedule, String newSchedule, String reason) {
+		ObjectMapper mapper = new ObjectMapper();
 		this.vessel = vessel;
 		this.date = date;
-		this.oldSchedule = oldSchedule;
-		this.newSchedule = newSchedule;
-		this.reason = reason;
-	}
-
-	public ScheduleChange(int vessel, Timestamp date, String oldSchedule, JSONPObject newSchedule, String reason) {
-		this.vessel = vessel;
-		this.date = date;
-		this.oldSchedule = oldSchedule;
-		this.newSchedule = newSchedule.toString();
+		try {
+			if (oldSchedule == null || oldSchedule.equals("")) {
+				this.oldSchedule = new Schedule();
+			} else {
+				this.oldSchedule = mapper.readValue(oldSchedule, Schedule.class);
+			}
+			this.newSchedule = mapper.readValue(newSchedule, Schedule.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		this.reason = reason;
 	}
 
@@ -60,19 +61,20 @@ public class ScheduleChange {
 		this.date = date;
 	}
 
-	public String getOldSchedule() {
+	public Schedule getOldSchedule(){
 		return oldSchedule;
 	}
 
-	public void setOldSchedule(String oldSchedule) {
+	public void setOldSchedule(Schedule oldSchedule) {
 		this.oldSchedule = oldSchedule;
 	}
 
-	public String getNewSchedule() {
+
+	public Schedule getNewSchedule(){
 		return newSchedule;
 	}
 
-	public void setNewSchedule(String newSchedule) {
+	public void setNewSchedule(Schedule newSchedule) {
 		this.newSchedule = newSchedule;
 	}
 

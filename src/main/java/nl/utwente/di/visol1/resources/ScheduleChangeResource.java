@@ -19,6 +19,7 @@ import java.util.List;
 import nl.utwente.di.visol1.dao.GenericDao;
 import nl.utwente.di.visol1.dao.ScheduleChangeDao;
 import nl.utwente.di.visol1.models.ScheduleChange;
+import nl.utwente.di.visol1.type_adapters.TimestampAdapter;
 
 
 public class ScheduleChangeResource {
@@ -48,17 +49,21 @@ public class ScheduleChangeResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<ScheduleChange> getScheduleChanges(@QueryParam("from") Timestamp from, @QueryParam("to") Timestamp to){
-		if (from == null) from = GenericDao.MIN_TIME;
-		if(to == null) to = GenericDao.MAX_TIME;
-		return ScheduleChangeDao.getScheduleChangesByVessel(id, from, to);
+	public List<ScheduleChange> getScheduleChanges(@QueryParam("from") String from, @QueryParam("to") String to){
+		Timestamp fromTime = TimestampAdapter.INSTANCE.unmarshal(from);
+		Timestamp toTime = TimestampAdapter.INSTANCE.unmarshal(to);
+		if (fromTime == null) fromTime = GenericDao.MIN_TIME;
+		if(toTime == null) toTime = GenericDao.MAX_TIME;
+		return ScheduleChangeDao.getScheduleChangesByVessel(id, fromTime, toTime);
 	}
 
 	@DELETE
-	public Response deleteScheduleChanges(@QueryParam("from") Timestamp from, @QueryParam("to") Timestamp to){
-		if (from == null) from = GenericDao.MIN_TIME;
-		if(to == null) to = GenericDao.MAX_TIME;
-		int i = ScheduleChangeDao.deleteScheduleChanges(id, from, to);
+	public Response deleteScheduleChanges(@QueryParam("from") String from, @QueryParam("to") String to){
+		Timestamp fromTime = TimestampAdapter.INSTANCE.unmarshal(from);
+		Timestamp toTime = TimestampAdapter.INSTANCE.unmarshal(to);
+		if (fromTime == null) fromTime = GenericDao.MIN_TIME;
+		if(toTime == null) toTime = GenericDao.MAX_TIME;
+		int i = ScheduleChangeDao.deleteScheduleChanges(id, fromTime, toTime);
 		if (i != 0){
 			return Response.status(Response.Status.NO_CONTENT).build();
 		} else {
@@ -68,8 +73,9 @@ public class ScheduleChangeResource {
 
 	@Path("{date}")
 	@GET
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response getScheduleChangeByDate(@PathParam("date") String date) {
-		ScheduleChange schange = ScheduleChangeDao.getScheduleChangeByDate(id, Timestamp.valueOf(date));
+		ScheduleChange schange = ScheduleChangeDao.getScheduleChangeByDate(id, TimestampAdapter.INSTANCE.unmarshal(date));
 		if (schange != null) {
 			return Response.status(Response.Status.OK)
 				.entity(schange).build();
@@ -81,7 +87,7 @@ public class ScheduleChangeResource {
 	@Path("{date}")
 	@DELETE
 	public Response deleteScheduleChangeByDate(@PathParam("date") String date) {
-		int i = ScheduleChangeDao.deleteScheduleChangeByDate(id, Timestamp.valueOf(date));
+		int i = ScheduleChangeDao.deleteScheduleChangeByDate(id, TimestampAdapter.INSTANCE.unmarshal(date));
 		if (i != 0) {
 			return Response.status(Response.Status.NO_CONTENT).build();
 		} else {

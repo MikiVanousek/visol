@@ -16,6 +16,7 @@ import java.util.Map;
 import nl.utwente.di.visol1.dao.GenericDao;
 import nl.utwente.di.visol1.dao.VesselChangeDao;
 import nl.utwente.di.visol1.models.VesselChange;
+import nl.utwente.di.visol1.type_adapters.TimestampAdapter;
 
 @Path("/changes/vessels")
 public class VesselChangesResource {
@@ -26,10 +27,12 @@ public class VesselChangesResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Map<Integer, List<VesselChange>> getVesselChanges(@QueryParam("from") Timestamp from, @QueryParam("to") Timestamp to){
-		if (from == null) from = GenericDao.MIN_TIME;
-		if(to == null) to = GenericDao.MAX_TIME;
-		return VesselChangeDao.getVesselChanges(from, to);
+	public Map<Integer, List<VesselChange>> getVesselChanges(@QueryParam("from") String from, @QueryParam("to") String to){
+		Timestamp fromTime = TimestampAdapter.INSTANCE.unmarshal(from);
+		Timestamp toTime = TimestampAdapter.INSTANCE.unmarshal(to);
+		if (fromTime == null) fromTime = GenericDao.MIN_TIME;
+		if(toTime == null) toTime = GenericDao.MAX_TIME;
+		return VesselChangeDao.getVesselChanges(fromTime, toTime);
 	}
 
 	@Path("{vessel_id}")

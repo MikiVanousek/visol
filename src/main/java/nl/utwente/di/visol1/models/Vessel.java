@@ -10,6 +10,9 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import nl.utwente.di.visol1.type_adapters.TimestampAdapter;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -146,5 +149,21 @@ public class Vessel implements Comparable<Vessel> {
 	@Override
 	public int compareTo(Vessel other) {
 		return Integer.compare(id, other.id);
+	}
+
+	@Override
+	public String toString() {
+		JsonNodeFactory factory = JsonNodeFactory.withExactBigDecimals(false);
+		ObjectNode vesselObject = factory.objectNode();
+		vesselObject.set("name", factory.textNode(name));
+		vesselObject.set("containers", factory.numberNode(containers));
+		vesselObject.set("destination", factory.numberNode(destination));
+		vesselObject.set("arrival", factory.textNode(TimestampAdapter.INSTANCE.marshal(arrival)));
+		vesselObject.set("deadline", factory.textNode(TimestampAdapter.INSTANCE.marshal(deadline)));
+		vesselObject.set("cost_per_hour", factory.numberNode(costPerHour));
+		vesselObject.set("width", factory.numberNode(width));
+		vesselObject.set("length", factory.numberNode(length));
+		vesselObject.set("depth", factory.numberNode(depth));
+		return vesselObject.toString();
 	}
 }

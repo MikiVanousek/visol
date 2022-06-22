@@ -14,11 +14,14 @@ import nl.utwente.di.visol1.models.VesselChange;
 public class VesselChangeDao {
 	public static VesselChange createVesselChange(VesselChange vesselChange){
 		try (GenericDao.Query query = GenericDao.Query.prepared("INSERT INTO vesselchange (vessel, date, old, new, reason) VALUES(?, ?, "
-		                                                        + "(SELECT to_jsonb(schedule) FROM schedule WHERE vessel = ?), ?::jsonb, ?) RETURNING *;", stmt -> {
+		                                                        + "(SELECT jsonb_build_object('name', name, 'containers', containers, "
+		                                                        + "'destination', destination, 'arrival', arrival, 'deadline', deadline, "
+		                                                        + "'cost_per_hour', cost_per_hour, 'width', width, 'depth', depth, 'length', length) "
+		                                                        + "FROM vessel WHERE id = ?), ?::jsonb, ?) RETURNING *;", stmt -> {
 			stmt.setInt(1, vesselChange.getVessel());
 			stmt.setTimestamp(2, vesselChange.getDate());
 			stmt.setInt(3, vesselChange.getVessel());
-			stmt.setString(4, vesselChange.getNewVessel());
+			stmt.setString(4, vesselChange.getNewVessel().toString());
 			stmt.setString(5, vesselChange.getReason());
 		})){
 			ResultSet rs = query.getResultSet();

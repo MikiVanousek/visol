@@ -5,6 +5,7 @@ import nl.utwente.di.visol1.dao.GenericDao;
 import nl.utwente.di.visol1.dao.ScheduleDao;
 import nl.utwente.di.visol1.models.Berth;
 import nl.utwente.di.visol1.models.Schedule;
+import nl.utwente.di.visol1.type_adapters.TimestampAdapter;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -65,11 +66,13 @@ public class BerthResource {
     @Path("/schedules")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Schedule> getSchedules(@QueryParam("from") Timestamp from, @QueryParam("to") Timestamp to){
-	      if (from == null) from = GenericDao.MIN_TIME;
-				if(to == null) to = GenericDao.MAX_TIME;
+    public List<Schedule> getSchedules(@QueryParam("from") String from, @QueryParam("to") String to){
+	    Timestamp fromTime = TimestampAdapter.INSTANCE.unmarshal(from);
+	    Timestamp toTime = TimestampAdapter.INSTANCE.unmarshal(to);
+	    if (fromTime == null) fromTime = GenericDao.MIN_TIME;
+	    if(toTime == null) toTime = GenericDao.MAX_TIME;
 
-	    return ScheduleDao.getSchedulesByBerth(id, from, to);
+	    return ScheduleDao.getSchedulesByBerth(id, fromTime, toTime);
 
     }
 }

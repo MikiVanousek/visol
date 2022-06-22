@@ -4,6 +4,7 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.sql.Time;
 
 public class TimeAdapter extends XmlAdapter<String, Time> {
+	public static final TimeAdapter INSTANCE = new TimeAdapter();
     @Override
     public String marshal(Time time) {
         return time == null ? null : time.toString();

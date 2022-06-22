@@ -16,6 +16,7 @@ import java.util.Map;
 import nl.utwente.di.visol1.dao.GenericDao;
 import nl.utwente.di.visol1.dao.ScheduleChangeDao;
 import nl.utwente.di.visol1.models.ScheduleChange;
+import nl.utwente.di.visol1.type_adapters.TimestampAdapter;
 
 @Path("/changes/schedules")
 public class ScheduleChangesResource {
@@ -26,10 +27,12 @@ public class ScheduleChangesResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Map<Integer, List<ScheduleChange>> getScheduleChanges(@QueryParam("from") Timestamp from, @QueryParam("to") Timestamp to){
-		if (from == null) from = GenericDao.MIN_TIME;
-		if(to == null) to = GenericDao.MAX_TIME;
-		return ScheduleChangeDao.getScheduleChanges(from, to);
+	public Map<Integer, List<ScheduleChange>> getScheduleChanges(@QueryParam("from") String from, @QueryParam("to") String to){
+		Timestamp fromTime = TimestampAdapter.INSTANCE.unmarshal(from);
+		Timestamp toTime = TimestampAdapter.INSTANCE.unmarshal(to);
+		if (fromTime == null) fromTime = GenericDao.MIN_TIME;
+		if(toTime == null) toTime = GenericDao.MAX_TIME;
+		return ScheduleChangeDao.getScheduleChanges(fromTime, toTime);
 	}
 
 	@Path("{vessel_id}")
