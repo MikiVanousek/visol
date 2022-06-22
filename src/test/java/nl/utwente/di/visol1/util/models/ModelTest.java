@@ -1,4 +1,4 @@
-package nl.utwente.di.visol1.models;
+package nl.utwente.di.visol1.util.models;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -11,6 +11,14 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Comparator;
+
+import nl.utwente.di.visol1.models.Berth;
+import nl.utwente.di.visol1.models.Port;
+import nl.utwente.di.visol1.models.Role;
+import nl.utwente.di.visol1.models.Schedule;
+import nl.utwente.di.visol1.models.Terminal;
+import nl.utwente.di.visol1.models.User;
+import nl.utwente.di.visol1.models.Vessel;
 
 public class ModelTest {
     public static void main(String[] args) {

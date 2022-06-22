@@ -11,6 +11,7 @@ import nl.utwente.di.visol1.models.Port;
 import nl.utwente.di.visol1.models.Schedule;
 import nl.utwente.di.visol1.models.Terminal;
 import nl.utwente.di.visol1.models.Vessel;
+import nl.utwente.di.visol1.type_adapters.TimestampAdapter;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -72,11 +73,12 @@ public class TerminalResource {
     @Path("/schedules")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Map<Integer, List<Schedule>> getSchedules(@QueryParam("from") Timestamp from, @QueryParam("to") Timestamp to){
-		if (from == null) from = GenericDao.MIN_TIME;
-		if(to == null) to = GenericDao.MAX_TIME;
-
-        return ScheduleDao.getSchedulesByTerminal(id, from, to);
+    public Map<Integer, List<Schedule>> getSchedules(@QueryParam("from") String from, @QueryParam("to") String to){
+	    Timestamp fromTime = TimestampAdapter.INSTANCE.unmarshal(from);
+	    Timestamp toTime = TimestampAdapter.INSTANCE.unmarshal(to);
+	    if (fromTime == null) fromTime = GenericDao.MIN_TIME;
+	    if(toTime == null) toTime = GenericDao.MAX_TIME;
+        return ScheduleDao.getSchedulesByTerminal(id, fromTime, toTime);
     }
 
     @Path("/berths")

@@ -4,10 +4,12 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -18,10 +20,10 @@ public class VesselChange {
 	private Timestamp date;
 	@JsonProperty("old")
 	@XmlElement(name = "old")
-	private String oldVessel;
+	private Vessel oldVessel;
 	@JsonProperty("new")
 	@XmlElement(name = "new")
-	private String newVessel;
+	private Vessel newVessel;
 	private String reason;
 
 	public VesselChange(){
@@ -29,24 +31,19 @@ public class VesselChange {
 	}
 
 	public VesselChange(int vessel, Timestamp date, String oldVessel, String newVessel, String reason) {
+		ObjectMapper mapper = new ObjectMapper();
 		this.vessel = vessel;
 		this.date = date;
-		this.oldVessel = oldVessel;
-		this.newVessel = newVessel;
-		this.reason = reason;
-	}
-
-	public VesselChange(int vessel, Timestamp date, String oldVessel, byte[] newVessel, String reason) {
-		this.vessel = vessel;
-		this.date = date;
-		this.oldVessel = oldVessel;
-		Vessel newVesselObject = new Vessel();
 		try {
-			newVesselObject = new ObjectMapper().readValue(newVessel, Vessel.class);
+			if (oldVessel == null || oldVessel.equals("")) {
+				this.oldVessel = new Vessel();
+			} else {
+				this.oldVessel = mapper.readValue(oldVessel, Vessel.class);
+			}
+			this.newVessel = mapper.readValue(newVessel, Vessel.class);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		this.newVessel = newVesselObject.toString();
 		this.reason = reason;
 	}
 
@@ -66,19 +63,19 @@ public class VesselChange {
 		this.date = date;
 	}
 
-	public String getOldVessel() {
+	public Vessel getOldVessel() {
 		return oldVessel;
 	}
 
-	public void setOldVessel(String oldVessel) {
+	public void setOldVessel(Vessel oldVessel) {
 		this.oldVessel = oldVessel;
 	}
 
-	public String getNewVessel() {
+	public Vessel getNewVessel() {
 		return newVessel;
 	}
 
-	public void setNewVessel(String newVessel) {
+	public void setNewVessel(Vessel newVessel) {
 		this.newVessel = newVessel;
 	}
 

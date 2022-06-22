@@ -20,6 +20,7 @@ import java.util.List;
 import nl.utwente.di.visol1.dao.GenericDao;
 import nl.utwente.di.visol1.dao.VesselChangeDao;
 import nl.utwente.di.visol1.models.VesselChange;
+import nl.utwente.di.visol1.type_adapters.TimestampAdapter;
 
 public class VesselChangeResource {
 	@Context
@@ -48,17 +49,21 @@ public class VesselChangeResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<VesselChange> getVesselChanges(@QueryParam("from") Timestamp from, @QueryParam("to") Timestamp to){
-		if (from == null) from = GenericDao.MIN_TIME;
-		if(to == null) to = GenericDao.MAX_TIME;
-		return VesselChangeDao.getVesselChangesByVessel(id, from, to);
+	public List<VesselChange> getVesselChanges(@QueryParam("from") String from, @QueryParam("to") String to){
+		Timestamp fromTime = TimestampAdapter.INSTANCE.unmarshal(from);
+		Timestamp toTime = TimestampAdapter.INSTANCE.unmarshal(to);
+		if (fromTime == null) fromTime = GenericDao.MIN_TIME;
+		if(toTime == null) toTime = GenericDao.MAX_TIME;
+		return VesselChangeDao.getVesselChangesByVessel(id, fromTime, toTime);
 	}
 
 	@DELETE
-	public Response deleteVesselChanges(@QueryParam("from") Timestamp from, @QueryParam("to") Timestamp to){
-		if (from == null) from = GenericDao.MIN_TIME;
-		if(to == null) to = GenericDao.MAX_TIME;
-		int i = VesselChangeDao.deleteVesselChanges(id, from, to);
+	public Response deleteVesselChanges(@QueryParam("from") String from, @QueryParam("to") String to){
+		Timestamp fromTime = TimestampAdapter.INSTANCE.unmarshal(from);
+		Timestamp toTime = TimestampAdapter.INSTANCE.unmarshal(to);
+		if (fromTime == null) fromTime = GenericDao.MIN_TIME;
+		if(toTime == null) toTime = GenericDao.MAX_TIME;
+		int i = VesselChangeDao.deleteVesselChanges(id, fromTime, toTime);
 		if (i != 0){
 			return Response.status(Response.Status.NO_CONTENT).build();
 		} else {
@@ -68,8 +73,9 @@ public class VesselChangeResource {
 
 	@Path("{date}")
 	@GET
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response getVesselChangeByDate(@PathParam("date") String date) {
-		VesselChange vchange = VesselChangeDao.getVesselChangeByDate(id, Timestamp.valueOf(date));
+		VesselChange vchange = VesselChangeDao.getVesselChangeByDate(id, TimestampAdapter.INSTANCE.unmarshal(date));
 		if (vchange != null) {
 			return Response.status(Response.Status.OK)
 				.entity(vchange).build();
@@ -81,7 +87,7 @@ public class VesselChangeResource {
 	@Path("{date}")
 	@DELETE
 	public Response deleteVesselChangeByDate(@PathParam("date") String date) {
-		int i = VesselChangeDao.deleteVesselChangeByDate(id, Timestamp.valueOf(date));
+		int i = VesselChangeDao.deleteVesselChangeByDate(id, TimestampAdapter.INSTANCE.unmarshal(date));
 		if (i != 0) {
 			return Response.status(Response.Status.NO_CONTENT).build();
 		} else {

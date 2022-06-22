@@ -11,6 +11,7 @@ import nl.utwente.di.visol1.models.Schedule;
 import nl.utwente.di.visol1.models.ScheduleChange;
 import nl.utwente.di.visol1.models.Terminal;
 import nl.utwente.di.visol1.models.Vessel;
+import nl.utwente.di.visol1.models.VesselChange;
 import nl.utwente.di.visol1.util.Configuration;
 import nl.utwente.di.visol1.util.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -173,12 +174,32 @@ public class DaoTest {
 			schanges2.addAll(ScheduleChangeDao.getScheduleChangesByVessel(vessel.getId(), GenericDao.MIN_TIME, GenericDao.MAX_TIME));
 		}
 
-		ScheduleChange schange1 = ScheduleChangeDao.createScheduleChange(new ScheduleChange(2, Timestamp.valueOf("2010-01-08 13:05:06"), "{\"de\": 1, \"test\": 2}", 	"{\"ed\": 2, \"test\": 3}", "tests"));
+		ScheduleChange schange1 = ScheduleChangeDao.createScheduleChange(new ScheduleChange(2, Timestamp.valueOf("2010-01-08 13:05:06"), "", 	DummyData.SCHEDULES.get(2).toString(), "tests"));
 		ScheduleChange schange2 = ScheduleChangeDao.getScheduleChangeByDate(2, Timestamp.valueOf("2010-01-08 13:05:06"));
 		int deletedRows = ScheduleChangeDao.deleteScheduleChangeByDate(2, Timestamp.valueOf("2010-01-08 13:05:06"));
 
 		assertTrue(schanges1.containsAll(schanges2) && schanges2.containsAll(schanges1));
 		assertEquals(deletedRows, 1);
 		assertEquals(schange1, schange2);
+	}
+
+	@Test
+	void vesselChangeTest(){
+		List<VesselChange> vchanges1 = new ArrayList<>();
+		List<VesselChange> vchanges2 = new ArrayList<>();
+		Map<Integer, List<VesselChange>> vchangeMap = VesselChangeDao.getVesselChanges(GenericDao.MIN_TIME, GenericDao.MAX_TIME);
+		for (int key : vchangeMap.keySet()) vchanges1.addAll(vchangeMap.get(key));
+
+		for (Vessel vessel : DummyData.VESSELS) {
+			vchanges2.addAll(VesselChangeDao.getVesselChangesByVessel(vessel.getId(), GenericDao.MIN_TIME, GenericDao.MAX_TIME));
+		}
+
+		VesselChange vchange1 = VesselChangeDao.createVesselChange(new VesselChange(2, Timestamp.valueOf("2010-01-08 13:05:06"), "", 	DummyData.VESSELS.get(2).toString(), "tests"));
+		VesselChange vchange2 = VesselChangeDao.getVesselChangeByDate(2, Timestamp.valueOf("2010-01-08 13:05:06"));
+		int deletedRows = VesselChangeDao.deleteVesselChangeByDate(2, Timestamp.valueOf("2010-01-08 13:05:06"));
+
+		assertTrue(vchanges1.containsAll(vchanges2) && vchanges2.containsAll(vchanges1));
+		assertEquals(deletedRows, 1);
+		assertEquals(vchange1, vchange2);
 	}
 }

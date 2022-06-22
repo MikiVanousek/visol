@@ -21,7 +21,7 @@ public class ScheduleChangeDao extends GenericDao{
 			stmt.setInt(1, scheduleChange.getVessel());
 			stmt.setTimestamp(2, scheduleChange.getDate());
 			stmt.setInt(3, scheduleChange.getVessel());
-			stmt.setString(4, scheduleChange.getNewSchedule());
+			stmt.setString(4, scheduleChange.getNewSchedule().toString());
 			stmt.setString(5, scheduleChange.getReason());
 		})){
 			ResultSet rs = query.getResultSet();

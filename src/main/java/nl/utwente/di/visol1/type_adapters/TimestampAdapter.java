@@ -7,6 +7,7 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 public class TimestampAdapter extends XmlAdapter<String, Timestamp> {
+	public static final TimestampAdapter INSTANCE = new TimestampAdapter();
 	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssX");
 
 	@Override

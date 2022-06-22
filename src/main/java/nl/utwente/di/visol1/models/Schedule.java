@@ -8,6 +8,9 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import nl.utwente.di.visol1.type_adapters.TimestampAdapter;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -17,7 +20,7 @@ public class Schedule implements Comparable<Schedule> {
     boolean manual;
     Timestamp start;
 	@JsonProperty("expected_end")
-		@XmlElement(name = "expected_end")
+	@XmlElement(name = "expected_end")
     Timestamp expectedEnd;
 
 
@@ -90,5 +93,17 @@ public class Schedule implements Comparable<Schedule> {
 	@Override
 	public int compareTo(Schedule other) {
 		return Integer.compare(vessel, other.vessel);
+	}
+
+	@Override
+	public String toString() {
+		JsonNodeFactory factory = JsonNodeFactory.withExactBigDecimals(false);
+		ObjectNode scheduleObject = factory.objectNode();
+		scheduleObject.set("vessel", factory.numberNode(vessel));
+		scheduleObject.set("berth", factory.numberNode(berth));
+		scheduleObject.set("manual", factory.booleanNode(manual));
+		scheduleObject.set("start", factory.textNode(TimestampAdapter.INSTANCE.marshal(start)));
+		scheduleObject.set("expected_end", factory.textNode(TimestampAdapter.INSTANCE.marshal(expectedEnd)));
+		return scheduleObject.toString();
 	}
 }
