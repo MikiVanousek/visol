@@ -8334,7 +8334,6 @@ readers do not read off random characters that represent icons */
 .navbar {
   background-color: white;
   padding: 18px 30px !important;
-  margin-bottom: 24px;
 }
 .navbar-brand-role {
   color: darkgrey;
@@ -8722,7 +8721,7 @@ icon-plain .view-default {
 
 .planner-schedule {
   display: flex;
-  max-height: 70vh;
+  max-height: calc(100vh - 265px);
   overflow: scroll;
   border: 1px solid #EBEBEB;
   border-radius: 8px;
