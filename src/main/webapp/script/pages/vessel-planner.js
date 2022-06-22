@@ -48,7 +48,7 @@ class VesselPlanner extends HTMLElement {
             view="${VesselCard.VIEW.unscheduled}"
         ></vessel-card> 
        
-        <vessel-modal name="update"></vessel-modal>
+        <vessel-modal name="update" id="update-modal"></vessel-modal>
 
     </unscheduled-vessels>
     `;

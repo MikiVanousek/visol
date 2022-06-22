@@ -1,4 +1,4 @@
-import Requests from './requests.js';
+import Requests from "./requests.js";
 
 class VisolApi {
   static portId = 1;
