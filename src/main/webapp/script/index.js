@@ -17,3 +17,5 @@ import './pages/port-authority.js';
 import './pages/landing-page.js';
 import './pages/vessel-planner.js';
 
+import './requests.js';
+import './api.js';

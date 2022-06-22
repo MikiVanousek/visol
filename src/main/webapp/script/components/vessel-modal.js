@@ -74,8 +74,8 @@ class VesselModal extends HTMLElement {
                      type="number">
             </div>
             <div class="col">
-              <label class="form-label" for="form-cost">Cost:</label>
-              <input class="form-control form-control-sm" id="${this.name}-form-cost"
+              <label class="form-label" for="${this.name}-form-cost_per_hour">Cost:</label>
+              <input class="form-control form-control-sm" id="${this.name}-form-cost_per_hour"
                      name="vessel-cost_per_hour" required type="number">
             </div>
           </div>
@@ -106,9 +106,9 @@ class VesselModal extends HTMLElement {
                      value="0">
             </div>
             <div class="col">
-              <label class="form-label" for="form-depth">Depth:</label>
+              <label class="form-label" for="${this.name}-form-depth">Depth:</label>
               <input class="form-control form-control-sm"
-                     id="form-depth"
+                     id="${this.name}-form-depth"
                      name="vessel-depth"
                      required
                      type="number"
@@ -153,11 +153,11 @@ class VesselModal extends HTMLElement {
 
           <div class="row mb-3" id="${this.name}-schedule-edit">
             <div class="col">
-              <label class="form-label" for="form-berth">Berth:</label>
+              <label class="form-label" for="form-destination">Berth:</label>
               <input class="form-control form-control-sm ${this.name}-disabled-if-auto"
                      disabled
-                     id="${this.name}-form-berth"
-                     name="schedule-berth"
+                     id="${this.name}-form-destination"
+                     name="schedule-destination"
                      required
                      type="number">
             </div>
@@ -260,6 +260,12 @@ class VesselModal extends HTMLElement {
     }
 
     return serializedForm;
+  }
+
+  setVessel(vessel) {
+    for (const key in vessel) {
+      this.getElement(`form-${key}`).value = vessel[key];
+    }
   }
 
   hideBtnFooter() {
