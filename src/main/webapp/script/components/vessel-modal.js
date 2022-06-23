@@ -1,7 +1,8 @@
 import VisolApi from '../api.js';
 
 class VesselModal extends HTMLElement {
-  schedule_type = 'auto';
+  schedule_type;
+  // ID prefix
   name;
 
   constructor() {
@@ -12,7 +13,6 @@ class VesselModal extends HTMLElement {
 
   set_schedule_type(type) {
     this.schedule_type = type;
-    // console.log("Changing to schedule type " + type)
     if (type === 'disabled') {
       this.getElement(`schedule-edit`).setAttribute('hidden', '');
     } else {
@@ -47,14 +47,13 @@ class VesselModal extends HTMLElement {
           <div class="row mb-3">
             <div class="col">
               <label class="form-label" for="${this.name}-form-arrival">Arrival:</label>
-              <input class="form-control form-control-sm" id="${this.name}-form-arrival"
-                     name="datetime-arrival-vessel" required type="datetime-local"
-                     value="${VisolApi.formatDatetimeForInput(Date.now())}" />
+              <input id="${this.name}-form-arrival" is="datetime-input" 
+                class="form-control form-control-sm" now name="vessel-arrival" required>
             </div>
             <div class="col">
               <label class="form-label" for="${this.name}-form-deadline">Deadline:</label>
-              <input class="form-control form-control-sm" id="${this.name}-form-deadline"
-                     name="datetime-deadline-vessel" type="datetime-local">
+              <input is="datetime-input" class="form-control form-control-sm" id="${this.name}-form-deadline"
+                     name="datetime-deadline-vessel">
             </div>
           </div>
 
@@ -76,8 +75,10 @@ class VesselModal extends HTMLElement {
           </div>
 
           <div class="mb-3 row">
-            <div class="col d-grid">
-              <select-terminal name="${this.name}" prefix="vessel"></select-terminal>
+            <div class="col">
+              <label class="form-label" for="${this.name}-form-width"><b>Terminal:</b></label>
+              <select is="select-terminal" class="form-select form-select-sm"
+                id="${this.name}-form-destination" name="${this.name}"></select>
             </div>
             <div class="col">
               <label class="form-label" for="form-length">Length:</label>
@@ -148,7 +149,9 @@ class VesselModal extends HTMLElement {
 
           <div class="row mb-3" id="${this.name}-schedule-edit">
             <div class="col d-grid">
-              <select-berth class ="${this.name}-disabled-if-auto"> </select-berth>
+              <label class="form-label" for="${this.name}-form-berth">Berth:</label>
+              <select is="select-berth" id="${this.name}-form-berth"
+                class="form-select form-select-sm"> </select>
             </div>
             <div class="col">
               <label class="form-label" for="form-handel">Handel time:</label>
@@ -178,6 +181,7 @@ class VesselModal extends HTMLElement {
     </div>
   </div>
 </div>`;
+    this.set_schedule_type('auto');
     // You can only attach the listeners after setting the innerHTML.
     this.attachListeners();
   }
@@ -197,11 +201,10 @@ class VesselModal extends HTMLElement {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
 
-      const serializedForm = this.serializeForm(form);
-      const vessel = serializedForm['vessel'];
+      const vessel = this.getVessel();
+      console.log(vessel);
       this.hideBtnFooter();
       VisolApi.postVessel(vessel).then((response) => {
-        const schedule = serializedForm['schedule'];
         if (this.schedule_type !== 'disabled') {
           // Extract the id from the url location of the vessel resource.
           const vesselId = response.headers.get('Location')
@@ -224,43 +227,29 @@ class VesselModal extends HTMLElement {
     });
   }
 
-  serializeForm(form) {
-    const serializedForm = {};
-    for (const prefix of ['vessel', 'schedule', 'datetime']) {
-      serializedForm[prefix] = {};
-    }
-
-    const formData = new FormData(form);
-    for (const [name, value] of formData) {
-      if (value !== '') {
-        const words = name.split('-');
-        const prefix = words[0];
-        const key = words[1];
-
-        // If it is a datetime, change to timezone-neutral
-        // Frankly awkward, let me know if you can do better!
-        if (prefix === 'datetime') {
-          // for datetimes, the object they belong to is the last word,as the first is datetime
-          serializedForm[words[2]][key] = VisolApi.formatDatetimeForApi(value);
-        } else {
-          serializedForm[prefix][key] = value;
-        }
-      }
-    }
-
-    return serializedForm;
-  }
-
   setVessel(vessel) {
     for (const key in vessel) {
-      if (key === 'arrival' || key === 'deadline') {
-        const formattedDate = VisolApi.formatDatetimeForInput(new Date(vessel[key]));
-        console.log(formattedDate);
-        this.getElement(`form-${key}`).value = formattedDate;
-      } else {
-        this.getElement(`form-${key}`).value = vessel[key];
-      }
+      this.getElement(`form-${key}`).value = vessel[key];
     }
+  }
+
+  getVessel() {
+    const vesselKeys = ['name', 'arrival', 'deadline', 'containers', 'cost_per_hour',
+      'destination', 'length', 'width', 'depth'];
+    const vessel = {};
+    vesselKeys.forEach((key, index) => {
+      vessel[key] = this.getElement(`form-${key}`).value;
+    });
+    return vessel;
+  }
+
+  getSchedule() {
+    const scheduleKeys = ['berth', 'handel'];
+    const schedule = {};
+    scheduleKeys.forEach((key, index) => {
+      schedule[key] = this.getElement(`form-${key}`).value;
+    });
+    return schedule;
   }
 
   hideBtnFooter() {
@@ -273,8 +262,11 @@ class VesselModal extends HTMLElement {
     this.buttons.removeAttribute('hidden');
   }
 
+  // TODO Miki getForm
   getElement(id) {
-    return document.getElementById(this.name + '-' + id);
+    const el = document.getElementById(this.name + '-' + id);
+    if (el === null) throw new Error(`Failed to get element with id ${this.name}-${id}`);
+    return el;
   }
 }
 

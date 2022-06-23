@@ -1,6 +1,6 @@
 import VisolApi from '../api.js';
 
-class SelectResource extends HTMLElement {
+class SelectResource extends HTMLSelectElement {
   resourcePromise;
   displayAttribute;
   parentName = this.getAttribute('name');
@@ -11,6 +11,7 @@ class SelectResource extends HTMLElement {
     this.displayAttribute = displayAttribute;
     this.resourcePromise = resourcePromise;
     this.resourceName = resourceName;
+    console.log(this.resourcePrefix);
   }
 
   connectedCallback() {
@@ -21,16 +22,9 @@ class SelectResource extends HTMLElement {
   }
 
   buildSelect(resource) {
-    return `<label class="form-label me-3" for="${this.parentName}-form-${this.resourceName}">
-  <b>${this.resourceName.charAt(0).toUpperCase() + this.resourceName.slice(1)}:</b>
-</label>
-<select class="form-select form-select-sm" id="${this.parentName}-form-${this.resourceName}"
-  name="${this.resourcePrefix}-${this.resourceName}">
-  ${Object.keys(resource).map((i) =>
-    `<option value="${i}">${this.displayAttribute === undefined ? i :
-        resource[i][this.displayAttribute]}</option>`).join('\n')}
-</select>
-    `;
+    return Object.keys(resource).map((i) =>
+      `<option value="${i}">${this.displayAttribute === undefined ? i :
+        resource[i][this.displayAttribute]}</option>`).join('\n');
   }
 }
 
@@ -46,7 +40,7 @@ class SelectBerth extends SelectResource {
   }
 }
 
-customElements.define('select-terminal', SelectTerminal);
-customElements.define('select-berth', SelectBerth);
+customElements.define('select-terminal', SelectTerminal, {extends: 'select'});
+customElements.define('select-berth', SelectBerth, {extends: 'select'});
 
 export default SelectResource;
