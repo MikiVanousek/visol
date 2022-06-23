@@ -159,19 +159,20 @@ class VesselModal extends HTMLElement {
               > </select>
             </div>
             <div class="col">
-              <label class="form-label" for="form-handel">Handel time:</label>
-              <input class="form-control form-control-sm ${this.name}-disabled-if-auto"
+              <label class="form-label" for="form-start">Handel time:</label>
+              <input id="${this.name}-form-start"
+                     is="datetime-input"
+              class="form-control form-control-sm ${this.name}-disabled-if-auto"
                      disabled
-                     id="${this.name}-form-handel"
                      required
-                     type="datetime-local">
+                   >
             </div>
           </div>
         </div>
         <div class="modal-footer" id="${this.name}-modal-footer-btn">
           <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
-          <button class="btn btn-primary" id="${this.name}-btn-save" type="submit">Save
-                                                                                        changes
+          <button class="btn btn-primary" id="${this.name}-btn-save" type="submit">
+            Save changes
           </button>
         </div>
         <div hidden id="${this.name}-modal-footer-loading">
@@ -215,17 +216,14 @@ class VesselModal extends HTMLElement {
 
   post() {
     const vessel = this.getVessel();
-    console.log(vessel);
     this.hideBtnFooter();
     VisolApi.postVessel(vessel).then((response) => {
       if (this.schedule_type !== 'disabled') {
         // Extract the id from the url location of the vessel resource.
-        const schedule = this.getSchedule();
-        console.log(schedule);
         const vesselId = response.headers.get('Location')
             .split('/').slice(-1)[0];
+        const schedule = this.getSchedule();
         VisolApi.putSchedule(vesselId, schedule).then((response) => {
-          console.log('Schedule created successfully.');
           console.log(response);
           this.showBtnFooter();
         }).catch((e) => {
@@ -242,29 +240,36 @@ class VesselModal extends HTMLElement {
   }
 
   fillIn(object) {
+    // eslint-disable-next-line guard-for-in
     for (const key in object) {
       this.getElement(`form-${key}`).value = object[key];
     }
   }
 
-  getVessel() {
-    const vesselKeys = ['name', 'arrival', 'deadline', 'containers', 'cost_per_hour',
-      'destination', 'length', 'width', 'depth'];
-    const vessel = {};
-    vesselKeys.forEach((key, index) => {
-      vessel[key] = this.getElement(`form-${key}`).value;
+  serialize(keys) {
+    const res = {};
+    keys.forEach((key, _) => {
+      const el = this.getElement(`form-${key}`);
+      if (!el.disabled) {
+        res[key] = el.value;
+      }
     });
-    return vessel;
+    return res;
+  }
+
+  getVessel() {
+    const vesselKeys = ['name', 'arrival', 'deadline', 'containers', 'cost_per_hour', 'destination', 'length', 'width', 'depth'];
+    return this.serialize(vesselKeys);
   }
 
   getSchedule() {
-    const scheduleKeys = ['berth', 'handel'];
-    const schedule = {};
-    scheduleKeys.forEach((key, index) => {
-      schedule[key] = this.getElement(`form-${key}`).value;
-    });
+    const scheduleKeys = ['berth', 'start'];
+    const schedule = this.serialize(scheduleKeys);
+    schedule['manual'] = this.schedule_type === 'manual';
     return schedule;
   }
+
+  // TODO Set schedule
 
   hideBtnFooter() {
     this.buttons.setAttribute('hidden', '');

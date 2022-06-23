@@ -17,7 +17,6 @@ class DatetimeInput extends HTMLInputElement {
   }
 
   set value(timestamp) {
-    console.log(timestamp);
     super.value = VisolApi.formatDatetimeForInput(new Date(timestamp));
   }
 }

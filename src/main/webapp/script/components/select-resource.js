@@ -3,13 +3,10 @@ import VisolApi from '../api.js';
 class SelectResource extends HTMLSelectElement {
   resourcePromise;
   displayAttribute;
-  parentName = this.getAttribute('name');
-  resourcePrefix = this.getAttribute('prefix');
 
   constructor(displayAttribute) {
     super();
     this.displayAttribute = displayAttribute;
-    console.log(this.resourcePrefix);
   }
 
   setResourcePromise(resourcePromise) {
