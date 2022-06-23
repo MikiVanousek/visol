@@ -1,6 +1,7 @@
 import FullButton from './full-button.js';
 import IconCircle from './icon-circle.js';
 import VesselCard from './vessel-card.js';
+import BerthClosed from './berth-closed.js';
 import VisolApi from '../api.js';
 
 class PlannerSchedule extends HTMLElement {
@@ -102,6 +103,11 @@ class PlannerSchedule extends HTMLElement {
                         Berth 2</div>
                   </div>
                 </div>
+                <berth-closed
+                    view="${BerthClosed.VIEW.daily}"
+                    open="08:00:00"
+                    close="19:00:00">
+                </berth-closed>
                 <div class="planner-berths-berth-ships">
                   <vessel-card
                         name="Queen Mary 2"
@@ -151,6 +157,11 @@ class PlannerSchedule extends HTMLElement {
                         Berth 2</div>
                   </div>
                 </div>
+                <berth-closed
+                    view="${BerthClosed.VIEW.daily}"
+                    open="08:00:00"
+                    close="01:00:00">
+                </berth-closed>
                 <div class="planner-berths-berth-ships">
                   <vessel-card
                         name="Queen Mary 2"
@@ -185,6 +196,11 @@ class PlannerSchedule extends HTMLElement {
                     </div>
                 </div>
               </div>
+                <berth-closed
+                    view="${BerthClosed.VIEW.daily}"
+                    open="08:00:00"
+                    close="00:00:00">
+                </berth-closed>
               <div class="planner-berths-berth-ships">
 
               </div>

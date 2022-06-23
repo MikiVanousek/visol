@@ -9,17 +9,19 @@
 		&-dividers
 			+size(100% calc(100% - #{$berth-header-height}))
 			+absolute($berth-header-height null null 0)
-			z-index: 2
+			z-index: 1
 
 			&-item
 				+relative
 				+size(100% $day-view-divider-height)
 				display: block
+
 				&::before
 					content: ""
 					+absolute(null null -2px 0)
 					+size(100% 1px)
 					background-color: $c-stroke
+
 				&:last-child
 					visibility: hidden
 
@@ -62,15 +64,33 @@
 							span
 								color: $c-text-light
 
+			&-closed
+				+absolute
+				+size(100%)
+				border-right: 1px solid $c-stroke
+				z-index: 2
+				padding: 0
+
+				&-in
+					+absolute
+					+flex(center)
+					width: calc(100% - 12px)
+					margin: 0 6px
+					background: repeating-linear-gradient(-45deg, #D9D9D9, #D9D9D9 7px, white 7px, white 14px)
+
+					& icon-circle
+						+sticky(calc(70px + 1em) null 1em null)
+						margin: 1em
 
 			&-ships
 				+relative
 				+size(100%)
 				border-right: 1px solid $c-stroke
-				z-index: 2
+				z-index: 3
 				padding: 0 2*$base-spacing
 
 			&:last-child &-header
 				border-right: none
+
 			&:last-child &-ships
 				border-right: none

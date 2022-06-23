@@ -10,6 +10,7 @@ import './components/drop-down.js';
 import './components/vessel-card.js';
 import './components/select-resource.js';
 import './components/error-toast.js';
+import './components/berth-closed.js';
 
 import './pages/port-authority.js';
 import './pages/landing-page.js';

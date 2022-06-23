@@ -72,7 +72,9 @@
       <option name="HTML_ENFORCE_QUOTES" value="true" />
     </HTMLCodeStyleSettings>
     <JSCodeStyleSettings version="0">
-      <option name="USE_DOUBLE_QUOTES" value="false" />
+	    <option name="FORCE_SEMICOLON_STYLE" value="true" />
+	    <option name="FORCE_QUOTE_STYlE" value="true" />
+	    <option name="USE_DOUBLE_QUOTES" value="false" />
     </JSCodeStyleSettings>
     <JSON>
       <option name="ARRAY_WRAPPING" value="5" />
