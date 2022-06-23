@@ -1,5 +1,5 @@
 import FullButton from '../components/full-button.js';
-import VesselCard from'../components/vessel-card.js';
+import VesselCard from '../components/vessel-card.js';
 
 class VesselPlanner extends HTMLElement {
   constructor() {
@@ -21,7 +21,8 @@ class VesselPlanner extends HTMLElement {
         </ul>
     </nav-bar>
   
-    <planner-schedule></planner-schedule>
+    <planner-schedule terminalId="1">
+    </planner-schedule>
 
     <unscheduled-vessels>
         <vessel-card
@@ -50,8 +51,6 @@ class VesselPlanner extends HTMLElement {
         <vessel-modal name="update"></vessel-modal>
 
     </unscheduled-vessels>
-    <!-- Button triggers modal -->
-      
     `;
   }
 }

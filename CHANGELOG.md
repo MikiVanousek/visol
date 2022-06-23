@@ -69,6 +69,10 @@
 ### Wednesday   
 ![][Niels] Fixing ScheduleChange and VesselChange, not fully done
 
+### Thursday  
+![][Niels] Finished Schedulechange and VesselChange \ 
+![][Niels] Fixed a few backend bugs
+
 [Han]: profile-pictures/Han.png "Han"
 [Hessel]: profile-pictures/Hessel.png "Hessel"
 [Krystof]: profile-pictures/Krystof.png "Krystof"

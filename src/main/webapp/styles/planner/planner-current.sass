@@ -1,7 +1,3 @@
-$current-padding-left: 35px
-$current-label-height: 20px
-$current-arrow-size: 12px
-
 .planner
 	&-current
 		+absolute(null null null 0)
@@ -16,6 +12,7 @@ $current-arrow-size: 12px
 			+size(100%)
 			z-index: 4
 			flex-shrink: 0
+			pointer-events: none
 
 		&::before
 			content: ""
