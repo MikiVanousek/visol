@@ -4,6 +4,7 @@
 		+relative
 		+flex(flex-start, flex-start)
 		padding-top: $berth-header-height
+		flex-grow: 1
 
 		&-dividers
 			+size(100% calc(100% - #{$berth-header-height}))
@@ -21,7 +22,6 @@
 					background-color: $c-stroke
 				&:last-child
 					visibility: hidden
-
 
 		&-berth
 			+relative
@@ -41,14 +41,27 @@
 				z-index: 4
 
 				&-info
-					+flex()
+					+flex(space-between)
 					+size(100%)
 					padding: $base-spacing*2
+
+					&-left
+						+flex
 
 					&-name
 						font-size: 14px
 						font-weight: 600
 						margin-left: $base-spacing*2
+
+					&-details
+						&-item
+							font-size: 11px
+							margin: 0
+							color: $c-text-semi
+
+							span
+								color: $c-text-light
+
 
 			&-ships
 				+relative

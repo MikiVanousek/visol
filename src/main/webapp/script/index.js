@@ -3,6 +3,7 @@ import './components/icon-circle.js';
 import './components/icon-plain.js';
 import './components/vessel-modal.js';
 import './components/navbar.js';
+import './components/planner-berth.js';
 import './components/planner-schedule.js';
 import './components/unscheduled-vessels.js';
 import './components/drop-down.js';

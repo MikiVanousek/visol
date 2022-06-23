@@ -5,6 +5,7 @@ class IconCircle extends HTMLElement {
     berth: 'berth',
     closed: 'closed',
     addVessel: 'add-vessel',
+    infeasible: 'infeasible',
   };
 
   constructor() {
