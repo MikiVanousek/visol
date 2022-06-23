@@ -77,7 +77,7 @@ class VesselModal extends HTMLElement {
 
           <div class="mb-3 row">
             <div class="col d-grid">
-              <select-terminal></select-terminal>
+              <select-terminal name="${this.name}" prefix="vessel"></select-terminal>
             </div>
             <div class="col">
               <label class="form-label" for="form-length">Length:</label>
@@ -148,11 +148,11 @@ class VesselModal extends HTMLElement {
 
           <div class="row mb-3" id="${this.name}-schedule-edit">
             <div class="col">
-              <label class="form-label" for="form-destination">Berth:</label>
+              <label class="form-label" for="${this.name}-form-berth">Berth:</label>
               <input class="form-control form-control-sm ${this.name}-disabled-if-auto"
                      disabled
-                     id="${this.name}-form-destination"
-                     name="schedule-destination"
+                     id="${this.name}-form-berth"
+                     name="schedule-berth"
                      required
                      type="number">
             </div>

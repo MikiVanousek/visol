@@ -54,7 +54,7 @@ class VesselPlanner extends HTMLElement {
 
     </unscheduled-vessels>
     `;
-    VisolApi.getVessel('1').then((res) => {
+    VisolApi.getVessel('18').then((res) => {
       const vessel = res;
       console.log(vessel);
       document.getElementById('update-m').setVessel(vessel);
