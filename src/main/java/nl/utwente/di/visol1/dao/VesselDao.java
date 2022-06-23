@@ -130,4 +130,24 @@ public class VesselDao extends GenericDao {
 		}
 		return result;
 	}
+
+	public static int getUnscheduledVesselsByTerminal(int terminalId, Timestamp from, Timestamp to) {
+		try (Query query = Query.prepared("SELECT COUNT(id) AS count FROM vessel WHERE destination = ?  AND deadline >= ? AND arrival <= ? "
+		                                  + "AND id NOT IN (SELECT vessel FROM schedule WHERE (start >= ? AND start <= ?) OR (expected_end >= ? AND expected_end <= ?))", stmt -> {
+			stmt.setInt(1, terminalId);
+			stmt.setTimestamp(2, from);
+			stmt.setTimestamp(3, to);
+			stmt.setTimestamp(4, from);
+			stmt.setTimestamp(5, to);
+			stmt.setTimestamp(6, from);
+			stmt.setTimestamp(7, to);
+		})) {
+			ResultSet rs = query.getResultSet();
+			if (!rs.next()) return -1;
+			return rs.getInt("count");
+		} catch (SQLException exception) {
+			exception.printStackTrace();
+			return -1;
+		}
+	}
 }

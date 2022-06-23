@@ -22,6 +22,7 @@ import nl.utwente.di.visol1.dao.ScheduleDao;
 import nl.utwente.di.visol1.dao.TerminalDao;
 import nl.utwente.di.visol1.dao.VesselDao;
 import nl.utwente.di.visol1.models.Berth;
+import nl.utwente.di.visol1.models.Performance;
 import nl.utwente.di.visol1.models.Schedule;
 import nl.utwente.di.visol1.models.Terminal;
 import nl.utwente.di.visol1.models.Vessel;
@@ -105,10 +106,23 @@ public class TerminalResource {
 	@Path("/performance")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Terminal getPerformance() {
-		//TODO: THIS, returns cost_per_hour, scheduled_vessels and unscheduled_vessels
+	public Performance getPerformance(@QueryParam("from") String from, @QueryParam("to") String to) {
+		Timestamp fromTime = TimestampAdapter.unadapt(from);
+		Timestamp toTime = TimestampAdapter.unadapt(to);
+		if (fromTime == null) fromTime = GenericDao.MIN_TIME;
+		if (toTime == null) toTime = GenericDao.MAX_TIME;
+		Map<Integer, Vessel> vesselMap = VesselDao.getVesselsByTerminal(id, fromTime, toTime);
+		int unscheduledVessels = VesselDao.getUnscheduledVesselsByTerminal(id, fromTime, toTime);
+		int scheduledVessels = vesselMap.size() - unscheduledVessels;
+		double totalCost = 0;
+		for (int i : vesselMap.keySet()){
+			Schedule schedule = ScheduleDao.getScheduleByVessel(i);
+			if(schedule == null) continue;
+			double hours = (schedule.getExpectedEnd().getTime() - schedule.getStart().getTime()) / 3600000.0;
+			totalCost += hours * vesselMap.get(i).getCostPerHour();
+		}
 
-		return null;
+		return new Performance(totalCost, scheduledVessels, unscheduledVessels);
 	}
 
 	@Path("/vessels")
