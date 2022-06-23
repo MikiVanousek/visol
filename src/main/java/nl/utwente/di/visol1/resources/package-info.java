@@ -1,6 +1,6 @@
 @XmlJavaTypeAdapters({
-        @XmlJavaTypeAdapter(value = TimeAdapter.class, type = Time.class),
-        @XmlJavaTypeAdapter(value = TimestampAdapter.class, type = Timestamp.class)
+	@XmlJavaTypeAdapter(value = TimeAdapter.XML.class, type = Time.class),
+	@XmlJavaTypeAdapter(value = TimestampAdapter.XML.class, type = Timestamp.class)
 })
 package nl.utwente.di.visol1.resources;
 

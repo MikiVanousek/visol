@@ -13,7 +13,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -28,19 +27,20 @@ public class VesselChangeResource {
 	@Context
 	Request request;
 	int id;
-	public VesselChangeResource(UriInfo uriInfo, Request request, String id){
+
+	public VesselChangeResource(UriInfo uriInfo, Request request, String id) {
 		this.uriInfo = uriInfo;
 		this.request = request;
 		this.id = Integer.parseInt(id);
 	}
 
 	@POST
-	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response createVesselChange(VesselChange vchange){
+	public Response createVesselChange(VesselChange vchange) {
 		vchange.setVessel(id);
 		VesselChange createdChange = VesselChangeDao.createVesselChange(vchange);
-		if (createdChange != null){
+		if (createdChange != null) {
 			return Response.status(Response.Status.OK).entity(createdChange).build();
 		} else {
 			return Response.status(Response.Status.NOT_ACCEPTABLE).build();
@@ -49,22 +49,22 @@ public class VesselChangeResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<VesselChange> getVesselChanges(@QueryParam("from") String from, @QueryParam("to") String to){
-		Timestamp fromTime = TimestampAdapter.INSTANCE.unmarshal(from);
-		Timestamp toTime = TimestampAdapter.INSTANCE.unmarshal(to);
+	public List<VesselChange> getVesselChanges(@QueryParam("from") String from, @QueryParam("to") String to) {
+		Timestamp fromTime = TimestampAdapter.unadapt(from);
+		Timestamp toTime = TimestampAdapter.unadapt(to);
 		if (fromTime == null) fromTime = GenericDao.MIN_TIME;
-		if(toTime == null) toTime = GenericDao.MAX_TIME;
+		if (toTime == null) toTime = GenericDao.MAX_TIME;
 		return VesselChangeDao.getVesselChangesByVessel(id, fromTime, toTime);
 	}
 
 	@DELETE
-	public Response deleteVesselChanges(@QueryParam("from") String from, @QueryParam("to") String to){
-		Timestamp fromTime = TimestampAdapter.INSTANCE.unmarshal(from);
-		Timestamp toTime = TimestampAdapter.INSTANCE.unmarshal(to);
+	public Response deleteVesselChanges(@QueryParam("from") String from, @QueryParam("to") String to) {
+		Timestamp fromTime = TimestampAdapter.unadapt(from);
+		Timestamp toTime = TimestampAdapter.unadapt(to);
 		if (fromTime == null) fromTime = GenericDao.MIN_TIME;
-		if(toTime == null) toTime = GenericDao.MAX_TIME;
+		if (toTime == null) toTime = GenericDao.MAX_TIME;
 		int i = VesselChangeDao.deleteVesselChanges(id, fromTime, toTime);
-		if (i != 0){
+		if (i != 0) {
 			return Response.status(Response.Status.NO_CONTENT).build();
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).build();
@@ -75,7 +75,7 @@ public class VesselChangeResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getVesselChangeByDate(@PathParam("date") String date) {
-		VesselChange vchange = VesselChangeDao.getVesselChangeByDate(id, TimestampAdapter.INSTANCE.unmarshal(date));
+		VesselChange vchange = VesselChangeDao.getVesselChangeByDate(id, TimestampAdapter.unadapt(date));
 		if (vchange != null) {
 			return Response.status(Response.Status.OK)
 				.entity(vchange).build();
@@ -87,7 +87,7 @@ public class VesselChangeResource {
 	@Path("{date}")
 	@DELETE
 	public Response deleteVesselChangeByDate(@PathParam("date") String date) {
-		int i = VesselChangeDao.deleteVesselChangeByDate(id, TimestampAdapter.INSTANCE.unmarshal(date));
+		int i = VesselChangeDao.deleteVesselChangeByDate(id, TimestampAdapter.unadapt(date));
 		if (i != 0) {
 			return Response.status(Response.Status.NO_CONTENT).build();
 		} else {

@@ -158,8 +158,8 @@ public class Vessel implements Comparable<Vessel> {
 		vesselObject.set("name", factory.textNode(name));
 		vesselObject.set("containers", factory.numberNode(containers));
 		vesselObject.set("destination", factory.numberNode(destination));
-		vesselObject.set("arrival", factory.textNode(TimestampAdapter.INSTANCE.marshal(arrival)));
-		vesselObject.set("deadline", factory.textNode(TimestampAdapter.INSTANCE.marshal(deadline)));
+		vesselObject.set("arrival", factory.textNode(TimestampAdapter.adapt(arrival)));
+		vesselObject.set("deadline", factory.textNode(TimestampAdapter.adapt(deadline)));
 		vesselObject.set("cost_per_hour", factory.numberNode(costPerHour));
 		vesselObject.set("width", factory.numberNode(width));
 		vesselObject.set("length", factory.numberNode(length));
