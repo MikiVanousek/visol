@@ -1,10 +1,5 @@
 package nl.utwente.di.visol1.resources;
 
-import nl.utwente.di.visol1.dao.BerthDao;
-import nl.utwente.di.visol1.dao.TerminalDao;
-import nl.utwente.di.visol1.models.Berth;
-import nl.utwente.di.visol1.models.Terminal;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -16,31 +11,33 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import nl.utwente.di.visol1.dao.TerminalDao;
+import nl.utwente.di.visol1.models.Terminal;
+
 @Path("/terminals")
 public class TerminalsResource {
-    @Context
-    UriInfo uriInfo;
-    @Context
-    Request request;
+	@Context
+	UriInfo uriInfo;
+	@Context
+	Request request;
 
-    @POST
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createTerminal(Terminal terminal){
+	@POST
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response createTerminal(Terminal terminal) {
+		Terminal createdTerminal = TerminalDao.createTerminal(terminal);
+		if (createdTerminal != null) {
+			return Response.status(Response.Status.CREATED)
+				.header("Location", "/rest/terminals/" + createdTerminal.getId())
+				.entity(createdTerminal).build();
+		} else {
+			return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+		}
 
-	    Terminal createdTerminal = TerminalDao.createTerminal(terminal);
-	    if (createdTerminal != null) {
-		    return Response.status(Response.Status.CREATED)
-			    .header("Location", "/rest/terminals/" + createdTerminal.getId())
-			    .entity(createdTerminal).build();
-	    } else {
-		      return Response.status(Response.Status.NOT_ACCEPTABLE).build();
-	    }
+	}
 
-    }
-
-    @Path("{terminal_id}")
-    public TerminalResource getTerminal(@PathParam("terminal_id") String id) {
-        return new TerminalResource(uriInfo, request, id);
-    }
+	@Path("{terminal_id}")
+	public TerminalResource getTerminal(@PathParam("terminal_id") String id) {
+		return new TerminalResource(uriInfo, request, id);
+	}
 }

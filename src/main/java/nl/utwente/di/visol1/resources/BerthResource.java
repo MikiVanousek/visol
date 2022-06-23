@@ -51,10 +51,12 @@ public class BerthResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response replaceBerth(Berth berth) {
 		int i = BerthDao.replaceBerth(id, berth);
-		if (i != 0) {
-			return Response.status(Response.Status.OK).entity(BerthDao.getBerth(id)).build();
-		} else {
+		if (i == -1) {
+			return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+		} else if (i == 0) {
 			return Response.status(Response.Status.NOT_FOUND).build();
+		} else {
+			return Response.status(Response.Status.OK).entity(BerthDao.getBerth(id)).build();
 		}
 	}
 

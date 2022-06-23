@@ -42,6 +42,7 @@ public class PortDao extends GenericDao {
 	}
 
 	public static int replacePort(int portId, Port port) {
+		if (port == null) return -1;
 		try (Update update = Update.prepared("UPDATE port SET name = ? WHERE id = ?", stmt -> {
 			stmt.setString(1, port.getName());
 			stmt.setInt(2, portId);
@@ -55,6 +56,7 @@ public class PortDao extends GenericDao {
 
 
 	public static Port createPort(Port port) {
+		if (port == null) return null;
 		try (Query query = Query.prepared("INSERT INTO port (name) VALUES (?) RETURNING *", stmt -> stmt.setString(1, port.getName()))) {
 			ResultSet rs = query.getResultSet();
 			if (!rs.next()) return null;
