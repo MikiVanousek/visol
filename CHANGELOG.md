@@ -63,6 +63,12 @@
 ![][Niels] Add ScheduleChange and VesselChange to backend (very WIP) \
 ![][Luka] Improve the configurability
 
+### Tuesday
+![][Niels] Full implementation of ScheduleChange and VesselChange, still bugged 
+
+### Wednesday   
+![][Niels] Fixing ScheduleChange and VesselChange, not fully done
+
 [Han]: profile-pictures/Han.png "Han"
 [Hessel]: profile-pictures/Hessel.png "Hessel"
 [Krystof]: profile-pictures/Krystof.png "Krystof"

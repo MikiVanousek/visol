@@ -1,25 +1,46 @@
+import ErrorToast from "./components/error-toast.js"
+
 class Requests {
   static baseUrl = 'http://localhost:8080/visol/rest'
-  static portId = 1
+  static headers = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  }
 
   static async postData(path, data = {}) {
-    const res = await fetch(this.baseUrl + path, {
+    let res = await fetch(this.baseUrl + path, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
+      headers: Requests.headers,
       body: JSON.stringify(data)
-    }).catch(e => console.log(e));
-    return res.json();
+    });
+    if (!res.ok) {
+      ErrorToast.show()
+      throw new Error(res.statusText)
+    }
+    return res;
   }
 
   static async getData(path) {
-    const res = await fetch(this.baseUrl + path, {
-      headers: {
-        'Accept': 'application/json'
-      },
+    let res = await fetch(this.baseUrl + path, {
+      headers: Requests.headers,
     });
+    if (!res.ok) {
+      ErrorToast.show()
+      throw new Error(res.statusText)
+    }
+    return res.json()
+  }
+  static async putData(path, data) {
+    let res = await fetch(this.baseUrl + path, {
+      method: 'PUT',
+      headers: Requests.headers,
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) {
+      ErrorToast.show()
+      throw new Error(res.statusText)
+
+    }
     return res.json();
   }
 }

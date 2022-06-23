@@ -1,7 +1,8 @@
-import FullButton from "../components/full-button.js";
+import FullButton from '../components/full-button.js';
+import VesselCard from '../components/vessel-card.js';
 
 class PortAuthority extends HTMLElement {
-  static terminalDropdownTag = "chooseTerminal";
+  static terminalDropdownTag = 'chooseTerminal';
 
   constructor() {
     super();
@@ -31,29 +32,49 @@ class PortAuthority extends HTMLElement {
 
     <planner-schedule></planner-schedule>
 
-    <unscheduled-vessels></unscheduled-vessels>`;
+    <unscheduled-vessels>
+        <vessel-card
+            name="DHL Transport"
+            view="${VesselCard.VIEW.unscheduled}"
+        ></vessel-card> 
+        <vessel-card
+            name="MSC Diana"
+            view="${VesselCard.VIEW.unscheduled}"
+        ></vessel-card> 
+        <vessel-card
+            name="Ever Golden"
+            view="${VesselCard.VIEW.unscheduled}"
+        ></vessel-card> 
+        <vessel-card
+            name="COSCO Shipping Taurus"
+            view="${VesselCard.VIEW.unscheduled}"
+        ></vessel-card> 
+        <vessel-card
+            name="CMA CGM Antoine De Saint Exupery"
+            view="${VesselCard.VIEW.unscheduled}"
+        ></vessel-card> 
+    </unscheduled-vessels>`;
 
-    this.addData()
+    this.addData();
   }
 
   addData() {
     const dropDown = document.getElementById(PortAuthority.terminalDropdownTag);
     dropDown.data = {
-      car: "Car Terminal",
-      fish: "Fish Terminal",
-      banana: "Banana Terminal",
-      trees: "Trees Terminal"
+      car: 'Car Terminal',
+      fish: 'Fish Terminal',
+      banana: 'Banana Terminal',
+      trees: 'Trees Terminal',
     };
     dropDown.active = dropDown.data.fish;
-    dropDown.callBack = this.changeTerminal
+    dropDown.callBack = this.changeTerminal;
     dropDown.render();
   }
 
   changeTerminal(newVal) {
-    console.log(newVal)
+    console.log(newVal);
   }
-
 }
 
 
-customElements.define("port-authority", PortAuthority)
+customElements.define('port-authority', PortAuthority);

@@ -30,8 +30,8 @@ public class TerminalsResource {
 
 	    Terminal createdTerminal = TerminalDao.createTerminal(terminal);
 	    if (createdTerminal != null) {
-		    return Response.status(Response.Status.OK)
-			    .header("Location", "/terminals/" + createdTerminal.getId())
+		    return Response.status(Response.Status.CREATED)
+			    .header("Location", "/rest/terminals/" + createdTerminal.getId())
 			    .entity(createdTerminal).build();
 	    } else {
 		      return Response.status(Response.Status.NOT_ACCEPTABLE).build();

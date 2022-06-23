@@ -36,8 +36,8 @@ public class VesselsResource {
 			vessel.setId(createdVessel.getId());
 			VesselChange vchange = new VesselChange(vessel, "creation of new vessel");
 		    VesselChangeDao.createVesselChange(vchange);
-		    return Response.status(Response.Status.OK)
-			    .header("Location", "/vessels/" + createdVessel.getId())
+		    return Response.status(Response.Status.CREATED)
+			    .header("Location", "/rest/vessels/" + createdVessel.getId())
 			    .entity(createdVessel).build();
 	    } else {
 		    return Response.status(Response.Status.NOT_ACCEPTABLE).build();

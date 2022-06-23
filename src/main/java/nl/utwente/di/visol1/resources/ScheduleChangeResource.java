@@ -51,8 +51,8 @@ public class ScheduleChangeResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<ScheduleChange> getScheduleChanges(@QueryParam("from") String from, @QueryParam("to") String to) {
-		Timestamp fromTime = TimestampAdapter.INSTANCE.unmarshal(from);
-		Timestamp toTime = TimestampAdapter.INSTANCE.unmarshal(to);
+		Timestamp fromTime = TimestampAdapter.unadapt(from);
+		Timestamp toTime = TimestampAdapter.unadapt(to);
 		if (fromTime == null) fromTime = GenericDao.MIN_TIME;
 		if (toTime == null) toTime = GenericDao.MAX_TIME;
 		return ScheduleChangeDao.getScheduleChangesByVessel(id, fromTime, toTime);
@@ -60,8 +60,8 @@ public class ScheduleChangeResource {
 
 	@DELETE
 	public Response deleteScheduleChanges(@QueryParam("from") String from, @QueryParam("to") String to) {
-		Timestamp fromTime = TimestampAdapter.INSTANCE.unmarshal(from);
-		Timestamp toTime = TimestampAdapter.INSTANCE.unmarshal(to);
+		Timestamp fromTime = TimestampAdapter.unadapt(from);
+		Timestamp toTime = TimestampAdapter.unadapt(to);
 		if (fromTime == null) fromTime = GenericDao.MIN_TIME;
 		if (toTime == null) toTime = GenericDao.MAX_TIME;
 		int i = ScheduleChangeDao.deleteScheduleChanges(id, fromTime, toTime);
@@ -76,7 +76,7 @@ public class ScheduleChangeResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getScheduleChangeByDate(@PathParam("date") String date) {
-		ScheduleChange schange = ScheduleChangeDao.getScheduleChangeByDate(id, TimestampAdapter.INSTANCE.unmarshal(date));
+		ScheduleChange schange = ScheduleChangeDao.getScheduleChangeByDate(id, TimestampAdapter.unadapt(date));
 		if (schange != null) {
 			return Response.status(Response.Status.OK)
 				.entity(schange).build();
@@ -88,7 +88,7 @@ public class ScheduleChangeResource {
 	@Path("{date}")
 	@DELETE
 	public Response deleteScheduleChangeByDate(@PathParam("date") String date) {
-		int i = ScheduleChangeDao.deleteScheduleChangeByDate(id, TimestampAdapter.INSTANCE.unmarshal(date));
+		int i = ScheduleChangeDao.deleteScheduleChangeByDate(id, TimestampAdapter.unadapt(date));
 		if (i != 0) {
 			return Response.status(Response.Status.NO_CONTENT).build();
 		} else {

@@ -79,8 +79,8 @@ public class TerminalResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Map<Integer, List<Schedule>> getSchedules(@QueryParam("from") String from, @QueryParam("to") String to) {
-		Timestamp fromTime = TimestampAdapter.INSTANCE.unmarshal(from);
-		Timestamp toTime = TimestampAdapter.INSTANCE.unmarshal(to);
+		Timestamp fromTime = TimestampAdapter.unadapt(from);
+		Timestamp toTime = TimestampAdapter.unadapt(to);
 		if (fromTime == null) fromTime = GenericDao.MIN_TIME;
 		if (toTime == null) toTime = GenericDao.MAX_TIME;
 		return ScheduleDao.getSchedulesByTerminal(id, fromTime, toTime);

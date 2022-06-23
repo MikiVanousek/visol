@@ -10,18 +10,20 @@ import java.util.function.Supplier;
 public class Configuration {
 	private static boolean inTestEnvironment = false;
 
+	private Configuration() {}
+
 	private static String getProperty(String key) {
-		String environmentVariable = System.getenv("visol.database." + key);
+		String environmentVariable = System.getenv("VISOL_CONFIG_" + key.toUpperCase().replace('.', '_'));
 		if (environmentVariable != null) {
 			return environmentVariable;
 		} else {
-			String propertiesFile = System.getenv().getOrDefault("visol.config.location", "config.properties");
+			String propertiesFile = System.getenv().getOrDefault("VISOL_CONFIG_LOCATION", "config.properties");
 			Properties properties = new Properties();
 			try (InputStream input = new FileInputStream(propertiesFile)) {
 				properties.load(input);
 			} catch (IOException exception) {
 				System.err.println("Properties file " + new File(propertiesFile).getAbsolutePath() + " not found");
-				throw new RuntimeException("Could not find property " + key);
+				throw new IllegalStateException("Could not find property " + key);
 			}
 			return properties.getProperty(key, null);
 		}
@@ -39,5 +41,7 @@ public class Configuration {
 		);
 		public static final Supplier<String> USERNAME = () -> getProperty("database.username");
 		public static final Supplier<String> PASSWORD = () -> getProperty("database.password");
+
+		private Database() {}
 	}
 }

@@ -27,11 +27,11 @@ public class VesselChangesResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Map<Integer, List<VesselChange>> getVesselChanges(@QueryParam("from") String from, @QueryParam("to") String to){
-		Timestamp fromTime = TimestampAdapter.INSTANCE.unmarshal(from);
-		Timestamp toTime = TimestampAdapter.INSTANCE.unmarshal(to);
+	public Map<Integer, List<VesselChange>> getVesselChanges(@QueryParam("from") String from, @QueryParam("to") String to) {
+		Timestamp fromTime = TimestampAdapter.unadapt(from);
+		Timestamp toTime = TimestampAdapter.unadapt(to);
 		if (fromTime == null) fromTime = GenericDao.MIN_TIME;
-		if(toTime == null) toTime = GenericDao.MAX_TIME;
+		if (toTime == null) toTime = GenericDao.MAX_TIME;
 		return VesselChangeDao.getVesselChanges(fromTime, toTime);
 	}
 

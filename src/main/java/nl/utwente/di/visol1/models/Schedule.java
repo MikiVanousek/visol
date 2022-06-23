@@ -15,13 +15,13 @@ import nl.utwente.di.visol1.type_adapters.TimestampAdapter;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Schedule implements Comparable<Schedule> {
-    private int vessel;
-    private int berth;
-    boolean manual;
-    Timestamp start;
+	private int vessel;
+	private int berth;
+	boolean manual;
+	Timestamp start;
 	@JsonProperty("expected_end")
 	@XmlElement(name = "expected_end")
-    Timestamp expectedEnd;
+	Timestamp expectedEnd;
 
 
 	public Schedule(int vessel, int berth, boolean manual, Timestamp start, Timestamp expectedEnd) {
@@ -32,7 +32,7 @@ public class Schedule implements Comparable<Schedule> {
 		this.expectedEnd = expectedEnd;
 	}
 
-	public Schedule(){
+	public Schedule() {
 		//empty constructor
 	}
 
@@ -105,8 +105,8 @@ public class Schedule implements Comparable<Schedule> {
 		scheduleObject.set("vessel", factory.numberNode(vessel));
 		scheduleObject.set("berth", factory.numberNode(berth));
 		scheduleObject.set("manual", factory.booleanNode(manual));
-		scheduleObject.set("start", factory.textNode(TimestampAdapter.INSTANCE.marshal(start)));
-		scheduleObject.set("expected_end", factory.textNode(TimestampAdapter.INSTANCE.marshal(expectedEnd)));
+		scheduleObject.set("start", factory.textNode(TimestampAdapter.adapt(start)));
+		scheduleObject.set("expected_end", factory.textNode(TimestampAdapter.adapt(expectedEnd)));
 		return scheduleObject.toString();
 	}
 }

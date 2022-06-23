@@ -4,15 +4,15 @@
 
 1. Copy `config.properties.example` to `config.properties`
 2. Change the values provided inside
-3. Copy the absolute path to your `config.properties` file and set the `visol.config.location` environment variable in the `Run Tomcat Server` to that absolute path
+3. Copy the absolute path to your `config.properties` file and set the `VISOL_CONFIG_LOCATION` environment variable in the `Run Tomcat Server` to that absolute path
 
 Alternatively, you can manually set the following environment variables:
-- `visol.config.database.url`
-- `visol.config.database.name`
-- `visol.config.database.production_schema`
-- `visol.config.database.test_schema`
-- `visol.config.database.username`
-- `visol.config.database.password`
+- `VISOL_CONFIG_DATABASE_URL`
+- `VISOL_CONFIG_DATABASE_NAME`
+- `VISOL_CONFIG_DATABASE_PRODUCTION_SCHEMA`
+- `VISOL_CONFIG_DATABASE_TEST_SCHEMA`
+- `VISOL_CONFIG_DATABASE_USERNAME`
+- `VISOL_CONFIG_DATABASE_PASSWORD`
 
 ## Committing
 
