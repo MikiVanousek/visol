@@ -55,10 +55,12 @@ public class TerminalResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response replaceTerminal(Terminal terminal) {
 		int i = TerminalDao.replaceTerminal(id, terminal);
-		if (i != 0) {
-			return Response.status(Response.Status.OK).entity(TerminalDao.getTerminal(id)).build();
-		} else {
+		if (i == -1) {
+			return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+		} else if (i == 0) {
 			return Response.status(Response.Status.NOT_FOUND).build();
+		} else {
+			return Response.status(Response.Status.OK).entity(TerminalDao.getTerminal(id)).build();
 		}
 	}
 

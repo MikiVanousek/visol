@@ -64,6 +64,7 @@ public class BerthDao extends GenericDao {
 	}
 
 	public static Berth createBerth(Berth berth) {
+		if (berth == null) return null;
 		try (Query query = Query.prepared(
 			"INSERT INTO berth (terminal, open, close, unload_speed, length, width, depth) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING *",
 			stmt -> {
@@ -94,6 +95,7 @@ public class BerthDao extends GenericDao {
 	}
 
 	public static int replaceBerth(int berthId, Berth berth) {
+		if (berth == null) return -1;
 		try (Update update = Update.prepared(
 			"UPDATE berth SET terminal = ?, open = ?, close = ?, unload_speed = ?, length = ?, width = ?, depth = ? WHERE id = ?",
 			stmt -> {

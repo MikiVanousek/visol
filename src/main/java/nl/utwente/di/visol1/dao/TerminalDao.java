@@ -33,6 +33,7 @@ public class TerminalDao extends GenericDao {
 	}
 
 	public static int replaceTerminal(int terminalId, Terminal terminal) {
+		if (terminal == null) return -1;
 		try (Update update = Update.prepared("UPDATE terminal SET port = ?, name = ? WHERE id = ?", stmt -> {
 			stmt.setInt(1, terminal.getPortId());
 			stmt.setString(2, terminal.getName());
@@ -66,6 +67,7 @@ public class TerminalDao extends GenericDao {
 	}
 
 	public static Terminal createTerminal(Terminal terminal) {
+		if (terminal == null) return null;
 		try (Query query = Query.prepared("INSERT INTO terminal (port, name) VALUES (?, ?) RETURNING *", stmt -> {
 			stmt.setInt(1, terminal.getPortId());
 			stmt.setString(2, terminal.getName());

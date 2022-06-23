@@ -40,6 +40,7 @@ public class VesselDao extends GenericDao {
 	}
 
 	public static int replaceVessel(int vesselId, Vessel vessel) {
+		if (vessel == null) return -1;
 		try (Update update = Update.prepared(
 			"UPDATE vessel SET name = ?, arrival = ?, deadline = ?, containers = ?, cost_per_hour = ?, destination = ?, length = ?, width = ?, depth = ? WHERE id = ?",
 			stmt -> {
@@ -63,6 +64,7 @@ public class VesselDao extends GenericDao {
 	}
 
 	public static Vessel createVessel(Vessel vessel) {
+		if (vessel == null) return null;
 		try (Query query = Query.prepared(
 			"INSERT INTO vessel (name, arrival, deadline, containers, cost_per_hour, destination, length, width, depth) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *",
 			stmt -> {

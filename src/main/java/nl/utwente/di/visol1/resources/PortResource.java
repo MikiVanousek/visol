@@ -52,10 +52,12 @@ public class PortResource {
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Response replacePort(Port port) {
 		int i = PortDao.replacePort(id, port);
-		if (i != 0) {
-			return Response.status(Response.Status.OK).entity(PortDao.getPort(id)).build();
-		} else {
+		if (i == -1) {
+			return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+		} else if (i == 0) {
 			return Response.status(Response.Status.NOT_FOUND).build();
+		} else {
+			return Response.status(Response.Status.OK).entity(PortDao.getPort(id)).build();
 		}
 
 	}
