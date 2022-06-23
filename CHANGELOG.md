@@ -71,7 +71,8 @@
 
 ### Thursday  
 ![][Niels] Finished Schedulechange and VesselChange \ 
-![][Niels] Fixed a few backend bugs
+![][Niels] Fixed a few backend bugs \
+![][Niels] Implemented performance of terminal
 
 [Han]: profile-pictures/Han.png "Han"
 [Hessel]: profile-pictures/Hessel.png "Hessel"
