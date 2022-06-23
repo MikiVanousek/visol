@@ -40,20 +40,25 @@ class VesselModal extends HTMLElement {
         <div class="modal-body">
           <div class="mb-3">
             <label class="form-label" for="form-name">Name:</label>
-            <input class="form-control form-control-sm" id="${this.name}-form-name"
-                   name="vessel-name" placeholder="Titanic" required type="text">
+            <input
+              class="form-control form-control-sm"
+              id="${this.name}-form-name">
           </div>
 
           <div class="row mb-3">
             <div class="col">
               <label class="form-label" for="${this.name}-form-arrival">Arrival:</label>
-              <input id="${this.name}-form-arrival" is="datetime-input" 
-                class="form-control form-control-sm" now name="vessel-arrival" required>
+              <input id="${this.name}-form-arrival"
+                     is="datetime-input"
+                     class="form-control form-control-sm"
+                     now
+                     required>
             </div>
             <div class="col">
               <label class="form-label" for="${this.name}-form-deadline">Deadline:</label>
-              <input is="datetime-input" class="form-control form-control-sm" id="${this.name}-form-deadline"
-                     name="datetime-deadline-vessel">
+              <input is="datetime-input"
+                     class="form-control form-control-sm"
+                     id="${this.name}-form-deadline">
             </div>
           </div>
 
@@ -63,28 +68,27 @@ class VesselModal extends HTMLElement {
               <input class="form-control form-control-sm"
                      id="${this.name}-form-containers"
                      min="-1"
-                     name="vessel-containers"
                      required
                      type="number">
             </div>
             <div class="col">
               <label class="form-label" for="${this.name}-form-cost_per_hour">Cost:</label>
-              <input class="form-control form-control-sm" id="${this.name}-form-cost_per_hour"
-                     name="vessel-cost_per_hour" required type="number">
+              <input class="form-control form-control-sm" id="${this.name}-form-cost_per_hour">
             </div>
           </div>
 
           <div class="mb-3 row">
             <div class="col">
               <label class="form-label" for="${this.name}-form-width"><b>Terminal:</b></label>
-              <select is="select-terminal" class="form-select form-select-sm"
-                id="${this.name}-form-destination" name="${this.name}"></select>
+              <select is="select-terminal" 
+                      class="form-select form-select-sm"
+                      id="${this.name}-form-destination"
+              ></select>
             </div>
             <div class="col">
               <label class="form-label" for="form-length">Length:</label>
               <input class="form-control form-control-sm"
                      id="${this.name}-form-length"
-                     name="vessel-length"
                      required
                      type="number"
                      value="0">
@@ -96,7 +100,6 @@ class VesselModal extends HTMLElement {
               <label class="form-label" for="form-width">Width:</label>
               <input class="form-control form-control-sm"
                      id="${this.name}-form-width"
-                     name="vessel-width"
                      required
                      type="number"
                      value="0">
@@ -105,7 +108,6 @@ class VesselModal extends HTMLElement {
               <label class="form-label" for="${this.name}-form-depth">Depth:</label>
               <input class="form-control form-control-sm"
                      id="${this.name}-form-depth"
-                     name="vessel-depth"
                      required
                      type="number"
                      value="0">
@@ -118,7 +120,7 @@ class VesselModal extends HTMLElement {
               <input checked
                      class="form-check-input"
                      id="${this.name}-radio-auto"
-                     name="schedule-manual"
+                     name="${this.name}-radio"
                      value="false"
                      type="radio">
               <label class="form-check-label" for="${this.name}-radio-auto">
@@ -128,7 +130,7 @@ class VesselModal extends HTMLElement {
             <div class="form-check form-check-inline col">
               <input class="form-check-input"
                      id="${this.name}-radio-manual"
-                     name="schedule-manual"
+                     name="${this.name}-radio"
                      value="true"
                      type="radio">
               <label class="form-check-label" for="${this.name}-radio-manual">
@@ -138,7 +140,7 @@ class VesselModal extends HTMLElement {
             <div class="form-check form-check-inline col">
               <input class="form-check-input"
                      id="${this.name}-radio-disabled"
-                     name="schedule-manual"
+                     name="${this.name}-radio"
                      value="true"
                      type="radio">
               <label class="form-check-label" for="${this.name}-radio-disabled">
@@ -146,19 +148,21 @@ class VesselModal extends HTMLElement {
               </label>
             </div>
           </div>
-
+          
           <div class="row mb-3" id="${this.name}-schedule-edit">
             <div class="col d-grid">
               <label class="form-label" for="${this.name}-form-berth">Berth:</label>
-              <select is="select-berth" id="${this.name}-form-berth"
-                class="form-select form-select-sm"> </select>
+              <select is="select-berth" 
+                      id="${this.name}-form-berth"
+                      class="form-select form-select-sm ${this.name}-disabled-if-auto"
+                      terminal="4"
+              > </select>
             </div>
             <div class="col">
               <label class="form-label" for="form-handel">Handel time:</label>
               <input class="form-control form-control-sm ${this.name}-disabled-if-auto"
                      disabled
                      id="${this.name}-form-handel"
-                     name="schedule-start"
                      required
                      type="datetime-local">
             </div>
@@ -200,36 +204,46 @@ class VesselModal extends HTMLElement {
     const form = this.getElement('modal-form');
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+      this.post();
+    });
 
-      const vessel = this.getVessel();
-      console.log(vessel);
-      this.hideBtnFooter();
-      VisolApi.postVessel(vessel).then((response) => {
-        if (this.schedule_type !== 'disabled') {
-          // Extract the id from the url location of the vessel resource.
-          const vesselId = response.headers.get('Location')
-              .split('/').slice(-1)[0];
-          VisolApi.putSchedule(vesselId, schedule).then((response) => {
-            console.log('Schedule created successfully.');
-            console.log(response);
-            this.showBtnFooter();
-          }).catch((e) => {
-            this.showBtnFooter();
-            console.log('Failed to create schedule: ', e);
-          });
-        } else {
-          this.showBtnFooter();
-        }
-      }).catch((e) => {
-        this.showBtnFooter();
-        console.log('Failed to create vessel: ', e);
-      });
+    const destinationSelect = this.getElement('form-destination');
+    destinationSelect.addEventListener('change', (e) => {
+      this.getElement('form-berth').setTerminal(destinationSelect.value);
     });
   }
 
-  setVessel(vessel) {
-    for (const key in vessel) {
-      this.getElement(`form-${key}`).value = vessel[key];
+  post() {
+    const vessel = this.getVessel();
+    console.log(vessel);
+    this.hideBtnFooter();
+    VisolApi.postVessel(vessel).then((response) => {
+      if (this.schedule_type !== 'disabled') {
+        // Extract the id from the url location of the vessel resource.
+        const schedule = this.getSchedule();
+        console.log(schedule);
+        const vesselId = response.headers.get('Location')
+            .split('/').slice(-1)[0];
+        VisolApi.putSchedule(vesselId, schedule).then((response) => {
+          console.log('Schedule created successfully.');
+          console.log(response);
+          this.showBtnFooter();
+        }).catch((e) => {
+          this.showBtnFooter();
+          console.log('Failed to create schedule: ', e);
+        });
+      } else {
+        this.showBtnFooter();
+      }
+    }).catch((e) => {
+      this.showBtnFooter();
+      console.log('Failed to create vessel: ', e);
+    });
+  }
+
+  fillIn(object) {
+    for (const key in object) {
+      this.getElement(`form-${key}`).value = object[key];
     }
   }
 
@@ -262,7 +276,6 @@ class VesselModal extends HTMLElement {
     this.buttons.removeAttribute('hidden');
   }
 
-  // TODO Miki getForm
   getElement(id) {
     const el = document.getElementById(this.name + '-' + id);
     if (el === null) throw new Error(`Failed to get element with id ${this.name}-${id}`);

@@ -57,7 +57,7 @@ class VesselPlanner extends HTMLElement {
     VisolApi.getVessel('18').then((res) => {
       const vessel = res;
       console.log(vessel);
-      document.getElementById('update-m').setVessel(vessel);
+      document.getElementById('update-m').fillIn(vessel);
     },
     );
   }

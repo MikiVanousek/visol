@@ -6,18 +6,18 @@ class SelectResource extends HTMLSelectElement {
   parentName = this.getAttribute('name');
   resourcePrefix = this.getAttribute('prefix');
 
-  constructor(displayAttribute, resourcePromise, resourceName) {
+  constructor(displayAttribute) {
     super();
     this.displayAttribute = displayAttribute;
-    this.resourcePromise = resourcePromise;
-    this.resourceName = resourceName;
     console.log(this.resourcePrefix);
   }
 
-  connectedCallback() {
+  setResourcePromise(resourcePromise) {
     this.innerHTML = ``;
+    this.resourcePromise = resourcePromise;
     this.resourcePromise.then((resource) => {
       this.innerHTML = this.buildSelect(resource);
+      this.dispatchEvent(new Event('change'));
     }).catch((err) => console.log('Error fetching resource for the selector: ', err));
   }
 
@@ -30,13 +30,18 @@ class SelectResource extends HTMLSelectElement {
 
 class SelectTerminal extends SelectResource {
   constructor() {
-    super('name', VisolApi.getTerminals(), 'destination');
+    super('name', 'destination');
+    this.setResourcePromise(VisolApi.getTerminals());
   }
 }
 
 class SelectBerth extends SelectResource {
   constructor() {
-    super(undefined, VisolApi.getBerths('1'), 'berth');
+    super(undefined, 'berth');
+  }
+
+  setTerminal(i) {
+    this.setResourcePromise(VisolApi.getBerths(i));
   }
 }
 
