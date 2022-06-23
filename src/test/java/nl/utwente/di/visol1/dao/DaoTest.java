@@ -111,7 +111,7 @@ public class DaoTest {
 		VesselDao.deleteVessel(1);
 		List<Vessel> vessels2 = new ArrayList<>();
 		for (int i = 0; i < terminals.size(); i++) {
-			vessels2.addAll(VesselDao.getVesselsByTerminal(i + 1).values());
+			vessels2.addAll(VesselDao.getVesselsByTerminal(i + 1, GenericDao.MIN_TIME, GenericDao.MAX_TIME).values());
 		}
 
 		berths.remove(0);
@@ -137,7 +137,7 @@ public class DaoTest {
 		assertTrue(TestUtil.listEqualsIgnoreOrder(berths, berths2));
 		assertTrue(TestUtil.listEqualsIgnoreOrder(terminals, terminals2));
 		assertTrue(TestUtil.listEqualsIgnoreOrder(ports, ports2));
-}
+	}
 
 	@Test
 	void replaceTest() {
@@ -174,7 +174,8 @@ public class DaoTest {
 			schanges2.addAll(ScheduleChangeDao.getScheduleChangesByVessel(vessel.getId(), GenericDao.MIN_TIME, GenericDao.MAX_TIME));
 		}
 
-		ScheduleChange schange1 = ScheduleChangeDao.createScheduleChange(new ScheduleChange(2, Timestamp.valueOf("2010-01-08 13:05:06"), "", 	DummyData.SCHEDULES.get(2).toString(), "tests"));
+		ScheduleChange schange1 = ScheduleChangeDao.createScheduleChange(
+			new ScheduleChange(2, Timestamp.valueOf("2010-01-08 13:05:06"), "", DummyData.SCHEDULES.get(2).toString(), "tests"));
 		ScheduleChange schange2 = ScheduleChangeDao.getScheduleChangeByDate(2, Timestamp.valueOf("2010-01-08 13:05:06"));
 		int deletedRows = ScheduleChangeDao.deleteScheduleChangeByDate(2, Timestamp.valueOf("2010-01-08 13:05:06"));
 
@@ -185,7 +186,7 @@ public class DaoTest {
 
 	@Disabled
 	@Test
-	void vesselChangeTest(){
+	void vesselChangeTest() {
 		List<VesselChange> vchanges1 = new ArrayList<>();
 		List<VesselChange> vchanges2 = new ArrayList<>();
 		Map<Integer, List<VesselChange>> vchangeMap = VesselChangeDao.getVesselChanges(GenericDao.MIN_TIME, GenericDao.MAX_TIME);
@@ -195,7 +196,8 @@ public class DaoTest {
 			vchanges2.addAll(VesselChangeDao.getVesselChangesByVessel(vessel.getId(), GenericDao.MIN_TIME, GenericDao.MAX_TIME));
 		}
 
-		VesselChange vchange1 = VesselChangeDao.createVesselChange(new VesselChange(2, Timestamp.valueOf("2010-01-08 13:05:06"), "", 	DummyData.VESSELS.get(2).toString(), "tests"));
+		VesselChange vchange1 = VesselChangeDao.createVesselChange(
+			new VesselChange(2, Timestamp.valueOf("2010-01-08 13:05:06"), "", DummyData.VESSELS.get(2).toString(), "tests"));
 		VesselChange vchange2 = VesselChangeDao.getVesselChangeByDate(2, Timestamp.valueOf("2010-01-08 13:05:06"));
 		int deletedRows = VesselChangeDao.deleteVesselChangeByDate(2, Timestamp.valueOf("2010-01-08 13:05:06"));
 

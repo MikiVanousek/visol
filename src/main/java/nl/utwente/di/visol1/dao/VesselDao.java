@@ -2,6 +2,7 @@ package nl.utwente.di.visol1.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -99,9 +100,13 @@ public class VesselDao extends GenericDao {
 		}
 	}
 
-	public static Map<Integer, Vessel> getVesselsByTerminal(int terminalId) {
+	public static Map<Integer, Vessel> getVesselsByTerminal(int terminalId, Timestamp deadlineAfter, Timestamp arrivalBefore) {
 		Map<Integer, Vessel> result = new HashMap<>();
-		try (Query query = Query.prepared("SELECT * FROM vessel WHERE destination = ?", stmt -> stmt.setInt(1, terminalId))) {
+		try (Query query = Query.prepared("SELECT * FROM vessel WHERE destination = ? AND deadline >= ? AND arrival <= ?", stmt -> {
+			stmt.setInt(1, terminalId);
+			stmt.setTimestamp(2, deadlineAfter);
+			stmt.setTimestamp(3, arrivalBefore);
+		})) {
 			ResultSet rs = query.getResultSet();
 			while (rs.next()) {
 				result.put(

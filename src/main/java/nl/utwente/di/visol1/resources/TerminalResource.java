@@ -114,8 +114,12 @@ public class TerminalResource {
 	@Path("/vessels")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Map<Integer, Vessel> getVessels() {
-		return VesselDao.getVesselsByTerminal(id);
+	public Map<Integer, Vessel> getVessels(@QueryParam("deadline_after") String deadline_after, @QueryParam("arrival_before") String arrival_before) {
+		Timestamp deadlineAfter = TimestampAdapter.unadapt(deadline_after);
+		Timestamp arrivalBefore = TimestampAdapter.unadapt(arrival_before);
+		if (deadlineAfter == null) deadlineAfter = GenericDao.MIN_TIME;
+		if (arrivalBefore == null) arrivalBefore = GenericDao.MAX_TIME;
+		return VesselDao.getVesselsByTerminal(id, deadlineAfter, arrivalBefore);
 	}
 
 }
