@@ -147,14 +147,8 @@ class VesselModal extends HTMLElement {
           </div>
 
           <div class="row mb-3" id="${this.name}-schedule-edit">
-            <div class="col">
-              <label class="form-label" for="${this.name}-form-berth">Berth:</label>
-              <input class="form-control form-control-sm ${this.name}-disabled-if-auto"
-                     disabled
-                     id="${this.name}-form-berth"
-                     name="schedule-berth"
-                     required
-                     type="number">
+            <div class="col d-grid">
+              <select-berth class ="${this.name}-disabled-if-auto"> </select-berth>
             </div>
             <div class="col">
               <label class="form-label" for="form-handel">Handel time:</label>

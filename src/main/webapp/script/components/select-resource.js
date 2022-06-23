@@ -27,8 +27,8 @@ class SelectResource extends HTMLElement {
 <select class="form-select form-select-sm" id="${this.parentName}-form-${this.resourceName}"
   name="${this.resourcePrefix}-${this.resourceName}">
   ${Object.keys(resource).map((i) =>
-    `<option value="${i}">${resource[i][this.displayAttribute]}</option>`).join('\n')
-}
+    `<option value="${i}">${this.displayAttribute === undefined ? i :
+        resource[i][this.displayAttribute]}</option>`).join('\n')}
 </select>
     `;
   }
@@ -40,6 +40,13 @@ class SelectTerminal extends SelectResource {
   }
 }
 
+class SelectBerth extends SelectResource {
+  constructor() {
+    super(undefined, VisolApi.getBerths('1'), 'berth');
+  }
+}
+
 customElements.define('select-terminal', SelectTerminal);
+customElements.define('select-berth', SelectBerth);
 
 export default SelectResource;
