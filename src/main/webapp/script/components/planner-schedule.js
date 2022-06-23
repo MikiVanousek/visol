@@ -2,6 +2,7 @@ import FullButton from './full-button.js';
 import IconCircle from './icon-circle.js';
 import VesselCard from './vessel-card.js';
 import BerthClosed from './berth-closed.js';
+import CurrentTime from './current-time.js';
 import VisolApi from '../api.js';
 
 class PlannerSchedule extends HTMLElement {
@@ -29,8 +30,8 @@ class PlannerSchedule extends HTMLElement {
 
   async connectedCallback() {
     this.terminalId =
-      this.hasAttribute('teminalId') ?
-        parseInt(this.getAttribute('terminalId')) : 1;
+        this.hasAttribute('teminalId') ?
+            parseInt(this.getAttribute('terminalId')) : 1;
     this.innerHTML = `
     <vessel-modal name="create"></vessel-modal>
     <div class="planner">
@@ -76,15 +77,8 @@ class PlannerSchedule extends HTMLElement {
               </icon-circle>
           </div>
           <div class="planner-schedule-in">
-            <div class="planner-current-wrap">
-              <div class="planner-current" 
-                   style="top: ${this.getCurrentHeight()}">
-                <div class="planner-current-in">
-                    <p class="planner-current-time">
-                        ${this.getCurrentTime()}</p>
-                </div>
-              </div>
-            </div>
+            <!-- TODO only add the current time if the view contains the current date. remove it if it no longer does -->
+            <current-time view="${CurrentTime.VIEW.daily}"></current-time>
             <div class="planner-timeline">
                ${this.buildTimeline()}
             </div>
@@ -226,6 +220,9 @@ class PlannerSchedule extends HTMLElement {
     </div>`;
 
     this.addData();
+    window.onload = function() {
+      document.querySelector('.planner-current-wrap').scrollToMiddle();
+    };
     await this.loadBerths();
     await this.loadVessels();
     await this.loadSchedules(null, null);
@@ -248,7 +245,7 @@ class PlannerSchedule extends HTMLElement {
 
   async loadBerths() {
     const schedule =
-      document.getElementById(`planner-berth-${this.terminalId}`);
+        document.getElementById(`planner-berth-${this.terminalId}`);
     const berths = await VisolApi.getBerthsPerTerminal(this.terminalId);
     Object.entries(berths).forEach(([id, berth]) => {
       const berthEl = document.createElement('planner-berth');
@@ -260,12 +257,12 @@ class PlannerSchedule extends HTMLElement {
 
   async loadVessels() {
     this.vessels =
-      await VisolApi.getVesselsPerTerminal(this.terminalId);
+        await VisolApi.getVesselsPerTerminal(this.terminalId);
   }
 
   async loadSchedules(timeFrom, timeTo) {
     const berthsSchedules =
-      await VisolApi.getSchedulesPerTerminal(this.terminalId);
+        await VisolApi.getSchedulesPerTerminal(this.terminalId);
     Object.entries(berthsSchedules).forEach(([id, berthSchedules]) => {
       const berthSchedulesEl = document.getElementById(`berth-ships-${id}`);
       let res = ``;
