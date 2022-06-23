@@ -9,11 +9,6 @@ class VesselModal extends HTMLElement {
     this.name = this.getAttribute('name');
   }
 
-  static nowJsonString() {
-    const timezoneOffset = new Date().getTimezoneOffset() * 60000; // offset in milliseconds
-    Date.now().toString();
-    return new Date(Date.now() - timezoneOffset).toJSON().substring(0, 16);
-  }
 
   set_schedule_type(type) {
     this.schedule_type = type;
@@ -51,10 +46,10 @@ class VesselModal extends HTMLElement {
 
           <div class="row mb-3">
             <div class="col">
-              <label class="form-label" for="form-arrival">Arrival:</label>
+              <label class="form-label" for="${this.name}-form-arrival">Arrival:</label>
               <input class="form-control form-control-sm" id="${this.name}-form-arrival"
                      name="datetime-arrival-vessel" required type="datetime-local"
-                     value="${VesselModal.nowJsonString()}">
+                     value="${VisolApi.formatDatetimeForInput(Date.now())}" />
             </div>
             <div class="col">
               <label class="form-label" for="${this.name}-form-deadline">Deadline:</label>
@@ -252,7 +247,7 @@ class VesselModal extends HTMLElement {
         // Frankly awkward, let me know if you can do better!
         if (prefix === 'datetime') {
           // for datetimes, the object they belong to is the last word,as the first is datetime
-          serializedForm[words[2]][key] = VisolApi.formatLocalDateTime(value);
+          serializedForm[words[2]][key] = VisolApi.formatDatetimeForApi(value);
         } else {
           serializedForm[prefix][key] = value;
         }
@@ -264,7 +259,13 @@ class VesselModal extends HTMLElement {
 
   setVessel(vessel) {
     for (const key in vessel) {
-      this.getElement(`form-${key}`).value = vessel[key];
+      if (key === 'arrival' || key === 'deadline') {
+        const formattedDate = VisolApi.formatDatetimeForInput(new Date(vessel[key]));
+        console.log(formattedDate);
+        this.getElement(`form-${key}`).value = formattedDate;
+      } else {
+        this.getElement(`form-${key}`).value = vessel[key];
+      }
     }
   }
 
