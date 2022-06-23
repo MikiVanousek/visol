@@ -125,6 +125,7 @@ public class ScheduleDao extends GenericDao {
 	}
 
 	public static Schedule replaceSchedule(int vesselId, Schedule schedule) {
+		if (schedule == null) return null;
 		try (Query query = Query.prepared(
 			"INSERT INTO schedule (vessel, berth, manual, start, expected_end) VALUES (?, ?, ?, ?, ?) " +
 			"ON CONFLICT (vessel) DO UPDATE SET berth = ?, manual = ?, start = ?, expected_end = ? RETURNING *",
