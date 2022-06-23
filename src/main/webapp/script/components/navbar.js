@@ -6,11 +6,11 @@ class Navbar extends HTMLElement {
   connectedCallback() {
     const children = this.innerHTML;
     const role = this.hasAttribute('role') ?
-      '-' + this.getAttribute('role') : '';
+        '-' + this.getAttribute('role') : '';
     this.innerHTML = `
     <nav class="navbar navbar-expand-lg sticky-top">
       <div class="container-fluid">
-        <a class="navbar-brand" href="./index.html">
+        <a class="navbar-brand" href="./">
           <img 
             src="./assets/logo${role}.svg"
             alt="logo" 
