@@ -1,6 +1,7 @@
 import FullButton from './full-button.js';
 import IconCircle from './icon-circle.js';
 import VesselCard from './vessel-card.js';
+import VisolApi from '../api.js';
 
 class PlannerSchedule extends HTMLElement {
   static viewDropdownTag = 'chooseView';
@@ -9,7 +10,26 @@ class PlannerSchedule extends HTMLElement {
     super();
   }
 
-  connectedCallback() {
+  get terminalId() {
+    return this._terminalId;
+  }
+
+  set terminalId(newVal) {
+    this._terminalId = newVal;
+  }
+
+  get vessels() {
+    return this._vessels;
+  }
+
+  set vessels(newVal) {
+    this._vessels = newVal;
+  }
+
+  async connectedCallback() {
+    this.terminalId =
+      this.hasAttribute('teminalId') ?
+        parseInt(this.getAttribute('terminalId')) : 1;
     this.innerHTML = `
     <vessel-modal name="create"></vessel-modal>
     <div class="planner">
@@ -58,40 +78,20 @@ class PlannerSchedule extends HTMLElement {
             <div class="planner-current-wrap">
               <div class="planner-current" 
                    style="top: ${this.getCurrentHeight()}">
-                    <div class="planner-current-in">
-                        <p class="planner-current-time">
-                            ${this.getCurrentTime()}</p>
-                    </div>
+                <div class="planner-current-in">
+                    <p class="planner-current-time">
+                        ${this.getCurrentTime()}</p>
+                </div>
               </div>
             </div>
             <div class="planner-timeline">
                ${this.buildTimeline()}
             </div>
-            <div class="planner-berths">
+            <div class="planner-berths" id="planner-berth-${this.terminalId}">
               <div class="planner-berths-dividers">
                   ${this.buildDividers()}
               </div>
-              <div class="planner-berths-berth">
-                <div class="planner-berths-berth-header">
-                  <div class="planner-berths-berth-header-info">
-                      <icon-circle 
-                        view="${IconCircle.VIEW.berth}" 
-                        name="anchor"></icon-circle>
-                      <div 
-                        class="planner-berths-berth-header-info-name">
-                        Berth 1</div>
-                  </div>
-                </div>
-                <div class="planner-berths-berth-ships">
-                   <vessel-card
-                        name="DHL Transport"
-                        view="${VesselCard.VIEW.automatic}"
-                        arrival="8:00"
-                        departure="14:00"
-                        style="top: 100px"
-                    ></vessel-card>
-                </div>
-              </div>
+              
               <div class="planner-berths-berth">
                 <div class="planner-berths-berth-header">
                   <div class="planner-berths-berth-header-info">
@@ -103,52 +103,41 @@ class PlannerSchedule extends HTMLElement {
                   </div>
                 </div>
                 <div class="planner-berths-berth-ships">
-                  
-                </div>
-              </div>    
-              
-              <div class="planner-berths-berth">
-                <div class="planner-berths-berth-header">
-                  <div class="planner-berths-berth-header-info">
-                    <icon-circle 
-                        view="${IconCircle.VIEW.berth}" 
-                        name="anchor"></icon-circle>
-                    <div class="planner-berths-berth-header-info-name">
-                        Berth 3</div>
-                  </div>
-                </div>
-                <div class="planner-berths-berth-ships">
-          
-                </div>
-              </div>
-              
-              <div class="planner-berths-berth">
-                <div class="planner-berths-berth-header">
-                  <div class="planner-berths-berth-header-info">
-                      <icon-circle 
-                        view="${IconCircle.VIEW.berth}" 
-                        name="anchor"></icon-circle>
-                      <div class="planner-berths-berth-header-info-name">
-                        Berth 4</div>
-                  </div>
-                </div>
-                <div class="planner-berths-berth-ships">
-          
-                </div>
-              </div>
-              
-              <div class="planner-berths-berth">
-                <div class="planner-berths-berth-header">
-                  <div class="planner-berths-berth-header-info">
-                      <icon-circle 
-                        view="${IconCircle.VIEW.berth}" 
-                        name="anchor"></icon-circle>
-                      <div class="planner-berths-berth-header-info-name">
-                        Berth 5</div>
-                  </div>
-                </div>
-                <div class="planner-berths-berth-ships">
-          
+                  <vessel-card
+                        name="Queen Mary 2"
+                        view="${VesselCard.VIEW.infeasible}"
+                        overflow="0"
+                        arrival="0:30"
+                        departure="2:10"
+                    ></vessel-card>
+                    <vessel-card
+                        name="Britania"
+                        view="${VesselCard.VIEW.infeasible}"
+                        overflow="1"
+                        arrival="0:30"
+                        departure="2:10"
+                    ></vessel-card>
+                    <vessel-card
+                        name="Britania"
+                        view="${VesselCard.VIEW.infeasible}"
+                        overflow="2"
+                        arrival="0:45"
+                        departure="2:30"
+                    ></vessel-card>
+                    <vessel-card
+                        name="Britania"
+                        view="${VesselCard.VIEW.infeasible}"
+                        overflow="3"
+                        arrival="0:55"
+                        departure="1:40"
+                    ></vessel-card>
+                    <vessel-card
+                        name="Britania"
+                        view="${VesselCard.VIEW.infeasible}"
+                        overflow="4"
+                        arrival="1:10"
+                        departure="1:60"
+                    ></vessel-card>
                 </div>
               </div>
               
@@ -159,66 +148,71 @@ class PlannerSchedule extends HTMLElement {
                         view="${IconCircle.VIEW.berth}" 
                         name="anchor"></icon-circle>
                       <div class="planner-berths-berth-header-info-name">
-                        Berth 6</div>
+                        Berth 2</div>
                   </div>
                 </div>
                 <div class="planner-berths-berth-ships">
-          
+                  <vessel-card
+                        name="Queen Mary 2"
+                        view="${VesselCard.VIEW.automatic}"
+                        arrival="0:30"
+                        departure="3:10"
+                    ></vessel-card>
+                    <vessel-card
+                        name="Britania"
+                        view="${VesselCard.VIEW.manual}"
+                        arrival="3:15"
+                        departure="4:10"
+                    ></vessel-card>
                 </div>
               </div>
-              
-              <div class="planner-berths-berth">
-                <div class="planner-berths-berth-header">
-                  <div class="planner-berths-berth-header-info">
+            
+            <div class="planner-berths-berth">
+              <div class="planner-berths-berth-header">
+                <div class="planner-berths-berth-header-info">
+                    <div class="planner-berths-berth-header-info-left">
                       <icon-circle 
                         view="${IconCircle.VIEW.berth}" 
                         name="anchor"></icon-circle>
                       <div class="planner-berths-berth-header-info-name">
-                        Berth 7</div>
-                  </div>
-                </div>
-                <div class="planner-berths-berth-ships">
-          
-                </div>
-              </div>
-              
-              <div class="planner-berths-berth">
-                <div class="planner-berths-berth-header">
-                  <div class="planner-berths-berth-header-info">
-                      <icon-circle 
-                        view="${IconCircle.VIEW.berth}" 
-                        name="anchor"></icon-circle>
-                      <div 
-                        class="planner-berths-berth-header-info-name">
-                        Berth 8</div>
-                  </div>
-                </div>
-                <div class="planner-berths-berth-ships">
-          
+                        Berth 2</div>
+                    </div>
+                    <div class="planner-berths-berth-header-info-details">
+                      <p class="planner-berths-berth-header-info-details-item">
+                        30<span>x</span>20<span>x</span>100</p>
+                      <p class="planner-berths-berth-header-info-details-item">
+                        125 con/h</p>
+                    </div>
                 </div>
               </div>
-              
-              <div class="planner-berths-berth">
-                <div class="planner-berths-berth-header">
-                  <div class="planner-berths-berth-header-info">
-                      <icon-circle 
-                        view="${IconCircle.VIEW.berth}" 
-                        name="anchor"></icon-circle>
-                      <div 
-                        class="planner-berths-berth-header-info-name">
-                        Berth 9</div>
-                  </div>
-                </div>
-                <div class="planner-berths-berth-ships">
-                      
-                </div>
+              <div class="planner-berths-berth-ships">
+
               </div>
             </div>
+           
+              <div class="planner-berths-berth">
+                <div class="planner-berths-berth-header">
+                  <div class="planner-berths-berth-header-info">
+                      <icon-circle 
+                        view="${IconCircle.VIEW.berth}" 
+                        name="anchor"></icon-circle>
+                      <div class="planner-berths-berth-header-info-name">
+                        Berth 2</div>
+                  </div>
+                </div>
+                <div class="planner-berths-berth-ships">
+  
+                </div>
+              </div>
+            
           </div>
         </div>
     </div>`;
 
     this.addData();
+    await this.loadBerths();
+    await this.loadVessels();
+    await this.loadSchedules(null, null);
   }
 
   addData() {
@@ -234,6 +228,42 @@ class PlannerSchedule extends HTMLElement {
 
   changeView(newVal) {
     console.log(newVal);
+  }
+
+  async loadBerths() {
+    const schedule =
+      document.getElementById(`planner-berth-${this.terminalId}`);
+    const berths = await VisolApi.getBerthsPerTerminal(this.terminalId);
+    Object.entries(berths).forEach(([id, berth]) => {
+      const berthEl = document.createElement('planner-berth');
+      berthEl.id = id;
+      berthEl.data = berth;
+      schedule.appendChild(berthEl);
+    });
+  }
+
+  async loadVessels() {
+    this.vessels =
+      await VisolApi.getVesselsPerTerminal(this.terminalId);
+  }
+
+  async loadSchedules(timeFrom, timeTo) {
+    const berthsSchedules =
+      await VisolApi.getSchedulesPerTerminal(this.terminalId);
+    Object.entries(berthsSchedules).forEach(([id, berthSchedules]) => {
+      const berthSchedulesEl = document.getElementById(`berth-ships-${id}`);
+      let res = ``;
+      Object.values(berthSchedules).forEach((schedule) => {
+        const vessel = this.vessels[schedule.vessel];
+        res += `<vessel-card
+                    name="${vessel.name}"
+                    view="${VesselCard.VIEW.automatic}"
+                    arrival="${schedule.start}"
+                    departure="${schedule.end}"
+                ></vessel-card>`;
+      });
+      berthSchedulesEl.innerHTML += res;
+    });
   }
 
   buildTimeline() {

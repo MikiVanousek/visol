@@ -1,0 +1,70 @@
+.vessel-card
+	+flex(flex-start, flex-start)
+	+relative()
+	flex-wrap: wrap
+	height: 100%
+	padding: $base-spacing * 2
+	background-color: rgba($c-secondary, 0.5)
+	backdrop-filter: blur(8px)
+	border-radius: $border-radius
+	cursor: pointer
+
+	&-info
+		+flex(flex-start, center)
+		gap: $base-spacing * 2
+
+		&-heading
+			font-weight: 600
+			font-size: 11px
+			margin: 0
+			padding: 0
+
+		&-description
+			font-size: 10px
+
+	&-footer
+		+absolute()
+		right: 10px
+		bottom: 10px
+
+	&.view-automatic,
+	&.view-manual
+		+absolute()
+		width: 100%
+		color: $c-primary
+
+	&.view-infeasible
+		+absolute()
+		background-color: $c-warning
+		color: $c-background
+		box-shadow: rgba(#000000, 0.2) 0px 0px 4px 0px
+
+		&:hover
+			z-index:1000
+			backdrop-filter: blur(8px)
+			transition: .5s ease
+
+	&.view-infeasible &-info-in
+		padding-left: 0px
+		padding-top: $base-spacing
+
+	&.view-automatic &-info,
+	&.view-manual &-info,
+	&.view-infeasible &-info
+		+flex()
+		flex-wrap: wrap
+		+sticky(($berth-header-height + 2*$base-spacing) null null null)
+
+	&.view-unscheduled
+		+flex(flex-start, flex-start)
+		min-width: 200px
+		max-width: 300px
+		width: 15vw
+		height: 70%
+		color: $c-primary
+		margin: 0 $base-spacing * 1.8
+		box-shadow: none
+
+vessel-card
+	+relative()
+	display: block
