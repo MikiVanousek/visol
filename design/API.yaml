@@ -16,14 +16,16 @@ paths:
         - Vessels
       summary: Create a Vessel
       operationId: createVessel
+      parameters:
+        - in: header
+          name: Reason
+          schema:
+            $ref: '#/components/schemas/Reason'
+          required: false
+          description: The reason for which the Vessel was created.
+          example: New vessel inbound (#142)
       requestBody:
         description: ''
-        headers:
-          Reason:
-            schema:
-              $ref: '#/components/schemas/Reason'
-            description: The reason for which the Vessel was created.
-            example: New vessel inbound (#142)
         content:
           application/json:
             schema:
@@ -71,14 +73,16 @@ paths:
         - Vessels
       summary: Replace a Vessel
       operationId: replaceVessel
+      parameters:
+        - in: header
+          name: Reason
+          schema:
+            $ref: '#/components/schemas/Reason'
+          required: false
+          description: The reason for which the Vessel was created.
+          example: Additional cargo (#2524)
       requestBody:
         description: ''
-        headers:
-          Reason:
-            schema:
-              $ref: '#/components/schemas/Reason'
-            description: The reason for which the Vessel was replaced/updated.
-            example: Additional cargo (#2524)
         content:
           application/json:
             schema:
@@ -130,14 +134,16 @@ paths:
         - Vessels
       summary: Replace or Create a Vessel's Schedule
       operationId: replaceOrCreateVesselSchedule
+      parameters:
+        - in: header
+          name: Reason
+          schema:
+            $ref: '#/components/schemas/Reason'
+          required: false
+          description: The reason for which the Schedule was replaced/updated.
+          example: Automatic scheduling job
       requestBody:
         description: ''
-        headers:
-          Reason:
-            schema:
-              $ref: '#/components/schemas/Reason'
-            description: The reason for which the Schedule was replaced/updated.
-            example: Automatic scheduling job
         content:
           application/json:
             schema:
@@ -146,12 +152,6 @@ paths:
       responses:
         '200':
           description: ''
-          headers:
-            Reason:
-              schema:
-                $ref: '#/components/schemas/Reason'
-              description: The reason for which the Schedule was created.
-              example: Schedule vessel \#351 early so we can have more delays
           content:
             application/json:
               schema:
