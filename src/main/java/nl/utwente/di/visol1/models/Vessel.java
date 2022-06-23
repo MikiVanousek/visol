@@ -153,6 +153,9 @@ public class Vessel implements Comparable<Vessel> {
 
 	@Override
 	public String toString() {
+		if (this.equals(new Vessel())) {
+			return null;
+		}
 		JsonNodeFactory factory = JsonNodeFactory.withExactBigDecimals(false);
 		ObjectNode vesselObject = factory.objectNode();
 		vesselObject.set("name", factory.textNode(name));

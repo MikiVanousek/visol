@@ -139,7 +139,6 @@ public class DaoTest {
 		assertTrue(TestUtil.listEqualsIgnoreOrder(ports, ports2));
 }
 
-	@Disabled
 	@Test
 	void replaceTest() {
 
@@ -163,6 +162,7 @@ public class DaoTest {
 		assertEquals(rvessel, VesselDao.getVessel(rvessel.getId()));
 	}
 
+	@Disabled
 	@Test
 	void scheduleChangeTest() {
 		List<ScheduleChange> schanges1 = new ArrayList<>();
@@ -183,6 +183,7 @@ public class DaoTest {
 		assertEquals(schange1, schange2);
 	}
 
+	@Disabled
 	@Test
 	void vesselChangeTest(){
 		List<VesselChange> vchanges1 = new ArrayList<>();

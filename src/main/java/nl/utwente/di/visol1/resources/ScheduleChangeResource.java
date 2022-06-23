@@ -28,19 +28,20 @@ public class ScheduleChangeResource {
 	@Context
 	Request request;
 	int id;
-	public ScheduleChangeResource(UriInfo uriInfo, Request request, String id){
+
+	public ScheduleChangeResource(UriInfo uriInfo, Request request, String id) {
 		this.uriInfo = uriInfo;
 		this.request = request;
 		this.id = Integer.parseInt(id);
 	}
 
 	@POST
-	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response createScheduleChange(ScheduleChange schange){
+	public Response createScheduleChange(ScheduleChange schange) {
 		schange.setVessel(id);
 		ScheduleChange createdChange = ScheduleChangeDao.createScheduleChange(schange);
-		if (createdChange != null){
+		if (createdChange != null) {
 			return Response.status(Response.Status.OK).entity(createdChange).build();
 		} else {
 			return Response.status(Response.Status.NOT_ACCEPTABLE).build();
@@ -49,22 +50,22 @@ public class ScheduleChangeResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<ScheduleChange> getScheduleChanges(@QueryParam("from") String from, @QueryParam("to") String to){
+	public List<ScheduleChange> getScheduleChanges(@QueryParam("from") String from, @QueryParam("to") String to) {
 		Timestamp fromTime = TimestampAdapter.INSTANCE.unmarshal(from);
 		Timestamp toTime = TimestampAdapter.INSTANCE.unmarshal(to);
 		if (fromTime == null) fromTime = GenericDao.MIN_TIME;
-		if(toTime == null) toTime = GenericDao.MAX_TIME;
+		if (toTime == null) toTime = GenericDao.MAX_TIME;
 		return ScheduleChangeDao.getScheduleChangesByVessel(id, fromTime, toTime);
 	}
 
 	@DELETE
-	public Response deleteScheduleChanges(@QueryParam("from") String from, @QueryParam("to") String to){
+	public Response deleteScheduleChanges(@QueryParam("from") String from, @QueryParam("to") String to) {
 		Timestamp fromTime = TimestampAdapter.INSTANCE.unmarshal(from);
 		Timestamp toTime = TimestampAdapter.INSTANCE.unmarshal(to);
 		if (fromTime == null) fromTime = GenericDao.MIN_TIME;
-		if(toTime == null) toTime = GenericDao.MAX_TIME;
+		if (toTime == null) toTime = GenericDao.MAX_TIME;
 		int i = ScheduleChangeDao.deleteScheduleChanges(id, fromTime, toTime);
-		if (i != 0){
+		if (i != 0) {
 			return Response.status(Response.Status.NO_CONTENT).build();
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).build();
