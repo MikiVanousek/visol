@@ -97,6 +97,9 @@ public class Schedule implements Comparable<Schedule> {
 
 	@Override
 	public String toString() {
+		if (this.equals(new Schedule())) {
+			return null;
+		}
 		JsonNodeFactory factory = JsonNodeFactory.withExactBigDecimals(false);
 		ObjectNode scheduleObject = factory.objectNode();
 		scheduleObject.set("vessel", factory.numberNode(vessel));

@@ -4,7 +4,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -28,6 +27,15 @@ public class VesselChange {
 
 	public VesselChange(){
 		//Empty Constructor
+	}
+
+	public VesselChange(Vessel vessel, String reason){
+		//Constructor to call with replacing or creating a vessel
+		this.vessel = vessel.getId();
+		this.date = new Timestamp(System.currentTimeMillis());
+		this.oldVessel = new Vessel();
+		this.newVessel = vessel;
+		this.reason = reason;
 	}
 
 	public VesselChange(int vessel, Timestamp date, String oldVessel, String newVessel, String reason) {

@@ -97,7 +97,6 @@ public class TerminalResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Map<Integer, List<Schedule>> getOptimalSchedules(Map<Integer, List<Schedule>> oldSchedule) {
-		//TODO: THIS
 		return null;
 	}
 

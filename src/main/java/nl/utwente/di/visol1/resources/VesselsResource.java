@@ -1,9 +1,11 @@
 package nl.utwente.di.visol1.resources;
 
 import nl.utwente.di.visol1.dao.PortDao;
+import nl.utwente.di.visol1.dao.VesselChangeDao;
 import nl.utwente.di.visol1.dao.VesselDao;
 import nl.utwente.di.visol1.models.Port;
 import nl.utwente.di.visol1.models.Vessel;
+import nl.utwente.di.visol1.models.VesselChange;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -31,6 +33,9 @@ public class VesselsResource {
     public Response createVessel(Vessel vessel){
 	    Vessel createdVessel = VesselDao.createVessel(vessel);
 	    if (createdVessel != null) {
+			vessel.setId(createdVessel.getId());
+			VesselChange vchange = new VesselChange(vessel, "creation of new vessel");
+		    VesselChangeDao.createVesselChange(vchange);
 		    return Response.status(Response.Status.CREATED)
 			    .header("Location", "/rest/vessels/" + createdVessel.getId())
 			    .entity(createdVessel).build();

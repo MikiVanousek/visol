@@ -17,10 +17,10 @@ public class ScheduleChangeDao extends GenericDao{
 
 	public static ScheduleChange createScheduleChange(ScheduleChange scheduleChange){
 		try (Query query = Query.prepared("INSERT INTO schedulechange (vessel, date, old, new, reason) VALUES(?, ?, "
-		                                  + "(SELECT to_jsonb(schedule) FROM schedule WHERE vessel = ?), ?::jsonb, ?) RETURNING *;", stmt -> {
+		                                  + "?::jsonb, ?::jsonb, ?) RETURNING *;", stmt -> {
 			stmt.setInt(1, scheduleChange.getVessel());
 			stmt.setTimestamp(2, scheduleChange.getDate());
-			stmt.setInt(3, scheduleChange.getVessel());
+			stmt.setString(3, scheduleChange.getOldSchedule().toString());
 			stmt.setString(4, scheduleChange.getNewSchedule().toString());
 			stmt.setString(5, scheduleChange.getReason());
 		})){

@@ -28,6 +28,15 @@ public class ScheduleChange {
 		//Empty Constructor
 	}
 
+	public ScheduleChange(Schedule schedule, String reason){
+		//Constructor to call with replacing or creating a vessel
+		this.vessel = schedule.getVessel();
+		this.date = new Timestamp(System.currentTimeMillis());
+		this.oldSchedule = new Schedule();
+		this.newSchedule = schedule;
+		this.reason = reason;
+	}
+
 	public ScheduleChange(int vessel, Timestamp date, String oldSchedule, String newSchedule, String reason) {
 		ObjectMapper mapper = new ObjectMapper();
 		this.vessel = vessel;

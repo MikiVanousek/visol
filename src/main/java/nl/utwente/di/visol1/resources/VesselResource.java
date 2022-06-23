@@ -1,12 +1,17 @@
 package nl.utwente.di.visol1.resources;
 
 import nl.utwente.di.visol1.dao.PortDao;
+import nl.utwente.di.visol1.dao.ScheduleChangeDao;
 import nl.utwente.di.visol1.dao.ScheduleDao;
+import nl.utwente.di.visol1.dao.VesselChangeDao;
 import nl.utwente.di.visol1.dao.VesselDao;
 import nl.utwente.di.visol1.models.Port;
 import nl.utwente.di.visol1.models.Schedule;
+import nl.utwente.di.visol1.models.ScheduleChange;
 import nl.utwente.di.visol1.models.Vessel;
+import nl.utwente.di.visol1.models.VesselChange;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -41,9 +46,15 @@ public class VesselResource {
     @PUT
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces(MediaType.APPLICATION_JSON)
-    public Response replaceVessel(Vessel vessel){
+    public Response replaceVessel(@Context HttpServletRequest request, Vessel vessel){
+		vessel.setId(id);
+	    String reason = request.getHeader("reason");
+	    VesselChange vchange = new VesselChange(vessel, reason);
+		Vessel oldvessel = VesselDao.getVessel(id);
 	    int i = VesselDao.replaceVessel(id, vessel);
 	    if (i != 0){
+			vchange.setOldVessel(oldvessel);
+		    VesselChangeDao.createVesselChange(vchange);
 		    return Response.status(Response.Status.OK).entity(VesselDao.getVessel(id)).build();
 	    } else {
 		    return Response.status(Response.Status.NOT_FOUND).build();
@@ -91,7 +102,18 @@ public class VesselResource {
     @PUT
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces(MediaType.APPLICATION_JSON)
-    public Schedule replaceSchedule(Schedule schedule){
-        return ScheduleDao.replaceSchedule(id, schedule);
+    public Response replaceSchedule(@Context HttpServletRequest request, Schedule schedule){
+		schedule.setVessel(id);
+		String reason = request.getHeader("reason");
+	    ScheduleChange schange = new ScheduleChange(schedule, reason);
+		Schedule oldSchedule = ScheduleDao.getScheduleByVessel(id);
+		Schedule createdSchedule = ScheduleDao.replaceSchedule(id, schedule);
+	    if (createdSchedule != null) {
+			schange.setOldSchedule(oldSchedule);
+		    ScheduleChangeDao.createScheduleChange(schange);
+		    return Response.status(Response.Status.OK).entity(createdSchedule).build();
+	    } else {
+		    return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+	    }
     }
 }
