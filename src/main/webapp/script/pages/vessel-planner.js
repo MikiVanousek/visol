@@ -28,6 +28,9 @@ class VesselPlanner extends HTMLElement {
     <unscheduled-vessels>
 
     </unscheduled-vessels>
+    
+    <update-modal></update-modal>
+    <create-modal></create-modal>
     `;
   }
 }
