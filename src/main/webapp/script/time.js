@@ -31,6 +31,11 @@ class Time {
     }
 
     // Note that in PostgreSQL, 24:00:00 is considered to be 00:00:00.
+    if (this.hours === 24) {
+      // TODO check if this is the correct solution
+      this._hours = 0;
+    }
+
     if (this._hours < 0 || this._hours > 23 ||
         this._minutes < 0 || this._minutes > 59 ||
         this._seconds < 0 || this._seconds > 59) {

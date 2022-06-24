@@ -26,6 +26,9 @@ class PlannerBerth extends HTMLElement {
               </div>
           </div>
         </div>
+        <berth-closed
+          open="${this.data.open}"
+          close="${this.data.close}"></berth-closed>
         <div
             class="planner-berths-berth-ships" 
             id="berth-ships-${this.id}">
