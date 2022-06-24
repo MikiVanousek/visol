@@ -21,13 +21,6 @@ class VisolApi {
 
   static putSchedule = (vesselId, schedule) =>
     Requests.putData(`/vessels/${vesselId}/schedule`, schedule);
-
-  static formatDatetimeForApi = (t) => new Date(Date.parse(t)).toISOString().substring(0, 19) + 'Z';
-
-  static formatDatetimeForInput(date) {
-    const timezoneOffset = new Date().getTimezoneOffset() * 60000; // offset in milliseconds
-    return new Date(date - timezoneOffset).toJSON().substring(0, 16);
-  }
 }
 
 export default VisolApi;

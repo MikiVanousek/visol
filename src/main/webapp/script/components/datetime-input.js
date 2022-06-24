@@ -1,4 +1,4 @@
-import VisolApi from '../api.js';
+import Timestamp from '../timestamp.js';
 
 class DatetimeInput extends HTMLInputElement {
   constructor() {
@@ -10,14 +10,15 @@ class DatetimeInput extends HTMLInputElement {
   }
 
   get value() {
-    if (super.value === '') {
+    try {
+      return new Timestamp(super.value).toUTC().formatted();
+    } catch (error) {
       return undefined;
     }
-    return VisolApi.formatDatetimeForApi(super.value);
   }
 
   set value(timestamp) {
-    super.value = VisolApi.formatDatetimeForInput(new Date(timestamp));
+    super.value = new Timestamp(timestamp).toLocal().formatted('YYYY-MM-DDThh:mm:ss');
   }
 }
 
