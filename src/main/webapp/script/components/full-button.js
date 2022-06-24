@@ -24,10 +24,11 @@ class FullButton extends HTMLElement {
             view="${IconPlain.VIEW.button}"></icon-plain>` : ``;
     const size = this.hasAttribute('size') ?
       this.getAttribute('size') : FullButton.SIZE.medium;
+    const onclick = this.hasAttribute('onclick') ? `onclick="${this.getAttribute('onclick')}"` : ``;
     this.innerHTML = `
         <button 
-            class="full-button view-${this.getAttribute('view')} size-${size}" 
-            type="button">${children} ${icon}</button>
+            class="full-button view-${this.getAttribute('view')} size-${size}"
+            ${onclick} type="button">${children} ${icon}</button>
     `;
   }
 }

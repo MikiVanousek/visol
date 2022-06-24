@@ -1,8 +1,8 @@
 import FullButton from './full-button.js';
 import IconCircle from './icon-circle.js';
-import VesselCard from './vessel-card.js';
 import CurrentTime from './current-time.js';
 import VisolApi from '../api.js';
+import Requests from '../requests.js';
 
 class PlannerSchedule extends HTMLElement {
   static VIEW = {
@@ -68,7 +68,7 @@ class PlannerSchedule extends HTMLElement {
               <div class="planner-header-sub-in">
                 <full-button 
                     view="${FullButton.VIEW.secondary}" 
-                    icon="fire">Optimise</full-button>
+                    icon="fire" onclick="document.getElementsByTagName('planner-schedule')[0].optimiseSchedules(event)">Optimise</full-button>
               </div>
             </div>
         </div>
@@ -122,7 +122,7 @@ class PlannerSchedule extends HTMLElement {
 
   async loadBerths() {
     const schedule =
-      document.getElementById(this.berthsId);
+        document.getElementById(this.berthsId);
     const berths = await VisolApi.getBerthsPerTerminal(this.terminalId);
     Object.entries(berths).forEach(([id, berth]) => {
       const berthEl = document.createElement('planner-berth');
@@ -173,6 +173,17 @@ class PlannerSchedule extends HTMLElement {
               </span>`;
     });
     return res;
+  }
+
+  async optimiseSchedules(event) {
+    event.preventDefault();
+    await Requests.postData(`/terminals/${this.terminalId}/schedules/optimise`).then(() => {
+      // Delete old schedules
+      Array.from(document.getElementsByTagName('vessel-card')).forEach((vesselEl) => {
+        vesselEl.remove();
+      });
+    });
+    await this.loadSchedules(null, null);
   }
 }
 
