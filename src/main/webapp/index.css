@@ -8472,7 +8472,8 @@ icon-plain .view-secondary {
 }
 .vessel-card.view-automatic, .vessel-card.view-manual {
   position: absolute;
-  width: 100%;
+  right: 6px;
+  left: 6px;
   color: #4CA6A8;
 }
 .vessel-card.view-infeasible {
@@ -8482,7 +8483,7 @@ icon-plain .view-secondary {
   box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 4px 0px;
 }
 .vessel-card.view-infeasible:hover {
-  z-index: 1000;
+  z-index: 100;
   backdrop-filter: blur(8px);
   transition: 0.5s ease;
 }
@@ -8508,11 +8509,6 @@ icon-plain .view-secondary {
   color: #4CA6A8;
   margin: 0 10.8px;
   box-shadow: none;
-}
-
-vessel-card {
-  position: relative;
-  display: block;
 }
 
 .planner {

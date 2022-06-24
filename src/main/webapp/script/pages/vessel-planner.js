@@ -26,31 +26,7 @@ class VesselPlanner extends HTMLElement {
     </planner-schedule>
 
     <unscheduled-vessels>
-        <vessel-card
-            name="DHL Transport"
-            view="${VesselCard.VIEW.unscheduled}"
-        ></vessel-card> 
-        <vessel-card
-            name="MSC Diana"
-            view="${VesselCard.VIEW.unscheduled}"
-        ></vessel-card> 
-        <vessel-card
-            name="Ever Golden"
-            view="${VesselCard.VIEW.unscheduled}"
-        ></vessel-card> 
 
-        <vessel-card
-            name="COSCO Shipping Taurus"
-            view="${VesselCard.VIEW.unscheduled}"
-        ></vessel-card> 
-
-        <vessel-card
-            name="CMA CGM Antoine De Saint Exupery"
-            view="${VesselCard.VIEW.unscheduled}"
-        ></vessel-card> 
-       
-        <create-modal></create-modal>
-        <update-modal></update-modal>
     </unscheduled-vessels>
     `;
   }

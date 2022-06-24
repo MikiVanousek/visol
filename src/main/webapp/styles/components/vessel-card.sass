@@ -29,8 +29,7 @@
 
 	&.view-automatic,
 	&.view-manual
-		+absolute()
-		width: 100%
+		+absolute(null $base-spacing null $base-spacing)
 		color: $c-primary
 
 	&.view-infeasible
@@ -40,7 +39,7 @@
 		box-shadow: rgba(#000000, 0.2) 0px 0px 4px 0px
 
 		&:hover
-			z-index:1000
+			z-index: 100
 			backdrop-filter: blur(8px)
 			transition: .5s ease
 
@@ -64,7 +63,3 @@
 		color: $c-primary
 		margin: 0 $base-spacing * 1.8
 		box-shadow: none
-
-vessel-card
-	+relative()
-	display: block

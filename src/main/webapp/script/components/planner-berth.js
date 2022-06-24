@@ -19,9 +19,8 @@ class PlannerBerth extends HTMLElement {
                     Berth ${this.id}</div>
               </div>
               <div class="planner-berths-berth-header-info-details">
-                <p class="planner-berths-berth-header-info-details-item">
-                  ${this.data.width}<span>x</span>${this.data.length}
-                  <span>x</span>${this.data.depth}</p>
+    <p class="planner-berths-berth-header-info-details-item">${this.data.width
+}<span>x</span>${this.data.length}<span>x</span>${this.data.depth}</p>
                 <p class="planner-berths-berth-header-info-details-item">
                   ${this.data.unload_speed} con/h</p>
               </div>

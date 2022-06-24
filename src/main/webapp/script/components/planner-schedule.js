@@ -32,6 +32,10 @@ class PlannerSchedule extends HTMLElement {
     this._vessels = newVal;
   }
 
+  get berthsId() {
+    return 'planner-berths-' + this.terminalId;
+  }
+
   async connectedCallback() {
     this.terminalId =
         this.hasAttribute('teminalId') ?
@@ -85,136 +89,10 @@ class PlannerSchedule extends HTMLElement {
             <div class="planner-timeline">
                ${this.buildTimeline()}
             </div>
-            <div class="planner-berths" id="planner-berth-${this.terminalId}">
+            <div class="planner-berths" id="${this.berthsId}">
               <div class="planner-berths-dividers">
                   ${this.buildDividers()}
               </div>
-              
-              <div class="planner-berths-berth">
-                <div class="planner-berths-berth-header">
-                  <div class="planner-berths-berth-header-info">
-                      <icon-circle 
-                        view="${IconCircle.VIEW.berth}" 
-                        name="anchor"></icon-circle>
-                      <div class="planner-berths-berth-header-info-name">
-                        Berth 2</div>
-                  </div>
-                </div>
-                <berth-closed
-                    open="08:00:00"
-                    close="19:00:00">
-                </berth-closed>
-                <div class="planner-berths-berth-ships">
-                  <vessel-card
-                        name="Queen Mary 2"
-                        view="${VesselCard.VIEW.infeasible}"
-                        overflow="0"
-                        arrival="0:30"
-                        departure="2:10"
-                    ></vessel-card>
-                    <vessel-card
-                        name="Britania"
-                        view="${VesselCard.VIEW.infeasible}"
-                        overflow="1"
-                        arrival="0:30"
-                        departure="2:10"
-                    ></vessel-card>
-                    <vessel-card
-                        name="Britania"
-                        view="${VesselCard.VIEW.infeasible}"
-                        overflow="2"
-                        arrival="0:45"
-                        departure="2:30"
-                    ></vessel-card>
-                    <vessel-card
-                        name="Britania"
-                        view="${VesselCard.VIEW.infeasible}"
-                        overflow="3"
-                        arrival="0:55"
-                        departure="1:40"
-                    ></vessel-card>
-                    <vessel-card
-                        name="Britania"
-                        view="${VesselCard.VIEW.infeasible}"
-                        overflow="4"
-                        arrival="1:10"
-                        departure="2:00"
-                    ></vessel-card>
-                </div>
-              </div>
-              
-              <div class="planner-berths-berth">
-                <div class="planner-berths-berth-header">
-                  <div class="planner-berths-berth-header-info">
-                      <icon-circle 
-                        view="${IconCircle.VIEW.berth}" 
-                        name="anchor"></icon-circle>
-                      <div class="planner-berths-berth-header-info-name">
-                        Berth 2</div>
-                  </div>
-                </div>
-                <berth-closed
-                    open="08:00:00"
-                    close="01:00:00">
-                </berth-closed>
-                <div class="planner-berths-berth-ships">
-                  <vessel-card
-                        name="Queen Mary 2"
-                        view="${VesselCard.VIEW.automatic}"
-                        arrival="0:30"
-                        departure="3:10"
-                    ></vessel-card>
-                    <vessel-card
-                        name="Britania"
-                        view="${VesselCard.VIEW.manual}"
-                        arrival="3:15"
-                        departure="4:10"
-                    ></vessel-card>
-                </div>
-              </div>
-            
-            <div class="planner-berths-berth">
-              <div class="planner-berths-berth-header">
-                <div class="planner-berths-berth-header-info">
-                    <div class="planner-berths-berth-header-info-left">
-                      <icon-circle 
-                        view="${IconCircle.VIEW.berth}" 
-                        name="anchor"></icon-circle>
-                      <div class="planner-berths-berth-header-info-name">
-                        Berth 2</div>
-                    </div>
-                    <div class="planner-berths-berth-header-info-details">
-                      <p class="planner-berths-berth-header-info-details-item">
-                        30<span>x</span>20<span>x</span>100</p>
-                      <p class="planner-berths-berth-header-info-details-item">
-                        125 con/h</p>
-                    </div>
-                </div>
-              </div>
-                <berth-closed
-                    open="08:00:00"
-                    close="00:00:00">
-                </berth-closed>
-              <div class="planner-berths-berth-ships">
-
-              </div>
-            </div>
-           
-              <div class="planner-berths-berth">
-                <div class="planner-berths-berth-header">
-                  <div class="planner-berths-berth-header-info">
-                      <icon-circle 
-                        view="${IconCircle.VIEW.berth}" 
-                        name="anchor"></icon-circle>
-                      <div class="planner-berths-berth-header-info-name">
-                        Berth 2</div>
-                  </div>
-                </div>
-                <div class="planner-berths-berth-ships">
-  
-                </div>
-              </div>
-            
           </div>
         </div>
     </div>`;
@@ -244,7 +122,7 @@ class PlannerSchedule extends HTMLElement {
 
   async loadBerths() {
     const schedule =
-        document.getElementById(`planner-berth-${this.terminalId}`);
+      document.getElementById(this.berthsId);
     const berths = await VisolApi.getBerthsPerTerminal(this.terminalId);
     Object.entries(berths).forEach(([id, berth]) => {
       const berthEl = document.createElement('planner-berth');
@@ -264,17 +142,13 @@ class PlannerSchedule extends HTMLElement {
         await VisolApi.getSchedulesPerTerminal(this.terminalId);
     Object.entries(berthsSchedules).forEach(([id, berthSchedules]) => {
       const berthSchedulesEl = document.getElementById(`berth-ships-${id}`);
-      let res = ``;
       Object.values(berthSchedules).forEach((schedule) => {
         const vessel = this.vessels[schedule.vessel];
-        res += `<vessel-card
-                    name="${vessel.name}"
-                    view="${VesselCard.VIEW.automatic}"
-                    arrival="${schedule.start}"
-                    departure="${schedule.end}"
-                ></vessel-card>`;
+        const vesselEl = document.createElement('vessel-card');
+        vesselEl.data = vessel;
+        vesselEl.schedule = schedule;
+        berthSchedulesEl.appendChild(vesselEl);
       });
-      berthSchedulesEl.innerHTML += res;
     });
   }
 
