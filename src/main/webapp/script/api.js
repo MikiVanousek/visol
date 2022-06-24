@@ -3,7 +3,6 @@ import Requests from './requests.js';
 class VisolApi {
   static portId = 1;
   static get;
-  q;
 
   static getTerminals = () =>
     Requests.getData(`/ports/${VisolApi.portId}/terminals`);
@@ -19,6 +18,9 @@ class VisolApi {
 
   static postVessel = (vessel) =>
     Requests.postData('/vessels', vessel);
+
+  static putVessel = (vesselId, vessel) =>
+    Requests.putData(`/vessels/${vesselId}`, vessel);
 
   static putSchedule = (vesselId, schedule) =>
     Requests.putData(`/vessels/${vesselId}/schedule`, schedule);
