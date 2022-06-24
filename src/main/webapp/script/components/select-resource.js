@@ -1,40 +1,48 @@
-import VisolApi from "../api.js"
+import VisolApi from '../api.js';
 
-class SelectResource extends HTMLElement {
-  resourcePromise
-  displayAttribute
-  name
+class SelectResource extends HTMLSelectElement {
+  resourcePromise;
+  displayAttribute;
 
-  constructor(displayAttribute, resourcePromise, name) {
-    super()
-    this.displayAttribute = displayAttribute
-    this.resourcePromise = resourcePromise
-    this.name = name
+  constructor(displayAttribute) {
+    super();
+    this.displayAttribute = displayAttribute;
   }
 
-  connectedCallback() {
-    this.innerHTML = ``
-    this.resourcePromise.then(resource =>{
-      this.innerHTML = this.buildSelect(resource)
-    }).catch(err => console.log("Error fetching resource for the selector: ", err))
+  setResourcePromise(resourcePromise) {
+    this.innerHTML = ``;
+    this.resourcePromise = resourcePromise;
+    this.resourcePromise.then((resource) => {
+      this.innerHTML = this.buildSelect(resource);
+      this.dispatchEvent(new Event('change'));
+    }).catch((err) => console.log('Error fetching resource for the selector: ', err));
   }
 
   buildSelect(resource) {
-    return `
-    <label class="form-label me-3" for="${name}-select-terminal"><b>${this.name.charAt(0).toUpperCase() + this.name.slice(1)}:</b></label>
-    <select class="form-select form-select-sm" id="${name}-select-terminal" name="vessel-destination"> 
-      ${Object.keys(resource).map(i => `<option value="${i}">${resource[i][this.displayAttribute]}</option>`).join('\n')}
-    </select>
-    `
+    return Object.keys(resource).map((i) =>
+      `<option value="${i}">${this.displayAttribute === undefined ? i :
+            resource[i][this.displayAttribute]}</option>`).join('\n');
   }
 }
 
 class SelectTerminal extends SelectResource {
   constructor() {
-    super('name', VisolApi.getTerminals(), 'terminals')
+    super('name', 'destination');
+    this.setResourcePromise(VisolApi.getTerminals());
   }
 }
 
-customElements.define('select-terminal', SelectTerminal)
+class SelectBerth extends SelectResource {
+  constructor() {
+    super(undefined, 'berth');
+  }
+
+  setTerminal(i) {
+    this.setResourcePromise(VisolApi.getBerthsPerTerminal(i));
+  }
+}
+
+customElements.define('select-terminal', SelectTerminal, {extends: 'select'});
+customElements.define('select-berth', SelectBerth, {extends: 'select'});
 
 export default SelectResource;

@@ -1,6 +1,12 @@
 // TODO Miki customize text
 class ErrorToast extends HTMLElement {
-  static id = "error-toast"
+  static id = 'error-toast';
+
+  static show(content = '<b> A request failed! </b> Try reloading the page!') {
+    document.getElementById('toast-body').innerHTML = content;
+    bootstrap.Toast.getOrCreateInstance(document.getElementById(ErrorToast.id)).show();
+  }
+
   connectedCallback() {
     this.innerHTML = `
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
@@ -10,18 +16,14 @@ class ErrorToast extends HTMLElement {
       <div class="toast-body" id="toast-body">
         <b> A request failed! </b> Try reloading the page!
       </div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" 
+        aria-label="Close"></button>
     </div>
   </div>
-</div>`
-  }
-
-  static show(content = "<b> A request failed! </b> Try reloading the page!") {
-    document.getElementById("toast-body").innerHTML = content
-    bootstrap.Toast.getOrCreateInstance(document.getElementById(ErrorToast.id)).show()
+</div>`;
   }
 }
 
 customElements.define('error-toast', ErrorToast);
 
-export default ErrorToast
+export default ErrorToast;

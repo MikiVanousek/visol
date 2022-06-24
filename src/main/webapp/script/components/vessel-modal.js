@@ -1,7 +1,8 @@
 import VisolApi from '../api.js';
 
 class VesselModal extends HTMLElement {
-  schedule_type = 'auto';
+  schedule_type;
+  // ID prefix
   name;
 
   constructor() {
@@ -9,10 +10,10 @@ class VesselModal extends HTMLElement {
     this.name = this.getAttribute('name');
   }
 
-  set_schedule_type(type) {
+
+  setScheduleType(type) {
     this.schedule_type = type;
-    // console.log("Changing to schedule type " + type)
-    if (type==='disabled') {
+    if (type === 'disabled') {
       this.getElement(`schedule-edit`).setAttribute('hidden', '');
     } else {
       this.getElement(`schedule-edit`).removeAttribute('hidden');
@@ -27,104 +28,152 @@ class VesselModal extends HTMLElement {
   }
 
   connectedCallback() {
-    this.innerHTML = `
-<div class="modal fade" id="${this.name}-modal" tabindex="-1">
+    this.innerHTML = `<div class="modal fade" id="${this.name}-modal" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title"><b>${this.name.charAt(0).toUpperCase() + this.name.substring(1)} vessel</b></h5>
+        <h5 class="modal-title">
+          <b>${this.name.charAt(0).toUpperCase() + this.name.substring(1)} vessel</b></h5>
         <button class="btn-close" data-bs-dismiss="modal" type="button"></button>
       </div>
       <form id="${this.name}-modal-form">
         <div class="modal-body">
           <div class="mb-3">
             <label class="form-label" for="form-name">Name:</label>
-            <input class="form-control form-control-sm" id="${this.name}-form-name" name="vessel-name" placeholder="Titanic" required type="text">
+            <input
+              class="form-control form-control-sm"
+              id="${this.name}-form-name">
           </div>
 
           <div class="row mb-3">
             <div class="col">
-              <label class="form-label" for="form-arrival">Arrival:</label>
-              <input class="form-control form-control-sm" id="${this.name}-form-arrival" name="datetime-arrival-vessel" required
-                     type="datetime-local" value="${VesselModal.nowJsonString()}">
+              <label class="form-label" for="${this.name}-form-arrival">Arrival:</label>
+              <input id="${this.name}-form-arrival"
+                     is="datetime-input"
+                     class="form-control form-control-sm"
+                     now
+                     required>
             </div>
             <div class="col">
               <label class="form-label" for="${this.name}-form-deadline">Deadline:</label>
-              <input class="form-control form-control-sm" id="${this.name}-form-deadline" name="datetime-deadline-vessel" type="datetime-local">
+              <input is="datetime-input"
+                     class="form-control form-control-sm"
+                     id="${this.name}-form-deadline">
             </div>
           </div>
 
           <div class="row mb-3">
             <div class="col">
               <label class="form-label" for="form-containers">Container amount:</label>
-              <input class="form-control form-control-sm" id="${this.name}-form-containers" min="-1" name="vessel-containers"
-                     required type="number">
+              <input class="form-control form-control-sm"
+                     id="${this.name}-form-containers"
+                     min="-1"
+                     required
+                     type="number">
             </div>
             <div class="col">
-              <label class="form-label" for="form-cost">Cost:</label>
-              <input class="form-control form-control-sm" id="${this.name}-form-cost" name="vessel-cost_per_hour" required type="number">
+              <label class="form-label" for="${this.name}-form-cost_per_hour">Cost:</label>
+              <input class="form-control form-control-sm" id="${this.name}-form-cost_per_hour">
             </div>
           </div>
 
           <div class="mb-3 row">
-            <div class="col d-grid">
-              <select-terminal></select-terminal> 
-              </div>
-              <div class="col">
-                <label class="form-label" for="form-length">Length:</label>
-              <input class="form-control form-control-sm" id="${this.name}-form-length" name="vessel-length" required type="number" value="0">
+            <div class="col">
+              <label class="form-label" for="${this.name}-form-width"><b>Terminal:</b></label>
+              <select is="select-terminal" 
+                      class="form-select form-select-sm"
+                      id="${this.name}-form-destination"
+              ></select>
+            </div>
+            <div class="col">
+              <label class="form-label" for="form-length">Length:</label>
+              <input class="form-control form-control-sm"
+                     id="${this.name}-form-length"
+                     required
+                     type="number"
+                     value="0">
             </div>
           </div>
 
           <div class="row mb-3">
             <div class="col">
               <label class="form-label" for="form-width">Width:</label>
-              <input class="form-control form-control-sm" id="${this.name}-form-width" name="vessel-width" required type="number" value="0">
+              <input class="form-control form-control-sm"
+                     id="${this.name}-form-width"
+                     required
+                     type="number"
+                     value="0">
             </div>
             <div class="col">
-              <label class="form-label" for="form-depth">Depth:</label>
-              <input class="form-control form-control-sm" id="form-depth" name="vessel-depth" required type="number" value="0">
+              <label class="form-label" for="${this.name}-form-depth">Depth:</label>
+              <input class="form-control form-control-sm"
+                     id="${this.name}-form-depth"
+                     required
+                     type="number"
+                     value="0">
             </div>
           </div>
 
           <div class="mb-3 row mt-2">
             <label class="label me-3 col" for="label"><b>Schedule:</b></label>
             <div class="form-check form-check-inline col">
-              <input checked class="form-check-input" id="${this.name}-radio-auto" name="schedule-manual" value="false" type="radio">
+              <input checked
+                     class="form-check-input"
+                     id="${this.name}-radio-auto"
+                     name="${this.name}-radio"
+                     value="false"
+                     type="radio">
               <label class="form-check-label" for="${this.name}-radio-auto">
                 Automatic
               </label>
             </div>
             <div class="form-check form-check-inline col">
-              <input class="form-check-input" id="${this.name}-radio-manual" name="schedule-manual" value="true" type="radio">
+              <input class="form-check-input"
+                     id="${this.name}-radio-manual"
+                     name="${this.name}-radio"
+                     value="true"
+                     type="radio">
               <label class="form-check-label" for="${this.name}-radio-manual">
                 Manual
               </label>
             </div>
             <div class="form-check form-check-inline col">
-              <input class="form-check-input" id="${this.name}-radio-disabled" name="schedule-manual" value="true" type="radio">
+              <input class="form-check-input"
+                     id="${this.name}-radio-disabled"
+                     name="${this.name}-radio"
+                     value="true"
+                     type="radio">
               <label class="form-check-label" for="${this.name}-radio-disabled">
                 Disabled
               </label>
             </div>
           </div>
-
+          
           <div class="row mb-3" id="${this.name}-schedule-edit">
-            <div class="col">
-              <label class="form-label" for="form-berth">Berth:</label>
-              <input class="form-control form-control-sm ${this.name}-disabled-if-auto" disabled id="${this.name}-form-berth" name="schedule-berth" required
-                     type="number">
+            <div class="col d-grid">
+              <label class="form-label" for="${this.name}-form-berth">Berth:</label>
+              <select is="select-berth" 
+                      id="${this.name}-form-berth"
+                      class="form-select form-select-sm ${this.name}-disabled-if-auto"
+                      terminal="4"
+              > </select>
             </div>
             <div class="col">
-              <label class="form-label" for="form-handel">Handel time:</label>
-              <input class="form-control form-control-sm ${this.name}-disabled-if-auto" disabled id="${this.name}-form-handel" name="schedule-start" required
-                     type="datetime-local">
+              <label class="form-label" for="form-start">Handel time:</label>
+              <input id="${this.name}-form-start"
+                     is="datetime-input"
+              class="form-control form-control-sm ${this.name}-disabled-if-auto"
+                     disabled
+                     required
+                   >
             </div>
           </div>
-        </div> 
+        </div>
         <div class="modal-footer" id="${this.name}-modal-footer-btn">
           <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
-          <button class="btn btn-primary" id="${this.name}-btn-save" type="submit">Save changes</button>
+          <button class="btn btn-primary" id="${this.name}-btn-save" type="submit">
+            Save changes
+          </button>
         </div>
         <div hidden id="${this.name}-modal-footer-loading">
           <div class="modal-footer d-flex justify-content-center">
@@ -136,8 +185,8 @@ class VesselModal extends HTMLElement {
       </form>
     </div>
   </div>
-</div>
-	`;
+</div>`;
+    this.setScheduleType('auto');
     // You can only attach the listeners after setting the innerHTML.
     this.attachListeners();
   }
@@ -146,86 +195,107 @@ class VesselModal extends HTMLElement {
     this.buttons = this.getElement(`modal-footer-btn`);
     this.loader = this.getElement(`modal-footer-loading`);
 
-    const radio_ids = ['auto', 'manual', 'disabled'];
-    radio_ids.forEach((id) => {
+    const radioIds = ['auto', 'manual', 'disabled'];
+    radioIds.forEach((id) => {
       this.getElement(`radio-${id}`).addEventListener('click', () => {
-        this.set_schedule_type(id);
+        this.setScheduleType(id);
       });
     });
 
     const form = this.getElement('modal-form');
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+      this.post();
+    });
 
-      const serializedForm = this.serializeForm(form);
-      const vessel = serializedForm['vessel'];
-      this.hideBtnFooter();
-      VisolApi.postVessel(vessel).then((response) => {
-        const schedule = serializedForm['schedule'];
-        if (this.schedule_type !== 'disabled') {
-          // Extract the id from the url location of the vessel resource.
-          const vessel_id = response.headers.get('Location').split('/').slice(-1)[0];
-          VisolApi.putSchedule(vessel_id, schedule).then((response) => {
-            console.log('Schedule created successfully.');
-            console.log(response);
-            this.showBtnFooter();
-          }).catch((e) => {
-            this.showBtnFooter();
-            console.log('Failed to create schedule: ', e);
-          });
-        } else {
-          this.showBtnFooter();
-        }
-      }).catch((e) => {
-        this.showBtnFooter();
-        console.log('Failed to create vessel: ', e);
-      });
+    const destinationSelect = this.getElement('form-destination');
+    destinationSelect.addEventListener('change', (e) => {
+      this.getElement('form-berth').setTerminal(destinationSelect.value);
     });
   }
 
-  serializeForm(form) {
-    const serializedForm = {};
-    for (const prefix of ['vessel', 'schedule', 'datetime']) {
-      serializedForm[prefix] = {};
-    }
+  post() {
+    const vessel = this.getVessel();
+    this.hideBtnFooter();
+    VisolApi.postVessel(vessel).then((response) => {
+      if (this.schedule_type !== 'disabled') {
+        // Extract the id from the url location of the vessel resource.
+        const vesselId = response.headers.get('Location')
+            .split('/').slice(-1)[0];
+        const schedule = this.getSchedule();
+        VisolApi.putSchedule(vesselId, schedule).then((response) => {
+          console.log(response);
+          this.showBtnFooter();
+        }).catch((e) => {
+          this.showBtnFooter();
+          console.log('Failed to create schedule: ', e);
+        });
+      } else {
+        this.showBtnFooter();
+      }
+    }).catch((e) => {
+      this.showBtnFooter();
+      console.log('Failed to create vessel: ', e);
+    });
+  }
 
-    const formData = new FormData(form);
-    for (const [name, value] of formData) {
-      if (value !== '') {
-        const words = name.split('-');
-        const prefix = words[0];
-        const key = words[1];
-
-        // If it is a datetime, change to timezone-neutral
-        // Frankly awkward, let me know if you can do better!
-        if (prefix === 'datetime') {
-          // for datetimes, the object they belong to is the last word, as the first is datetime
-          serializedForm[words[2]][key] = VisolApi.formatLocalDateTime(value);
-        } else {
-          serializedForm[prefix][key] = value;
-        }
+  fillIn(object) {
+    // eslint-disable-next-line guard-for-in
+    for (const key in object) {
+      try {
+        this.getElement(`form-${key}`).value = object[key];
+      } catch (_) {
+        console.log(`Warning: ${key} has no filed in the form.`);
       }
     }
+  }
 
-    return serializedForm;
+  serialize(keys) {
+    const res = {};
+    keys.forEach((key, _) => {
+      const el = this.getElement(`form-${key}`);
+      if (!el.disabled) {
+        res[key] = el.value;
+      }
+    });
+    return res;
+  }
+
+  getVessel() {
+    const vesselKeys = ['name', 'arrival', 'deadline', 'containers', 'cost_per_hour', 'destination', 'length', 'width', 'depth'];
+    return this.serialize(vesselKeys);
+  }
+
+  getSchedule() {
+    const scheduleKeys = ['berth', 'start'];
+    const schedule = this.serialize(scheduleKeys);
+    schedule['manual'] = this.schedule_type === 'manual';
+    return schedule;
+  }
+
+  setSchedule(schedule) {
+    if (schedule === null || !('manual' in schedule)) {
+      this.getElement('radio-disabled').click();
+    } else {
+      this.fillIn(schedule);
+      this.getElement('radio-' + (schedule['manual'] ? 'manual' : 'auto')).click();
+    }
   }
 
   hideBtnFooter() {
     this.buttons.setAttribute('hidden', '');
     this.loader.removeAttribute('hidden');
   }
+
   showBtnFooter() {
     this.loader.setAttribute('hidden', '');
     this.buttons.removeAttribute('hidden');
   }
 
   getElement(id) {
-    return document.getElementById(this.name + '-' + id);
-  }
-  static nowJsonString() {
-    const tz_offset = new Date().getTimezoneOffset() * 60000; // offset in milliseconds
-    Date.now().toString();
-    return new Date(Date.now() - tz_offset).toJSON().substring(0, 16);
+    const el = document.getElementById(this.name + '-' + id);
+    if (el === null) throw new Error(`Failed to get element with id ${this.name}-${id}`);
+    return el;
   }
 }
 
