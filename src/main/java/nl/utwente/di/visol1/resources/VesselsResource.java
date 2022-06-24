@@ -1,5 +1,6 @@
 package nl.utwente.di.visol1.resources;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -26,14 +27,14 @@ public class VesselsResource {
 	@POST
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response createVessel(Vessel vessel) {
+	public Response createVessel(@Context HttpServletRequest request, Vessel vessel) {
 		Vessel createdVessel = VesselDao.createVessel(vessel);
 		if (createdVessel != null) {
 			vessel.setId(createdVessel.getId());
 			VesselChange vchange = new VesselChange(vessel, "creation of new vessel");
 			VesselChangeDao.createVesselChange(vchange);
 			return Response.status(Response.Status.CREATED)
-				.header("Location", "/rest/vessels/" + createdVessel.getId())
+				.header("Location", request.getRequestURI() + "/" +  createdVessel.getId())
 				.entity(createdVessel).build();
 		} else {
 			return Response.status(Response.Status.NOT_ACCEPTABLE).build();

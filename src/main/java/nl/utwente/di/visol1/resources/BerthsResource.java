@@ -1,5 +1,6 @@
 package nl.utwente.di.visol1.resources;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -20,11 +21,11 @@ public class BerthsResource {
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createBerth(Berth berth) {
+    public Response createBerth(@Context HttpServletRequest request, Berth berth) {
 	    Berth createdBerth = BerthDao.createBerth(berth);
 			if (createdBerth != null) {
 				return Response.status(Response.Status.CREATED)
-					.header("Location", "/rest/berths/" + createdBerth.getId())
+					.header("Location", request.getRequestURI() + "/" +  createdBerth.getId())
 					.entity(createdBerth).build();
 			} else {
 				return Response.status(Response.Status.NOT_ACCEPTABLE).build();

@@ -5,6 +5,7 @@ import nl.utwente.di.visol1.dao.PortDao;
 import nl.utwente.di.visol1.models.Berth;
 import nl.utwente.di.visol1.models.Port;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -25,11 +26,11 @@ public class PortsResource {
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createPort(Port port){
+    public Response createPort(@Context HttpServletRequest request, Port port){
 	    Port createdPort = PortDao.createPort(port);
 	    if (createdPort != null) {
 		    return Response.status(Response.Status.CREATED)
-			    .header("Location", "/rest/ports/" + createdPort.getId())
+			    .header("Location", request.getRequestURI() + "/" +  createdPort.getId())
 			    .entity(createdPort).build();
 	    } else {
 		    return Response.status(Response.Status.NOT_ACCEPTABLE).build();

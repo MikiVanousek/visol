@@ -13,6 +13,9 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import java.sql.Timestamp;
+
+import nl.utwente.di.visol1.dao.BerthDao;
 import nl.utwente.di.visol1.dao.ScheduleChangeDao;
 import nl.utwente.di.visol1.dao.ScheduleDao;
 import nl.utwente.di.visol1.dao.VesselChangeDao;
@@ -21,6 +24,7 @@ import nl.utwente.di.visol1.models.Schedule;
 import nl.utwente.di.visol1.models.ScheduleChange;
 import nl.utwente.di.visol1.models.Vessel;
 import nl.utwente.di.visol1.models.VesselChange;
+import nl.utwente.di.visol1.optimise.OptimiseSchedule;
 
 
 public class VesselResource {
@@ -111,6 +115,11 @@ public class VesselResource {
 	public Response replaceSchedule(@Context HttpServletRequest request, Schedule schedule) {
 		String reason = request.getHeader("reason");
 		Schedule oldSchedule = ScheduleDao.getScheduleByVessel(id);
+		if(schedule.isManual()) {
+
+		} else {
+
+		}
 		Schedule createdSchedule = ScheduleDao.replaceSchedule(id, schedule);
 		if (createdSchedule != null) {
 			schedule.setVessel(id);
