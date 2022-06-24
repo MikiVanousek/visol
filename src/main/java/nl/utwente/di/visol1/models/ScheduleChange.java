@@ -28,11 +28,10 @@ public class ScheduleChange {
 		//Empty Constructor
 	}
 
-	public ScheduleChange(Schedule schedule, String reason){
+	public ScheduleChange(Schedule schedule, Schedule oldSchedule, String reason){
 		//Constructor to call with replacing or creating a vessel
 		this.vessel = schedule.getVessel();
-		this.date = new Timestamp(System.currentTimeMillis());
-		this.oldSchedule = new Schedule();
+		this.oldSchedule = oldSchedule;
 		this.newSchedule = schedule;
 		this.reason = reason;
 	}
