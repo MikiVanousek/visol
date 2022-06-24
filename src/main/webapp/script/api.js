@@ -3,6 +3,7 @@ import Requests from './requests.js';
 class VisolApi {
   static portId = 1;
   static get;
+  q;
 
   static getTerminals = () =>
     Requests.getData(`/ports/${VisolApi.portId}/terminals`);

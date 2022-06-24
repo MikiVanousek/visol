@@ -2,6 +2,7 @@ import VisolApi from '../api.js';
 
 class VesselModal extends HTMLElement {
   schedule_type;
+  footerExtra = '';
   // ID prefix
   name;
 
@@ -9,7 +10,6 @@ class VesselModal extends HTMLElement {
     super();
     this.name = this.getAttribute('name');
   }
-
 
   setScheduleType(type) {
     this.schedule_type = type;
@@ -28,12 +28,14 @@ class VesselModal extends HTMLElement {
   }
 
   connectedCallback() {
-    this.innerHTML = `<div class="modal fade" id="${this.name}-modal" tabindex="-1">
+    this.innerHTML = `
+<div class="modal fade" id="${this.name}-modal" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">
-          <b>${this.name.charAt(0).toUpperCase() + this.name.substring(1)} vessel</b></h5>
+          <b>${this.name.charAt(0).toUpperCase() + this.name.substring(1)} vessel</b>
+        </h5>
         <button class="btn-close" data-bs-dismiss="modal" type="button"></button>
       </div>
       <form id="${this.name}-modal-form">
@@ -162,23 +164,31 @@ class VesselModal extends HTMLElement {
               <label class="form-label" for="form-start">Handel time:</label>
               <input id="${this.name}-form-start"
                      is="datetime-input"
-              class="form-control form-control-sm ${this.name}-disabled-if-auto"
+                      class="form-control form-control-sm ${this.name}-disabled-if-auto"
                      disabled
                      required
                    >
             </div>
           </div>
         </div>
-        <div class="modal-footer" id="${this.name}-modal-footer-btn">
-          <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
-          <button class="btn btn-primary" id="${this.name}-btn-save" type="submit">
-            Save changes
-          </button>
-        </div>
-        <div hidden id="${this.name}-modal-footer-loading">
-          <div class="modal-footer d-flex justify-content-center">
-            <div class="spinner-grow text-primary" role="status">
-              <span class="sr-only">Loading...</span>
+        <hr></hr>
+        <div class="mx-3 my-4">
+          <div class="row " id="${this.name}-modal-footer-btn">
+            ${this.footerExtra}
+            <div class="col d-flex justify-content-end">
+              <button class="btn btn-secondary me-2" data-bs-dismiss="modal" type="button">
+                Cancel
+              </button>
+              <button class="btn btn-primary" id="${this.name}-btn-save" type="submit">
+                Save changes
+              </button>
+            </div>
+          </div>
+          <div hidden id="${this.name}-modal-footer-loading">
+            <div class="d-flex justify-content-center">
+              <div class="spinner-grow text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
             </div>
           </div>
         </div>
@@ -205,7 +215,7 @@ class VesselModal extends HTMLElement {
     const form = this.getElement('modal-form');
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      this.post();
+      this.submitVessel();
     });
 
     const destinationSelect = this.getElement('form-destination');
@@ -214,41 +224,6 @@ class VesselModal extends HTMLElement {
     });
   }
 
-  post() {
-    const vessel = this.getVessel();
-    this.hideBtnFooter();
-    VisolApi.postVessel(vessel).then((response) => {
-      if (this.schedule_type !== 'disabled') {
-        // Extract the id from the url location of the vessel resource.
-        const vesselId = response.headers.get('Location')
-            .split('/').slice(-1)[0];
-        const schedule = this.getSchedule();
-        VisolApi.putSchedule(vesselId, schedule).then((response) => {
-          console.log(response);
-          this.showBtnFooter();
-        }).catch((e) => {
-          this.showBtnFooter();
-          console.log('Failed to create schedule: ', e);
-        });
-      } else {
-        this.showBtnFooter();
-      }
-    }).catch((e) => {
-      this.showBtnFooter();
-      console.log('Failed to create vessel: ', e);
-    });
-  }
-
-  fillIn(object) {
-    // eslint-disable-next-line guard-for-in
-    for (const key in object) {
-      try {
-        this.getElement(`form-${key}`).value = object[key];
-      } catch (_) {
-        console.log(`Warning: ${key} has no filed in the form.`);
-      }
-    }
-  }
 
   serialize(keys) {
     const res = {};
@@ -273,15 +248,6 @@ class VesselModal extends HTMLElement {
     return schedule;
   }
 
-  setSchedule(schedule) {
-    if (schedule === null || !('manual' in schedule)) {
-      this.getElement('radio-disabled').click();
-    } else {
-      this.fillIn(schedule);
-      this.getElement('radio-' + (schedule['manual'] ? 'manual' : 'auto')).click();
-    }
-  }
-
   hideBtnFooter() {
     this.buttons.setAttribute('hidden', '');
     this.loader.removeAttribute('hidden');
@@ -297,6 +263,76 @@ class VesselModal extends HTMLElement {
     if (el === null) throw new Error(`Failed to get element with id ${this.name}-${id}`);
     return el;
   }
+
+  submitVessel() {
+    throw new Error('Not implemented');
+  }
 }
 
-customElements.define('vessel-modal', VesselModal);
+class UpdateModal extends VesselModal {
+  name = 'update';
+  footerExtra = `
+            <div class="col d-grid">
+              <input id="${this.name}-form-reason"
+                class="form-control form-control-sm"
+                type="text"
+                placeholder="Reason for the change"
+              ></input>
+            </div> 
+  `;
+
+  setSchedule(schedule) {
+    if (schedule === null || !('manual' in schedule)) {
+      this.getElement('radio-disabled').click();
+    } else {
+      this.fillIn(schedule);
+      this.getElement('radio-' + (schedule['manual'] ? 'manual' : 'auto')).click();
+    }
+  }
+
+  fillIn(object) {
+    // eslint-disable-next-line guard-for-in
+    for (const key in object) {
+      try {
+        this.getElement(`form-${key}`).value = object[key];
+      } catch (_) {
+        console.log(`Warning: ${key} has no filed in the form.`);
+      }
+    }
+  }
+
+  submitVessel() {
+  }
+}
+
+class CreateModal extends VesselModal {
+  name = 'create';
+
+  submitVessel() {
+    const vessel = this.getVessel();
+    this.hideBtnFooter();
+    VisolApi.postVessel(vessel).then((response) => {
+      if (this.schedule_type !== 'disabled') {
+        // Extract the id from the url location of the vessel resource.
+        const vesselId = response.headers.get('Location')
+            .split('/').slice(-1)[0];
+        const schedule = this.getSchedule();
+        VisolApi.putSchedule(vesselId, schedule).then((response) => {
+          console.log(response);
+          this.showBtnFooter();
+        }).catch((e) => {
+          this.showBtnFooter();
+          console.log('Failed to create schedule: ', e);
+        });
+      } else {
+        this.showBtnFooter();
+      }
+    }).catch((e) => {
+      this.showBtnFooter();
+      console.log('Failed to create vessel: ', e);
+    });
+  }
+}
+
+customElements.define('update-modal', UpdateModal);
+customElements.define('create-modal', CreateModal);

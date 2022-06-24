@@ -33,7 +33,6 @@ class PlannerSchedule extends HTMLElement {
         this.hasAttribute('teminalId') ?
             parseInt(this.getAttribute('terminalId')) : 1;
     this.innerHTML = `
-    <vessel-modal name="create"></vessel-modal>
     <div class="planner">
         <div class="planner-header">
             <div class="planner-header-sub">
