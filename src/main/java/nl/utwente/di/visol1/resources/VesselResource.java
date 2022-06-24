@@ -123,8 +123,7 @@ public class VesselResource {
 		Schedule createdSchedule = ScheduleDao.replaceSchedule(id, schedule);
 		if (createdSchedule != null) {
 			schedule.setVessel(id);
-			ScheduleChange schange = new ScheduleChange(schedule, reason);
-			schange.setOldSchedule(oldSchedule);
+			ScheduleChange schange = new ScheduleChange(schedule, oldSchedule, reason);
 			ScheduleChangeDao.createScheduleChange(schange);
 			return Response.status(Response.Status.OK).entity(createdSchedule).build();
 		} else {

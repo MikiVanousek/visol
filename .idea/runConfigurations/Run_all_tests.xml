@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Run all tests" type="JUnit" factoryName="JUnit">
-    <module name="visol" />
+    <module name="ut-visol-1" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="nl.utwente.di.visol1.*" />

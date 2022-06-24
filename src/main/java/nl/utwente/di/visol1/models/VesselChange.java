@@ -32,7 +32,6 @@ public class VesselChange {
 	public VesselChange(Vessel vessel, String reason){
 		//Constructor to call with replacing or creating a vessel
 		this.vessel = vessel.getId();
-		this.date = new Timestamp(System.currentTimeMillis());
 		this.oldVessel = new Vessel();
 		this.newVessel = vessel;
 		this.reason = reason;

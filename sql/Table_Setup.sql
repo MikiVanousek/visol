@@ -86,7 +86,7 @@ CREATE TABLE schedule (
 
 CREATE TABLE schedulechange (
 	vessel int,
-	date timestamp(0),
+	date timestamp(0) DEFAULT CURRENT_TIMESTAMP,
 	old jsonb,
 	new jsonb NOT NULL,
 	reason varchar(255),
@@ -98,7 +98,7 @@ CREATE TABLE schedulechange (
 
 CREATE TABLE vesselchange (
 	vessel int,
-	date timestamp(0),
+	date timestamp(0) DEFAULT CURRENT_TIMESTAMP,
 	old jsonb,
 	new jsonb NOT NULL,
 	reason varchar(255),
@@ -125,5 +125,8 @@ CREATE TABLE employee (
 	CONSTRAINT employee_password_check_size CHECK (octet_length(key_hash) = 64), -- SHA-512 hash, 512 / 8 = 64
 	CONSTRAINT employee_salt_check_size CHECK (octet_length(key_salt) = 32)      -- generated salt, 32 bytes
 );
+CREATE VIEW end_time_for_schedule AS
+    (SELECT s.vessel, TO_TIMESTAMP(extract(epoch from s.start) + (v.containers / b.unload_speed * 3600000)::bigint  / 1000)::timestamptz at time zone 'UTC' AS end
+FROM vessel v, schedule s, berth b WHERE s.vessel = v.id AND s.berth = b.id ORDER BY s.vessel);
 
 

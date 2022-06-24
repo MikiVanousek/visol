@@ -16,44 +16,13 @@ import nl.utwente.di.visol1.dao.ScheduleDao;
 import nl.utwente.di.visol1.dao.VesselDao;
 import nl.utwente.di.visol1.models.Berth;
 import nl.utwente.di.visol1.models.Schedule;
-import nl.utwente.di.visol1.models.Terminal;
+import nl.utwente.di.visol1.models.ScheduleChange;
 import nl.utwente.di.visol1.models.Vessel;
 
 public class OptimiseSchedule {
 
 	public static void main(String[] args) {
-		List<Vessel> vessels = Arrays.asList(
-			new Vessel(1, "Dumbarton Castle", Timestamp.valueOf("2022-06-23 13:00:00"), Timestamp.valueOf("2022-06-24 01:00:00"), 25, 200, 1, 8, 2, 2),
-			new Vessel(2, "The Llandudno", Timestamp.valueOf("2022-06-23 04:30:00"), Timestamp.valueOf("2022-06-23 12:30:00"), 22, 430, 1, 7, 4, 3),
-			new Vessel(3, "Killeney", Timestamp.valueOf("2022-06-23 13:00:00"), Timestamp.valueOf("2022-06-23 23:30:00"), 35, 212, 1, 4, 4, 2),
-			new Vessel(4, "The Erne", Timestamp.valueOf("2022-06-23 18:15:00"), Timestamp.valueOf("2022-06-24 12:00:00"), 12, 421, 1, 3, 2, 1),
-			new Vessel(5, "Bonito", Timestamp.valueOf("2022-06-23 12:00:00"), Timestamp.valueOf("2022-06-23 06:30:00"), 43, 522, 1, 2, 3, 3),
-			new Vessel(6, "Blaze", Timestamp.valueOf("2022-06-24 12:15:00"), Timestamp.valueOf("2022-06-24 23:30:00"), 15, 243, 1, 4, 3, 2),
-			new Vessel(7, "Acheron", Timestamp.valueOf("2022-06-24 12:15:00"), Timestamp.valueOf("2022-06-23 18:30:00"), 86, 522, 1, 3, 2, 3),
-			new Vessel(8, "Bere Castle", Timestamp.valueOf("2022-06-24 18:00:00"), Timestamp.valueOf("2022-06-24 10:00:00"), 56, 364, 1, 10, 4, 3),
-			new Vessel(9, "Llandaff", Timestamp.valueOf("2022-06-23 12:30:00"), Timestamp.valueOf("2022-06-25 23:00:00"), 12, 14, 1, 2, 5, 3),
-			new Vessel(10, "Tang", Timestamp.valueOf("2022-06-23 17:05:06"), Timestamp.valueOf("2022-06-24 23:15:00"), 12, 412, 1, 1, 2, 2)
-			);
-		List<Schedule> s = Arrays.asList(
-			new Schedule(1, 1, false, Timestamp.valueOf("2022-06-23 13:30:00"), Timestamp.valueOf("2022-06-23 15:30:00")),
-			new Schedule(2, 2, true, Timestamp.valueOf("2022-06-23 06:00:00"), Timestamp.valueOf("2022-06-23 07:30:00")),
-			new Schedule(3, 2, false, Timestamp.valueOf("2022-06-23 13:00:00"), Timestamp.valueOf("2022-06-23 15:30:00")),
-			new Schedule(4, 2, false, Timestamp.valueOf("2022-06-23 19:00:00"), Timestamp.valueOf("2022-06-23 21:00:00")),
-			new Schedule(5, 3, false, Timestamp.valueOf("2022-06-23 13:00:00"), Timestamp.valueOf("2022-06-23 14:00:00")),
-			new Schedule(6, 3, true, Timestamp.valueOf("2022-06-24 8:00:00"), Timestamp.valueOf("2022-06-24 12:00:00")),
-			new Schedule(7, 4, false, Timestamp.valueOf("2022-06-23 13:00:00"), Timestamp.valueOf("2022-06-24 17:00:00")),
-			new Schedule(8, 4, false, Timestamp.valueOf("2022-06-23 19:00:00"), Timestamp.valueOf("2022-06-23 20:00:00")),
-
-			new Schedule(9, 1, true, Timestamp.valueOf("2022-06-23 14:00:00"), Timestamp.valueOf("2022-06-23 17:00:00")),
-			new Schedule(10, 3, true, Timestamp.valueOf("2022-06-23 13:30:00"), Timestamp.valueOf("2022-06-23 16:00:00")),
-			new Schedule(10, 4, true, Timestamp.valueOf("2023-06-23 13:30:00"), Timestamp.valueOf("2023-06-23 16:00:00"))
-		);
-		Map<Integer, List<Schedule>> test1 = new HashMap<>();
-		test1.put(1, new ArrayList<>(Arrays.asList(s.get(0))));
-		test1.put(2, new ArrayList<>(Arrays.asList(s.get(1), s.get(2), s.get(3))));
-		test1.put(3, new ArrayList<>(Arrays.asList(s.get(4), s.get(5))));
-		test1.put(4, new ArrayList<>(Arrays.asList(s.get(6), s.get(7), s.get(10))));
-		getOptimalPlanning(test1);
+		optimisePlanning(Timestamp.valueOf("2022-06-23 01:00:00"), Timestamp.valueOf("2022-06-25 13:30:00"), 1);
 	}
 
 
@@ -77,24 +46,13 @@ public class OptimiseSchedule {
 		Map<Integer, List<Schedule>> newSchedule = getNewSchedule(oldSchedule, berths);
 
 
-
-
-	public static Map<Integer, List<Schedule>> getOptimalPlanning(Map<Integer, List<Schedule>> oldSchedule) {
-
-		List<Berth> berths = getBerths(oldSchedule);
-		List<Vessel> vessels = getAutomaticVessels(oldSchedule);
-
-		Timestamp time = Timestamp.valueOf("2022-06-23 03:00:00");//new Timestamp(System.currentTimeMillis() + OFFSET);
-		Map<Integer, List<Schedule>> newSchedule = getNewSchedule(oldSchedule, berths);
-
-
 		while(true) {
 			if(vessels.isEmpty()) break;
-			if(impossibleToSchedule(vessels, time)) break;
+			if(impossibleToSchedule(vessels, from)) break;
 
-			Map<Berth, Timestamp> minTimes = getMinimumTimes(newSchedule, berths, time);
+			Map<Berth, Timestamp> minTimes = getMinimumTimes(newSchedule, berths, from);
 			List<Berth> sortedBerthsOnTime = sortBerthsOnMinTime(minTimes);
-			time = minTimes.get(sortedBerthsOnTime.get(0));
+			from = minTimes.get(sortedBerthsOnTime.get(0));
 
 			for(Berth b : sortedBerthsOnTime) {
 				Timestamp firstOpen = minTimes.get(b);
@@ -116,6 +74,28 @@ public class OptimiseSchedule {
 		updateDatabase(newSchedule);
 		return newSchedule;
 
+	}
+
+	/*public static Schedule scheduleAutomatic(Vessel vessel) {
+		Timestamp start = new Timestamp(Math.max(System.currentTimeMillis(), vessel.getArrival().getTime());
+		Map<Integer, List<Schedule>> schedule = ScheduleDao.getSchedulesByTerminal(vessel.getDestination(), start, MAX_TIME);
+		List<Berth> berths = new ArrayList<>( BerthDao.getBerthsByTerminal(vessel.getDestination()).values() );
+		Map<Berth, Timestamp> minTimes = getMinimumTimes(schedule, berths, start);
+		
+		
+	}*/
+
+	public static void updateDatabase(Map<Integer, List<Schedule>> newSchedule) {
+		for(int k : newSchedule.keySet()) {
+			for(Schedule s : newSchedule.get(k)) {
+				if(!s.isManual()) {
+					Schedule oldSchedule = ScheduleDao.getScheduleByVessel(s.getVessel());
+					ScheduleDao.replaceSchedule(s.getVessel(), s);
+					ScheduleChange schange = new ScheduleChange(s, oldSchedule, "optimise algorithm");
+					ScheduleChangeDao.createScheduleChange(schange);
+				}
+			}
+		}
 	}
 
 
