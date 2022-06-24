@@ -19,6 +19,9 @@ class VisolApi {
   static postVessel = (vessel) =>
     Requests.postData('/vessels', vessel);
 
+  static putVessel = (vesselId, vessel) =>
+    Requests.putData(`/vessels/${vesselId}`, vessel);
+
   static putSchedule = (vesselId, schedule) =>
     Requests.putData(`/vessels/${vesselId}/schedule`, schedule);
 }
