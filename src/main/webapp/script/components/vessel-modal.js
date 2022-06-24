@@ -314,6 +314,11 @@ class UpdateModal extends VesselModal {
     }
   }
 
+  setVessel(vessel, vesselId) {
+    this.fillIn(vessel);
+    this.vesselId = vesselId;
+  }
+
   setSchedule(schedule) {
     if (schedule === null || !('manual' in schedule)) {
       this.getElement('radio-disabled').click();
