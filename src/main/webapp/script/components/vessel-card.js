@@ -3,6 +3,7 @@ import IconCircle from './icon-circle.js';
 import IconPlain from './icon-plain.js';
 import PlannerSchedule from './planner-schedule.js';
 import Time from '../time.js';
+import Timestamp from '../timestamp.js';
 
 class VesselCard extends HTMLElement {
   static VIEW = {
@@ -69,11 +70,11 @@ class VesselCard extends HTMLElement {
   }
 
   get arrival() {
-    return new Date(Date.parse(this.schedule.start));
+    return new Timestamp(this.schedule.start).toLocal();
   }
 
   get departure() {
-    return new Date(Date.parse(this.schedule.expected_end));
+    return new Timestamp(this.schedule.expected_end).toLocal();
   }
 
   generateStyle() {
@@ -89,31 +90,20 @@ class VesselCard extends HTMLElement {
 
   calculateHeight() {
     const timeScale = this.getTimeScale();
-    /* TODO
-    const arrival = new Timestamp(this.getAttribute('arrival'));
-    const departure = new Timestamp(this.getAttribute('departure'));
 
-    return ((departure.toDate() - arrival.toDate()) / 60000) * timeScale;
-     */
-
-    return (
-      new Time(this.getAttribute('departure')).value -
-        new Time(this.getAttribute('arrival')).value
-    ) * timeScale;
+    return ((this.departure.toDate() - this.arrival.toDate()) / 1000 / 60 / 60) * timeScale + 'px';
   }
 
   calculateTop() {
     const view = document.getElementsByTagName('planner-schedule')[0].getAttribute('view');
     const timeScale = this.getTimeScale();
-    // TODO const arrival = new Timestamp(this.getAttribute('arrival')).toLocal();
-    const arrival = this.getAttribute('arrival');
 
-
-    const top = new Time(arrival).value * timeScale;
+    let top = new Time(this.arrival).value * timeScale;
 
     if (view === PlannerSchedule.VIEW.weekly) {
       // Add day to top
       // TODO
+      top += 0;
     }
 
     return top + 'px';
@@ -144,14 +134,19 @@ class VesselCard extends HTMLElement {
     return (overflow * 30).toString() + 'px';
   }
 
-  getDayTimeFormat(date) {
-    return date.getUTCHours() + ':' + date.getUTCMinutes().toString().padStart(2, '0');
+  formatDate(date) {
+    const view = document.getElementsByTagName('planner-schedule')[0].getAttribute('view');
+    if (view === PlannerSchedule.VIEW.daily) {
+      return date.formatted('hh:mm');
+    } else if (view === PlannerSchedule.VIEW.weekly) {
+      return date.formatted('YYYY-MM-DD hh:mm');
+    }
   }
 
   getDescription() {
     return `<div class="vessel-card-info-description">
-    ${this.getDayTimeFormat(this.arrival) +
-    ' - ' + this.getDayTimeFormat(this.departure) +
+    ${this.formatDate(this.arrival) +
+    ' – ' + this.formatDate(this.departure) +
      ' • ' + this.capitalizeFirstLetter(this.view)}
     </div>`;
   }
