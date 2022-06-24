@@ -21,7 +21,7 @@ class SelectResource extends HTMLSelectElement {
   buildSelect(resource) {
     return Object.keys(resource).map((i) =>
       `<option value="${i}">${this.displayAttribute === undefined ? i :
-        resource[i][this.displayAttribute]}</option>`).join('\n');
+            resource[i][this.displayAttribute]}</option>`).join('\n');
   }
 }
 
@@ -38,7 +38,7 @@ class SelectBerth extends SelectResource {
   }
 
   setTerminal(i) {
-    this.setResourcePromise(VisolApi.getBerths(i));
+    this.setResourcePromise(VisolApi.getBerthsPerTerminal(i));
   }
 }
 

@@ -1,6 +1,5 @@
 import FullButton from '../components/full-button.js';
 import VesselCard from '../components/vessel-card.js';
-import VisolApi from '../api.js';
 
 class VesselPlanner extends HTMLElement {
   constructor() {
@@ -49,17 +48,10 @@ class VesselPlanner extends HTMLElement {
             view="${VesselCard.VIEW.unscheduled}"
         ></vessel-card> 
        
-        <vessel-modal name="create"></vessel-modal>
-        <vessel-modal name="update" id="update-m"></vessel-modal>
+        <vessel-modal name="update"></vessel-modal>
 
     </unscheduled-vessels>
     `;
-    VisolApi.getVessel('18').then((res) => {
-      const vessel = res;
-      console.log(vessel);
-      document.getElementById('update-m').fillIn(vessel);
-    },
-    );
   }
 }
 

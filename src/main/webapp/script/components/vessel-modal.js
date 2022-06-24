@@ -11,7 +11,7 @@ class VesselModal extends HTMLElement {
   }
 
 
-  set_schedule_type(type) {
+  setScheduleType(type) {
     this.schedule_type = type;
     if (type === 'disabled') {
       this.getElement(`schedule-edit`).setAttribute('hidden', '');
@@ -186,7 +186,7 @@ class VesselModal extends HTMLElement {
     </div>
   </div>
 </div>`;
-    this.set_schedule_type('auto');
+    this.setScheduleType('auto');
     // You can only attach the listeners after setting the innerHTML.
     this.attachListeners();
   }
@@ -198,7 +198,7 @@ class VesselModal extends HTMLElement {
     const radioIds = ['auto', 'manual', 'disabled'];
     radioIds.forEach((id) => {
       this.getElement(`radio-${id}`).addEventListener('click', () => {
-        this.set_schedule_type(id);
+        this.setScheduleType(id);
       });
     });
 
@@ -242,7 +242,11 @@ class VesselModal extends HTMLElement {
   fillIn(object) {
     // eslint-disable-next-line guard-for-in
     for (const key in object) {
-      this.getElement(`form-${key}`).value = object[key];
+      try {
+        this.getElement(`form-${key}`).value = object[key];
+      } catch (_) {
+        console.log(`Warning: ${key} has no filed in the form.`);
+      }
     }
   }
 
@@ -269,7 +273,14 @@ class VesselModal extends HTMLElement {
     return schedule;
   }
 
-  // TODO Set schedule
+  setSchedule(schedule) {
+    if (schedule === null || !('manual' in schedule)) {
+      this.getElement('radio-disabled').click();
+    } else {
+      this.fillIn(schedule);
+      this.getElement('radio-' + (schedule['manual'] ? 'manual' : 'auto')).click();
+    }
+  }
 
   hideBtnFooter() {
     this.buttons.setAttribute('hidden', '');
