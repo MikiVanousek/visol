@@ -115,6 +115,7 @@ public class ScheduleDao extends GenericDao {
 		return result;
 	}
 
+
 	public static int deleteScheduleByVessel(int vesselId) {
 		try (Update update = Update.prepared("DELETE FROM schedule WHERE vessel = ?", stmt -> stmt.setInt(1, vesselId))) {
 			return update.getRowsChanged();

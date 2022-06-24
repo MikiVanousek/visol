@@ -118,7 +118,7 @@ public class VesselResource {
 		if(schedule.isManual()) {
 
 		} else {
-
+			
 		}
 		Schedule createdSchedule = ScheduleDao.replaceSchedule(id, schedule);
 		if (createdSchedule != null) {

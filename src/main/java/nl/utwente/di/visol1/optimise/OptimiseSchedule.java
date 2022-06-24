@@ -2,20 +2,17 @@ package nl.utwente.di.visol1.optimise;
 
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.AbstractMap;
 
 
 import nl.utwente.di.visol1.dao.BerthDao;
+import nl.utwente.di.visol1.dao.ScheduleChangeDao;
+import nl.utwente.di.visol1.dao.ScheduleDao;
 import nl.utwente.di.visol1.dao.VesselDao;
 import nl.utwente.di.visol1.models.Berth;
 import nl.utwente.di.visol1.models.Schedule;
@@ -66,7 +63,18 @@ public class OptimiseSchedule {
 
 	private static final int DUMMY_ID = -1;
 	private static final long TIME_LIMIT = MINUTE*60*24*30;//30 days
+	private static final Timestamp MAX_TIME = Timestamp.valueOf("3000-1-1 23:05:06");
 
+
+	public static Map<Integer, List<Schedule>> optimisePlanning(Timestamp from, Timestamp to, int terminalId) {
+
+		List<Berth> berths = new ArrayList<>( BerthDao.getBerthsByTerminal(terminalId).values() );
+
+		Map<Integer, List<Schedule>> oldSchedule = ScheduleDao.getSchedulesByTerminal(terminalId, from, to);
+		List<Vessel> vessels = getAutomaticVessels(oldSchedule);
+
+
+		Map<Integer, List<Schedule>> newSchedule = getNewSchedule(oldSchedule, berths);
 
 
 
@@ -103,7 +111,11 @@ public class OptimiseSchedule {
 
 			}
 		}
-		return getScheduleWithoutDummies(newSchedule);
+
+		newSchedule =  getScheduleWithoutDummies(newSchedule);
+		updateDatabase(newSchedule);
+		return newSchedule;
+
 	}
 
 
@@ -113,13 +125,6 @@ public class OptimiseSchedule {
 			if(!oldSchedule.containsKey(b.getId())) newSchedule.put(b.getId(), new ArrayList<>());
 		}
 		return newSchedule;
-	}
-
-	public static List<Berth> getBerths(Map<Integer, List<Schedule>> oldSchedule) {
-		for(int k : oldSchedule.keySet()) {
-			return new ArrayList<>( BerthDao.getBerthsByTerminal( BerthDao.getBerth(k).getTerminalId() ).values() );
-		}
-		return null;
 	}
 
 
@@ -148,18 +153,18 @@ public class OptimiseSchedule {
 	}
 
 
-	public static Schedule getBestSchedule(Vessel bestVessel, Berth b, Timestamp from, Timestamp to) {
+	private static Schedule getBestSchedule(Vessel bestVessel, Berth b, Timestamp from, Timestamp to) {
 		long start = Math.max(bestVessel.getArrival().getTime(), from.getTime());
 		return new Schedule(bestVessel.getId(), b.getId(), false, new Timestamp(start), new Timestamp(start + scheduleTimeInMillis(b, bestVessel)));
 	}
 
-	public static Schedule getDummySchedule(int berthid, Timestamp from, Timestamp to) {
+	private static Schedule getDummySchedule(int berthid, Timestamp from, Timestamp to) {
 		return new Schedule(DUMMY_ID, berthid , false, from, to);
 	}
 
 
 	private static long scheduleTimeInMillis(Berth berth, Vessel vessel) {
-		return (long) ((berth.getUnloadSpeed() / vessel.getContainers())*60*60*1000);
+		return (long) ((vessel.getContainers() / berth.getUnloadSpeed())*60*60*1000);
 	}
 
 
@@ -196,6 +201,7 @@ public class OptimiseSchedule {
 
 
 	private static Map<Berth, Timestamp> getMinimumTimes(Map<Integer, List<Schedule>> schedule,List<Berth> berths, Timestamp after) {
+
 		Map<Berth, Timestamp> res = new HashMap<>();
 		for(Berth b : berths) {
 			res.put(b, getFirstOpenTime(b, schedule.get(b.getId()),after));

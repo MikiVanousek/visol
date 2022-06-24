@@ -3,6 +3,7 @@ package nl.utwente.di.visol1.resources;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -26,6 +27,7 @@ import nl.utwente.di.visol1.models.Performance;
 import nl.utwente.di.visol1.models.Schedule;
 import nl.utwente.di.visol1.models.Terminal;
 import nl.utwente.di.visol1.models.Vessel;
+import nl.utwente.di.visol1.optimise.OptimiseSchedule;
 import nl.utwente.di.visol1.type_adapters.TimestampAdapter;
 
 public class TerminalResource {
@@ -97,10 +99,15 @@ public class TerminalResource {
 	}
 
 	@Path("/schedules/optimise")
-	@GET
+	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public Map<Integer, List<Schedule>> getOptimalSchedules(Map<Integer, List<Schedule>> oldSchedule) {
-		return null;
+	public Response getOptimalSchedules(@QueryParam("from") String from, @QueryParam("to") String to) {
+		Timestamp fromTime = TimestampAdapter.unadapt(from);
+		Timestamp toTime = TimestampAdapter.unadapt(to);
+		if (fromTime == null) fromTime = GenericDao.MIN_TIME;
+		if (toTime == null) toTime = GenericDao.MAX_TIME;
+		OptimiseSchedule.optimisePlanning(fromTime, toTime, id);
+		return Response.status(Response.Status.OK).build();
 	}
 
 	@Path("/performance")
