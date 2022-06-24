@@ -109,7 +109,7 @@ public class Berth implements Comparable<Berth> {
 	}
 
 	public boolean fits(Vessel vessel) {
-		return vessel.getWidth() < getWidth() && vessel.getDepth() < vessel.getDepth() && vessel.getLength() < getLength();
+		return vessel.getWidth() <= getWidth() && vessel.getDepth() <= vessel.getDepth() && vessel.getLength() <= getLength();
 	}
 
 
