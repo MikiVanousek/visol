@@ -1,5 +1,6 @@
 import FullButton from '../components/full-button.js';
 import VesselCard from '../components/vessel-card.js';
+import PlannerSchedule from '../components/planner-schedule.js';
 
 class VesselPlanner extends HTMLElement {
   constructor() {
@@ -21,7 +22,7 @@ class VesselPlanner extends HTMLElement {
         </ul>
     </nav-bar>
   
-    <planner-schedule terminalId="1">
+    <planner-schedule terminalId="1" view="${PlannerSchedule.VIEW.daily}">
     </planner-schedule>
 
     <unscheduled-vessels>

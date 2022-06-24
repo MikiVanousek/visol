@@ -35,7 +35,7 @@ class CurrentTime extends HTMLElement {
   updateTime() {
     const view = this.getAttribute('view');
     const timeScale = this.getTimeScale();
-    const time = new Time(new Date());
+    const time = new Time(new Date()).toLocal();
 
     if (view === CurrentTime.VIEW.daily) {
       this.querySelector('.planner-current-time').innerHTML =
@@ -50,7 +50,7 @@ class CurrentTime extends HTMLElement {
 
   scrollToMiddle() {
     const timeScale = this.getTimeScale();
-    const time = new Time(new Date());
+    const time = new Time(new Date()).toLocal();
     const plannerHeight = document.querySelector('.planner').offsetHeight;
     document.querySelector('.planner-schedule').scroll(0,
         (60 + time.value * timeScale) - (plannerHeight / 2));

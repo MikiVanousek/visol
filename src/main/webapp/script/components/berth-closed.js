@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import IconCircle from './icon-circle.js';
 import Time from '../time.js';
+import PlannerSchedule from './planner-schedule.js';
 
 class BerthClosed extends HTMLElement {
   static VIEW = {
@@ -18,12 +19,12 @@ class BerthClosed extends HTMLElement {
   }
 
   generateBlocks() {
-    const view = this.getAttribute('view');
-    const open = new Time(this.getAttribute('open'));
-    const close = new Time(this.getAttribute('close'));
+    const view = document.getElementsByTagName('planner-schedule')[0].getAttribute('view');
+    const open = new Time(this.getAttribute('open')).toLocal();
+    const close = new Time(this.getAttribute('close')).toLocal();
     let blocks = '';
 
-    if (view === BerthClosed.VIEW.daily) {
+    if (view === PlannerSchedule.VIEW.daily) {
       if (open.value < close.value || close.value === 0) {
         // Two blocks, before open and after close
         if (open.value > 0) {
@@ -38,7 +39,7 @@ class BerthClosed extends HTMLElement {
         // One block, between close and open
         blocks += this.generateBlock(0, close.value, open.value);
       }
-    } else if (view === BerthClosed.VIEW.weekly) {
+    } else if (view === PlannerSchedule.VIEW.weekly) {
       // TODO
     }
     return blocks;
@@ -58,10 +59,10 @@ class BerthClosed extends HTMLElement {
   }
 
   getTimeScale() {
-    const view = this.getAttribute('view');
-    if (view === BerthClosed.VIEW.daily) {
+    const view = document.getElementsByTagName('planner-schedule')[0].getAttribute('view');
+    if (view === PlannerSchedule.VIEW.daily) {
       return 120;
-    } else if (view === BerthClosed.VIEW.weekly) {
+    } else if (view === PlannerSchedule.VIEW.weekly) {
       return 20; // TODO
     }
   }

@@ -1,25 +1,40 @@
+import Timestamp from './timestamp.js';
+
 class Time {
-  constructor(value) {
-    if (typeof value === 'string') {
-      const numbers = value.split(':').map(Number);
-      if (numbers.length !== 3) {
+  constructor(value1, value2, value3) {
+    if (value1 === undefined) {
+      value1 = new Date();
+    }
+
+    if (typeof value1 === 'number') {
+      this._hours = value1;
+      this._minutes = value2 || 0;
+      this._seconds = value3 || 0;
+    } else if (typeof value1 === 'string') {
+      const numbers = value1.split(':').map(Number);
+      if (numbers.length < 1 || numbers.length > 3) {
         throw new Error('Invalid time string');
       }
       this._hours = numbers[0];
-      this._minutes = numbers[1];
-      this._seconds = numbers[2];
-    } else if (typeof value === 'object') {
-      // Assume it's a Date object
-      this._hours = value.getHours();
-      this._minutes = value.getMinutes();
-      this._seconds = value.getSeconds();
+      this._minutes = numbers[1] || 0;
+      this._seconds = numbers[2] || 0;
+    } else if (value1 instanceof Date) {
+      this._hours = value1.getUTCHours();
+      this._minutes = value1.getUTCMinutes();
+      this._seconds = value1.getUTCSeconds();
+    } else if (value1 instanceof Timestamp) {
+      this._hours = value1.hours;
+      this._minutes = value1.minutes;
+      this._seconds = value1.seconds;
+    } else {
+      throw new Error('Invalid time argument');
     }
 
     // Note that in PostgreSQL, 24:00:00 is considered to be 00:00:00.
     if (this._hours < 0 || this._hours > 23 ||
-      this._minutes < 0 || this._minutes > 59 ||
-      this._seconds < 0 || this._seconds > 59) {
-      throw new Error('Invalid time');
+        this._minutes < 0 || this._minutes > 59 ||
+        this._seconds < 0 || this._seconds > 59) {
+      throw new Error('Invalid time values');
     }
   }
 
@@ -36,18 +51,34 @@ class Time {
   }
 
   get value() {
-    return this._hours + this._minutes / 60 + this._seconds / 3600;
+    return this.hours + this.minutes / 60 + this.seconds / 3600;
   }
 
   formatted(format = 'hh:mm:ss') {
     let result = format;
-    result = result.replace('hh', this._hours.toString().padStart(2, '0'));
-    result = result.replace('h', this._hours.toString());
-    result = result.replace('mm', this._minutes.toString().padStart(2, '0'));
-    result = result.replace('m', this._minutes.toString());
-    result = result.replace('ss', this._seconds.toString().padStart(2, '0'));
-    result = result.replace('s', this._seconds.toString());
+    result = result.replace('hh', this.hours.toString().padStart(2, '0'));
+    result = result.replace('h', this.hours.toString());
+    result = result.replace('mm', this.minutes.toString().padStart(2, '0'));
+    result = result.replace('m', this.minutes.toString());
+    result = result.replace('ss', this.seconds.toString().padStart(2, '0'));
+    result = result.replace('s', this.seconds.toString());
     return result;
+  }
+
+  toLocal() {
+    // Subtract the timezone offset
+    const offset = new Date().getTimezoneOffset();
+    const hours = offset / 60;
+    const minutes = offset % 60;
+    return new Time(this.hours - hours, this.minutes - minutes, this.seconds);
+  }
+
+  toUTC() {
+    // Add the timezone offset
+    const offset = new Date().getTimezoneOffset();
+    const hours = offset / 60;
+    const minutes = offset % 60;
+    return new Time(this.hours + hours, this.minutes + minutes, this.seconds);
   }
 }
 

@@ -1,11 +1,15 @@
 import FullButton from './full-button.js';
 import IconCircle from './icon-circle.js';
 import VesselCard from './vessel-card.js';
-import BerthClosed from './berth-closed.js';
 import CurrentTime from './current-time.js';
 import VisolApi from '../api.js';
 
 class PlannerSchedule extends HTMLElement {
+  static VIEW = {
+    daily: 'daily',
+    weekly: 'weekly',
+  };
+
   static viewDropdownTag = 'chooseView';
 
   constructor() {
@@ -97,7 +101,6 @@ class PlannerSchedule extends HTMLElement {
                   </div>
                 </div>
                 <berth-closed
-                    view="${BerthClosed.VIEW.daily}"
                     open="08:00:00"
                     close="19:00:00">
                 </berth-closed>
@@ -135,7 +138,7 @@ class PlannerSchedule extends HTMLElement {
                         view="${VesselCard.VIEW.infeasible}"
                         overflow="4"
                         arrival="1:10"
-                        departure="1:60"
+                        departure="2:00"
                     ></vessel-card>
                 </div>
               </div>
@@ -151,7 +154,6 @@ class PlannerSchedule extends HTMLElement {
                   </div>
                 </div>
                 <berth-closed
-                    view="${BerthClosed.VIEW.daily}"
                     open="08:00:00"
                     close="01:00:00">
                 </berth-closed>
@@ -190,7 +192,6 @@ class PlannerSchedule extends HTMLElement {
                 </div>
               </div>
                 <berth-closed
-                    view="${BerthClosed.VIEW.daily}"
                     open="08:00:00"
                     close="00:00:00">
                 </berth-closed>
@@ -229,11 +230,10 @@ class PlannerSchedule extends HTMLElement {
 
   addData() {
     const dropDown = document.getElementById(PlannerSchedule.viewDropdownTag);
-    dropDown.data = {
-      daily: 'Daily',
-      weekly: 'Week',
-    };
-    dropDown.active = dropDown.data.daily;
+    dropDown.data = {};
+    dropDown.data[PlannerSchedule.VIEW.daily] = 'Daily';
+    dropDown.data[PlannerSchedule.VIEW.weekly] = 'Week';
+    dropDown.active = dropDown.data[PlannerSchedule.VIEW.daily];
     dropDown.callBack = this.changeView;
     dropDown.render();
   }
@@ -300,14 +300,8 @@ class PlannerSchedule extends HTMLElement {
     });
     return res;
   }
-
-  getCurrentHeight() {
-    return '100px';
-  }
-
-  getCurrentTime() {
-    return '8:45';
-  }
 }
 
 customElements.define('planner-schedule', PlannerSchedule);
+
+export default PlannerSchedule;

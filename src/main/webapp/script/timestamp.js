@@ -1,28 +1,39 @@
 class Timestamp {
-  constructor(value) {
-    if (value === undefined) {
-      value = new Date();
+  constructor(value1, value2, value3, value4, value5, value6) {
+    if (value1 === undefined) {
+      value1 = new Date();
     }
 
-    if (typeof value === 'string') {
-      const numbers = value.split(/(?<!^)[-:TZ]/)
+    if (typeof value1 === 'number') {
+      if (value2 === undefined || value3 === undefined) {
+        throw new Error('Invalid timestamp values, need at least 3');
+      } else {
+        this._year = value1;
+        this._month = value2;
+        this._day = value3;
+        this._hours = value4 || 0;
+        this._minutes = value5 || 0;
+        this._seconds = value6 || 0;
+      }
+    } else if (typeof value1 === 'string') {
+      const numbers = value1.split(/(?<!^)[-:TZ]/)
           .filter((s) => s.length > 0).map(Number);
-      if (numbers.length < 4 || numbers.length > 6) {
+      if (numbers.length < 3 || numbers.length > 6) {
         throw new Error('Invalid timestamp string');
       }
       this._year = numbers[0];
       this._month = numbers[1];
       this._day = numbers[2];
-      this._hours = numbers[3];
+      this._hours = numbers[3] || 0;
       this._minutes = numbers[4] || 0;
       this._seconds = numbers[5] || 0;
-    } else if (value instanceof Date) {
-      this._year = value.getUTCFullYear();
-      this._month = value.getUTCMonth() + 1;
-      this._day = value.getUTCDate();
-      this._hours = value.getUTCHours();
-      this._minutes = value.getUTCMinutes();
-      this._seconds = value.getUTCSeconds();
+    } else if (value1 instanceof Date) {
+      this._year = value1.getUTCFullYear();
+      this._month = value1.getUTCMonth() + 1;
+      this._day = value1.getUTCDate();
+      this._hours = value1.getUTCHours();
+      this._minutes = value1.getUTCMinutes();
+      this._seconds = value1.getUTCSeconds();
     } else {
       throw new Error('Invalid timestamp argument');
     }

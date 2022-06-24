@@ -1,5 +1,6 @@
 import FullButton from '../components/full-button.js';
 import VesselCard from '../components/vessel-card.js';
+import PlannerSchedule from '../components/planner-schedule.js';
 
 class PortAuthority extends HTMLElement {
   static terminalDropdownTag = 'chooseTerminal';
@@ -30,7 +31,7 @@ class PortAuthority extends HTMLElement {
         </ul>
     </nav-bar>
 
-    <planner-schedule></planner-schedule>
+    <planner-schedule view="${PlannerSchedule.VIEW.weekly}"></planner-schedule>
 
     <unscheduled-vessels>
         <vessel-card
