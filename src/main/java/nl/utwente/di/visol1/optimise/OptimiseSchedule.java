@@ -19,6 +19,7 @@ import nl.utwente.di.visol1.dao.BerthDao;
 import nl.utwente.di.visol1.dao.VesselDao;
 import nl.utwente.di.visol1.models.Berth;
 import nl.utwente.di.visol1.models.Schedule;
+import nl.utwente.di.visol1.models.Terminal;
 import nl.utwente.di.visol1.models.Vessel;
 
 public class OptimiseSchedule {
@@ -71,17 +72,17 @@ public class OptimiseSchedule {
 
 
 	public static Map<Integer, List<Schedule>> getOptimalPlanning(Map<Integer, List<Schedule>> oldSchedule) {
-		List<Berth> berths = new ArrayList<>();
+
+		List<Berth> berths = getBerths(oldSchedule);
 		List<Vessel> vessels = getAutomaticVessels(oldSchedule);
-		for(int id : oldSchedule.keySet()) berths.add(BerthDao.getBerth(id));
-		Timestamp initial_time = Timestamp.valueOf("2022-06-23 03:00:00");//new Timestamp(System.currentTimeMillis() + OFFSET);
-		Timestamp time = new Timestamp(initial_time.getTime());
-		Map<Integer, List<Schedule>> newSchedule = removeManuals(oldSchedule);
+
+		Timestamp time = Timestamp.valueOf("2022-06-23 03:00:00");//new Timestamp(System.currentTimeMillis() + OFFSET);
+		Map<Integer, List<Schedule>> newSchedule = getNewSchedule(oldSchedule, berths);
+
 
 		while(true) {
 			if(vessels.isEmpty()) break;
 			if(impossibleToSchedule(vessels, time)) break;
-			if(time.getTime() - initial_time.getTime() >= TIME_LIMIT) break;
 
 			Map<Berth, Timestamp> minTimes = getMinimumTimes(newSchedule, berths, time);
 			List<Berth> sortedBerthsOnTime = sortBerthsOnMinTime(minTimes);
@@ -96,6 +97,7 @@ public class OptimiseSchedule {
 					continue;
 				}
 				Vessel bestVessel = getBestVessel(fittingVessels, b, firstOpen, firstClose);
+
 				vessels.remove(bestVessel);
 				newSchedule.get(b.getId()).add(getBestSchedule(bestVessel, b, firstOpen, firstClose));
 
@@ -103,6 +105,24 @@ public class OptimiseSchedule {
 		}
 		return getScheduleWithoutDummies(newSchedule);
 	}
+
+
+	public static  Map<Integer, List<Schedule>> getNewSchedule(Map<Integer, List<Schedule>> oldSchedule, List<Berth> allBerths) {
+		Map<Integer, List<Schedule>> newSchedule = removeManuals(oldSchedule);
+		for(Berth b : allBerths) {
+			if(!oldSchedule.containsKey(b.getId())) newSchedule.put(b.getId(), new ArrayList<>());
+		}
+		return newSchedule;
+	}
+
+	public static List<Berth> getBerths(Map<Integer, List<Schedule>> oldSchedule) {
+		for(int k : oldSchedule.keySet()) {
+			return new ArrayList<>( BerthDao.getBerthsByTerminal( BerthDao.getBerth(k).getTerminalId() ).values() );
+		}
+		return null;
+	}
+
+
 
 	public static List<Berth> sortBerthsOnMinTime(Map<Berth, Timestamp> minTimes) {
 		List<Berth> res = new ArrayList<>(minTimes.keySet());
