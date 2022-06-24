@@ -1,5 +1,6 @@
 package nl.utwente.di.visol1.resources;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -24,11 +25,11 @@ public class TerminalsResource {
 	@POST
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response createTerminal(Terminal terminal) {
+	public Response createTerminal(@Context HttpServletRequest request, Terminal terminal) {
 		Terminal createdTerminal = TerminalDao.createTerminal(terminal);
 		if (createdTerminal != null) {
 			return Response.status(Response.Status.CREATED)
-				.header("Location", "/rest/terminals/" + createdTerminal.getId())
+				.header("Location", request.getRequestURI() + "/" +  createdTerminal.getId())
 				.entity(createdTerminal).build();
 		} else {
 			return Response.status(Response.Status.NOT_ACCEPTABLE).build();
