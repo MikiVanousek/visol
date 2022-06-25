@@ -4,6 +4,15 @@ class DatetimeInput extends HTMLInputElement {
   constructor() {
     super();
     this.setAttribute('type', 'datetime-local');
+
+    // Format
+    this._format = 'YYYY-MM-DDThh:mm:ss';
+    if (this.hasAttribute('no-seconds')) {
+      this.setAttribute('step', '60');
+      this._format = 'YYYY-MM-DDThh:mm';
+    }
+
+    // Other attributes
     if (this.hasAttribute('now')) {
       this.value = new Date();
     }
@@ -18,7 +27,7 @@ class DatetimeInput extends HTMLInputElement {
   }
 
   set value(timestamp) {
-    super.value = new Timestamp(timestamp).toLocal().formatted('YYYY-MM-DDThh:mm:ss');
+    super.value = new Timestamp(timestamp).toLocal().formatted(this._format);
   }
 }
 

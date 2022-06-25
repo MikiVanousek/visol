@@ -53,14 +53,14 @@ class VesselModal extends HTMLElement {
               <input id="${this.name}-form-arrival"
                      is="datetime-input"
                      class="form-control form-control-sm"
-                     now
+                     now no-seconds
                      required>
             </div>
             <div class="col">
               <label class="form-label" for="${this.name}-form-deadline">Deadline:</label>
               <input is="datetime-input"
                      class="form-control form-control-sm"
-                     id="${this.name}-form-deadline">
+                     id="${this.name}-form-deadline" no-seconds>
             </div>
           </div>
 
@@ -69,7 +69,7 @@ class VesselModal extends HTMLElement {
               <label class="form-label" for="form-containers">Container amount:</label>
               <input class="form-control form-control-sm"
                      id="${this.name}-form-containers"
-                     min="-1"
+                     min="0"
                      required
                      type="number">
             </div>
@@ -79,7 +79,7 @@ class VesselModal extends HTMLElement {
               <input
                 class="form-control form-control-sm"
                 id="${this.name}-form-cost_per_hour"
-                type="number"
+                type="number" step="0.01" min="0"
               >
             </div>
           </div>
@@ -98,7 +98,7 @@ class VesselModal extends HTMLElement {
                      id="${this.name}-form-length"
                      required
                      type="number"
-                     value="0">
+                     value="0" min="0">
             </div>
           </div>
 
@@ -109,7 +109,7 @@ class VesselModal extends HTMLElement {
                      id="${this.name}-form-width"
                      required
                      type="number"
-                     value="0">
+                     value="0" min="0">
             </div>
             <div class="col">
               <label class="form-label" for="${this.name}-form-depth">Depth:</label>
@@ -117,7 +117,7 @@ class VesselModal extends HTMLElement {
                      id="${this.name}-form-depth"
                      required
                      type="number"
-                     value="0">
+                     value="0" min="0">
             </div>
           </div>
 
@@ -162,7 +162,7 @@ class VesselModal extends HTMLElement {
               <select is="select-berth" 
                       id="${this.name}-form-berth"
                       class="form-select form-select-sm ${this.name}-disabled-if-auto"
-                      terminal="4"
+                      terminal="1"
               > </select>
             </div>
             <div class="col">
@@ -172,11 +172,12 @@ class VesselModal extends HTMLElement {
                       class="form-control form-control-sm ${this.name}-disabled-if-auto"
                      disabled
                      required
+                     no-seconds
                    >
             </div>
           </div>
         </div>
-        <hr></hr>
+        <hr />
         <div class="mx-3 my-4">
           <div class="row " id="${this.name}-modal-footer-btn">
             <div class="col d-flex justify-content-end">
@@ -220,6 +221,8 @@ class VesselModal extends HTMLElement {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       this.submitContents();
+      // TODO refresh schedule or implement autofetch
+      bootstrap.Modal.getInstance(document.getElementById(`${this.name}-modal`)).hide();
     });
 
     const destinationSelect = this.getElement('form-destination');
