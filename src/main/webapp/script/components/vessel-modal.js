@@ -4,6 +4,7 @@ class VesselModal extends HTMLElement {
   schedule_type;
   // ID prefix
   vesselApiEndpoint;
+  getId;
   name;
 
   constructor() {
@@ -180,6 +181,12 @@ class VesselModal extends HTMLElement {
         <hr />
         <div class="mx-3 my-4">
           <div class="row " id="${this.name}-modal-footer-btn">
+            <div class="col d-grid">
+              <input id="${this.name}-form-reason"
+                class="form-control form-control-sm"
+                type="text"
+                placeholder="Reason" />                
+            </div> 
             <div class="col d-flex justify-content-end">
               <button class="btn btn-secondary me-2" data-bs-dismiss="modal" type="button">
                 Cancel
@@ -222,7 +229,7 @@ class VesselModal extends HTMLElement {
       e.preventDefault();
       this.submitContents();
       // TODO refresh schedule or implement autofetch
-      bootstrap.Modal.getInstance(document.getElementById(`${this.name}-modal`)).hide();
+      bootstrap.Modal.getOrCreateInstance(document.getElementById(`${this.name}-modal`)).hide();
     });
 
     const destinationSelect = this.getElement('form-destination');
@@ -243,6 +250,7 @@ class VesselModal extends HTMLElement {
   }
 
   getVessel() {
+    // TODO integrate this with fill-in method?
     const vesselKeys = ['name', 'arrival', 'deadline', 'containers', 'cost_per_hour', 'destination', 'length', 'width', 'depth'];
     return this.serialize(vesselKeys);
   }
@@ -273,14 +281,13 @@ class VesselModal extends HTMLElement {
   submitContents() {
     const vessel = this.getVessel();
     this.hideBtnFooter();
-    this.vesselApiEndpoint(vessel).then((response) => {
+    const reason = this.getElement(`form-reason`).value;
+    // TODO reason
+    this.vesselApiEndpoint(vessel, reason).then((response) => {
       if (this.schedule_type !== 'disabled') {
-        // Extract the id from the url location of the vessel resource.
-        const vesselId = response.headers.get('Location')
-            .split('/').slice(-1)[0];
+        const vesselId = this.getId(response);
         const schedule = this.getSchedule();
-        VisolApi.putSchedule(vesselId, schedule).then((response) => {
-          console.log(response);
+        VisolApi.putSchedule(vesselId, schedule, reason).then(() => {
           this.showBtnFooter();
         }).catch((e) => {
           this.showBtnFooter();
@@ -299,12 +306,13 @@ class VesselModal extends HTMLElement {
 class UpdateModal extends VesselModal {
   name = 'update';
   vesselId;
-  vesselApiEndpoint = (vessel) => {
+  vesselApiEndpoint = (vessel, reason) => {
     if (this.vesselId === null) {
       throw new Error('You have to set a vesselId when opening an update form.');
     }
-    return VisolApi.putVessel(this.vesselId, vessel);
+    return VisolApi.putVessel(this.vesselId, vessel, reason);
   };
+  getId = () => this.vesselId;
 
   fillIn(object) {
     // eslint-disable-next-line guard-for-in
@@ -312,7 +320,7 @@ class UpdateModal extends VesselModal {
       try {
         this.getElement(`form-${key}`).value = object[key];
       } catch (_) {
-        console.log(`Warning: ${key} has no filed in the form.`);
+        console.log(`Warning: ${key} has no value in the form.`);
       }
     }
   }
@@ -326,8 +334,11 @@ class UpdateModal extends VesselModal {
     if (schedule === null || !('manual' in schedule)) {
       this.getElement('radio-disabled').click();
     } else {
-      this.fillIn(schedule);
-      this.getElement('radio-' + (schedule['manual'] === 'true' ? 'manual' : 'auto')).click();
+      // TODO either adapt fillIn to take list of values or do it manually, as to not trigger warnings
+      // this.fillIn(schedule);
+      this.getElement(`form-berth`).value = schedule['berth'];
+      this.getElement('form-start').value = schedule['start'];
+      this.getElement(`radio-${schedule['manual'] ? 'manual' : 'auto'}`).click();
     }
   }
 }
@@ -335,6 +346,7 @@ class UpdateModal extends VesselModal {
 class CreateModal extends VesselModal {
   name = 'create';
   vesselApiEndpoint = VisolApi.postVessel;
+  getId = (response) => response.headers.get('Location').split('/').slice(-1)[0];
 }
 
 customElements.define('update-modal', UpdateModal);

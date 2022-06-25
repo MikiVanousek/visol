@@ -145,6 +145,7 @@ class PlannerSchedule extends HTMLElement {
       Object.values(berthSchedules).forEach((schedule) => {
         const vessel = this.vessels[schedule.vessel];
         const vesselEl = document.createElement('vessel-card');
+        vesselEl.id = schedule.vessel;
         vesselEl.data = vessel;
         vesselEl.schedule = schedule;
         berthSchedulesEl.appendChild(vesselEl);

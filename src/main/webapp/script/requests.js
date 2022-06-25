@@ -7,10 +7,10 @@ class Requests {
     'Accept': 'application/json',
   };
 
-  static async postData(path, data = {}) {
+  static async postData(path, data = {}, headers = {}) {
     const res = await fetch(this.baseUrl + path, {
       method: 'POST',
-      headers: Requests.headers,
+      headers: {...Requests.headers, ...headers},
       body: JSON.stringify(data),
     });
     if (!res.ok) {
@@ -20,9 +20,9 @@ class Requests {
     return res;
   }
 
-  static async getData(path) {
+  static async getData(path, headers = {}) {
     const res = await fetch(this.baseUrl + path, {
-      headers: Requests.headers,
+      headers: {...Requests.headers, ...headers},
     });
     if (!res.ok) {
       ErrorToast.show();
@@ -30,10 +30,12 @@ class Requests {
     }
     return res.json();
   }
-  static async putData(path, data) {
+
+  static async putData(path, data, headers = {}) {
     const res = await fetch(this.baseUrl + path, {
       method: 'PUT',
-      headers: Requests.headers,
+      // Extend standard headers with custom headers
+      headers: {...Requests.headers, ...headers},
       body: JSON.stringify(data),
     });
     if (!res.ok) {

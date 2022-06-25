@@ -16,14 +16,14 @@ class VisolApi {
   static getVesselsPerTerminal = (terminalId) =>
     Requests.getData(`/terminals/${terminalId}/vessels`);
 
-  static postVessel = (vessel) =>
-    Requests.postData('/vessels', vessel);
+  static postVessel = (vessel, reason) =>
+    Requests.postData('/vessels', vessel, {'Reason': reason});
 
-  static putVessel = (vesselId, vessel) =>
-    Requests.putData(`/vessels/${vesselId}`, vessel);
+  static putVessel = (vesselId, vessel, reason) =>
+    Requests.putData(`/vessels/${vesselId}`, vessel, {'Reason': reason});
 
-  static putSchedule = (vesselId, schedule) =>
-    Requests.putData(`/vessels/${vesselId}/schedule`, schedule);
+  static putSchedule = (vesselId, schedule, reason) =>
+    Requests.putData(`/vessels/${vesselId}/schedule`, schedule, {'Reason': reason});
 }
 
 export default VisolApi;

@@ -17,32 +17,12 @@ class VesselCard extends HTMLElement {
     super();
   }
 
-  connectedCallback() {
-    this.classList.add('vessel-card', `view-${this.view}`);
-    this.innerHTML = `
-      <div class="vessel-card-info">
-        <icon-circle
-          name="ship"
-          view=${this.view === VesselCard.VIEW.infeasible ?
-            IconCircle.VIEW.infeasible : IconCircle.VIEW.primary}>
-        </icon-circle>
-        <div class="vessel-card-info-in">
-          <h6 class="vessel-card-info-heading">${this.data.name}</h6>
-          ${this.view !== VesselCard.VIEW.unscheduled ?
-              this.getDescription() : ''}
-        </div>
-      </div>
-      ${this.view === VesselCard.VIEW.manual ? this.getIcon() : ''}`;
-
-    this.generateStyle();
-  }
-
   get view() {
     if (this.hasAttribute('view')) {
       return this.getAttribute('view');
     }
     return this.schedule.manual ?
-      VesselCard.VIEW.manual : VesselCard.VIEW.automatic;
+        VesselCard.VIEW.manual : VesselCard.VIEW.automatic;
   }
 
   get isInfeasible() {
@@ -51,6 +31,14 @@ class VesselCard extends HTMLElement {
 
   set isInfeasible(newVal) {
     this._isInfeasible = newVal;
+  }
+
+  get id() {
+    return this._id;
+  }
+
+  set id(newVal) {
+    this._id = newVal;
   }
 
   get data() {
@@ -75,6 +63,32 @@ class VesselCard extends HTMLElement {
 
   get departure() {
     return new Timestamp(this.schedule.expected_end).toLocal();
+  }
+
+  connectedCallback() {
+    this.classList.add('vessel-card', `view-${this.view}`);
+    this.innerHTML = `
+      <div class="vessel-card-info">
+        <icon-circle
+          name="ship"
+          view="${this.view === VesselCard.VIEW.infeasible ?
+        IconCircle.VIEW.infeasible : IconCircle.VIEW.primary}">
+        </icon-circle>
+        <div class="vessel-card-info-in">
+          <h6 class="vessel-card-info-heading">${this.data.name}</h6>
+          ${this.view !== VesselCard.VIEW.unscheduled ?
+        this.getDescription() : ''}
+        </div>
+      </div>
+      ${this.view === VesselCard.VIEW.manual ? this.getIcon() : ''}`;
+
+    this.generateStyle();
+    this.addEventListener('click', () => {
+      const updateModal = document.getElementsByTagName('update-modal')[0];
+      updateModal.setVessel(this.data, this.id);
+      updateModal.setSchedule(this.schedule);
+      bootstrap.Modal.getOrCreateInstance(document.getElementById(`update-modal`)).show();
+    });
   }
 
   generateStyle() {
@@ -147,7 +161,7 @@ class VesselCard extends HTMLElement {
     return `<div class="vessel-card-info-description">
     ${this.formatDate(this.arrival) +
     ' – ' + this.formatDate(this.departure) +
-     ' • ' + this.capitalizeFirstLetter(this.view)}
+    ' • ' + this.capitalizeFirstLetter(this.view)}
     </div>`;
   }
 
